@@ -1,0 +1,46 @@
+
+/* body {
+  padding-top: 56px;
+} */
+
+.peopleIcon {
+
+	/* Add properties below */
+	border-radius: 50%;
+	height: 50px;
+	width: 50px;
+  margin-left: 10px;
+  /* margin-bottom: 5px; */
+}
+
+.list-group-item-light{
+  background-color: white;
+  border-bottom: 3px solid black;
+}
+
+/* .list-group-item-action :hover{
+  background-color: red;
+  border-bottom: 3px solid black;
+}
+
+.list-group-item-action :visited{
+  background-color: yellow;
+  border-bottom: 3px solid black;
+} */
+
+#pageContent{
+  position: relative;
+  top: 80px;
+  width: 100%;
+}
+
+#dropDownButton{
+  background-color: red;
+}
+
+/* #catogoriesAndPromotions{
+  width: 2000px;
+} */
+/* #restaurantsPromoteSection{
+  
+} */
