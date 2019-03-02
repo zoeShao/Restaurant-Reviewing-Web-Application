@@ -1,0 +1,92 @@
+:root {
+  --input-padding-x: 1.5rem;
+  --input-padding-y: .75rem;
+}
+
+body {
+	margin: 0;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#header {
+	height: 80px;
+}
+
+.col-md-9 {
+	height: 100%;
+}
+
+.col-md-1 {
+	height: 100%;
+	bottom: 3px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.navContainer {
+	border-left-style: solid;
+	border-width: 1px;
+	border-color: lightgrey;
+}
+
+.portraitContainer {
+	height: 50px;
+}
+
+.signOut {
+	position: relative;
+	top: 30px;
+}
+
+#topNavBar {
+	height: 40px;
+}
+
+.navButton {
+	margin-top: 8px;
+	margin-bottom: 8px;
+	text-align: center;
+}
+
+a.navChoice {
+	color: #666f77;
+	text-decoration: none;
+
+}
+
+a.navChoice:hover {
+  color: black;
+}
+
+a.navInitialChoice {
+	color: black;
+	text-decoration: none;
+	pointer-events: none;
+}
+
+#reviewBody {
+	height: 100vh;
+	background-color: #e6eaef;
+	margin: 15px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: lightgrey;
+	border-radius: 25px;
+}
+
+.reviewInitial {
+	width: 100%;
+	position: absolute;
+	top: 65%;
+	left: 0%;
+	text-align: center;
+}
+
+.emptyReview {
+	font-size: 22px;
+	color: grey;
+}
