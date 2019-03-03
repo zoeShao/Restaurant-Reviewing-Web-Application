@@ -70,10 +70,17 @@ a.navInitialChoice {
 	pointer-events: none;
 }
 
+.dropDown {
+    height: 40px;
+    padding-right: 20px;
+
+}
+
 #accountBody {
 	height: 100vh;
 	background-color: #e6eaef;
-	margin: 15px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 	border-style: solid;
 	border-width: 1px;
 	border-color: lightgrey;
@@ -156,3 +163,56 @@ a.navInitialChoice {
 	font-size: 15px;
 }
 
+.mainBody {
+	height: 100%;
+}
+
+.contentBox {
+	min-height: 150px;
+	max-height: 200px;
+	background-color: white;
+	padding: 15px;
+	margin-bottom: 15px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: lightgrey;
+	border-radius: 25px;
+}
+
+a.reviewLink {
+	text-decoration: none;
+	color: black;
+}
+
+a.reviewLink:hover {
+  	color: black;
+}
+
+.reviewContent strong{
+	font-size: 18px;
+}
+
+.checked {
+  	color: orange;
+}
+
+.storeImg {
+	margin-left: 10px;
+	margin-right: 40px;
+	margin-top: 10px;
+	height: 100px;
+	float: left;
+}
+
+
+.storeImgContainer {
+	width: 30%;
+	height: 100%;
+}
+
+.storeInfoContainer {
+	font-size: 15px;
+	line-height: 10px;
+	float: left;
+	margin-top: 12px;
+}
