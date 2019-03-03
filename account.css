@@ -33,8 +33,20 @@ img {
 	border-color: lightgrey;
 }
 
+.logoContainer {
+	margin-left: 55px;
+	height: 50px;
+}
+
 .portraitContainer {
 	height: 50px;
+}
+
+.userName {
+	font-size: 18px;
+	position: relative;
+	top: 20%;
+	left: 0%;
 }
 
 .signOut {
@@ -179,6 +191,10 @@ a.navInitialChoice {
 	border-radius: 25px;
 }
 
+.reviewLink {
+	display:block;
+}
+
 a.reviewLink {
 	text-decoration: none;
 	color: black;
@@ -215,15 +231,4 @@ a.reviewLink:hover {
 	line-height: 10px;
 	float: left;
 	margin-top: 12px;
-}
-
-#newResBox {
-	min-height: 420px;
-	background-color: white;
-	padding: 15px;
-	margin-bottom: 15px;
-	border-style: solid;
-	border-width: 1px;
-	border-color: lightgrey;
-	border-radius: 25px;
 }
