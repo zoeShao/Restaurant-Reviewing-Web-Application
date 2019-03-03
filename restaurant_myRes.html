@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<title>Account</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+		<link rel="stylesheet" type="text/css" href="account.css">
+    </head>
+    <body>
+        <div class="container-fluid">
+			<div id="header" class="row p-3 bg-danger text-white">
+				<div class="col-md-9">
+					<h2>logo here</h2>
+				</div>
+				<div class="col-md-1">
+					<div class="portraitContainer">
+					<img src="avatar.jpg" class="portraitIcon rounded float-right img-thumbnail rounded-circle">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<p>John Jiang</p>
+				</div>
+				<div class="col-md-1">
+					<p class="signOut float-left">
+						<a href="" target="_self">Sign out</a>
+					</p>
+				</div>
+			</div>
+        </div>
+        <div class="container-fluid">
+			<div id="topNavBar" class="row bg-light">
+				<div class="navContainer col-md-4">
+					<p class="navButton">
+						<a class="navChoice" href="restaurant_account.html" target="_self">
+							<strong>All reviews</strong>
+						</a>
+					</p>
+				</div>
+				<div class="navContainer col-md-4">
+					<p class="navButton">
+						<a class="navInitialChoice" href='' target="_self">
+							<strong>My retaurants</strong>
+						</a>
+					</p>
+				</div>
+				<div class="navContainer col-md-4">
+					<p class="navButton">
+						<a class="navChoice" href="restaurant_setting.html" target="_self">
+						<strong>Settings</strong>
+						</a>
+					</p>
+				</div>
+			</div>
+        </div>
+        
+        <div class="container-fluid">
+                <div id="accountBody" class="p-3">
+                    <!-- <div class="bodyInitial">
+                        <p class="emptyReview"><strong>(Empty)</strong></p>
+                    </div> -->
+                    <div class="dropDown container-fluid">
+                        <div class="float-right btn-group">
+                              <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            sort by
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <!-- <a class="dropdown-item" href="#">time</a> -->
+                                <a class="dropdown-item" href="#">name</a>
+                              </div>
+                        </div>
+                    </div>
+    
+                    <div class="mainBody">
+                        <div class="contentBox p-3">
+                            <a class="reviewLink" style="display:block" href="#">
+                                <div class='storeImgContainer'>
+                                    <img class='storeImg' src="" alt="Store Picture"/>
+                                 </div>
+                                 <div class='storeInfoContainer'>
+                                     <p><strong>Restaurant name: </strong>Osaka Sushi
+                                    </p>
+                                    <p><strong>Telephone: (905) 471-8006</strong></p>
+                                    <p><strong>Restaurant address: </strong>5762 Hwy 7, Markham</p>
+                                 </div>
+                             </a>
+                        </div>
+
+                        <div id = "newResBox">
+                                 <div class="col-md-8">
+                                        <form class="infoForm">
+                                            <h2>Add a new restaurant</h2>
+                                            <div class="form-group">
+                                                <label for="newRestaurantImg">Restaurant Image:</label>
+                                                <input id="newRestaurantImg" name="newStoreImg" type="file" accept="image/*" required="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="newRestaurantName">Restaurant name:</label>
+                                                <input type="text" class="form-control" id="newRestaurantName" placeholder="Restaurant name">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="newRestaurantPhone">Telephone:</label>
+                                                <input type="text" class="form-control" id="newRestaurantPhone" placeholder="Restaurant phone number">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="newRestaurantAddr">Restaurant address:</label>
+                                                <input type="text" class="form-control" id="newRestaurantAddr" placeholder="Restaurant address">
+                                            </div>
+                                        </form>
+                                 </div>    
+                        </div>
+                    </div>
+    
+                    <div class="pager float-right">
+                        <nav aria-label="Page navigation example">
+                              <ul class="pagination">
+                                <li class="page-item">
+                                      <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                      </a>
+                                </li>
+                                <li class="page-item">
+                                      <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                      </a>
+                                </li>
+                              </ul>
+                        </nav>
+                    </div>
+    
+                </div>
+            </div>
+    </body>
+</html>
