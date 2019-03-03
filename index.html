@@ -26,10 +26,9 @@
 <body>
 
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-sm bg-danger navbar-dark">
+  <nav id = "navBar" class="navbar navbar-expand-sm bg-danger navbar-dark">
     <div class="container">
       <a class="navbar-brand" href="index.html">Restaurant Reviewer</a>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="login.html">Log In
@@ -44,7 +43,6 @@
             </div>
           </li>
         </ul>
-      </div>
     </div>
   </nav>
 
@@ -52,11 +50,14 @@
   <!-- Page Content -->
   <div id= "pageContent" class="container">
 
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-text1"><i class="fas fa-search text-white"></i></span>
-      </div>
+    <div id = "searchBar" class="input-group border border-danger mb-5">
+      <!-- <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fas fa-search text-white"></i></span>
+      </div> -->
       <input class="form-control" type="text" placeholder="Search Restaurants">
+      <div class="input-group-append">
+        <button class="btn btn-danger" type="submit"><i class="fas fa-search text-white"></i></button> 
+      </div>
     </div>
 
     <div id = "catogoriesAndPromotions" class="row">
@@ -65,12 +66,6 @@
 
         <h3 class = "display-4">Food Catogories</h3>
         <div class="list-group">
-          <a href="#" class="list-group-item list-group-item-action list-group-item-light">Fast Food</a>
-          <a href="#" class="list-group-item list-group-item-action list-group-item-light">Chinese</a>
-          <a href="#" class="list-group-item list-group-item-action list-group-item-light">Japanese</a>
-          <a href="#" class="list-group-item list-group-item-action list-group-item-light">Fast Food</a>
-          <a href="#" class="list-group-item list-group-item-action list-group-item-light">Chinese</a>
-          <a href="#" class="list-group-item list-group-item-action list-group-item-light">Japanese</a>
           <a href="#" class="list-group-item list-group-item-action list-group-item-light">Fast Food</a>
           <a href="#" class="list-group-item list-group-item-action list-group-item-light">Chinese</a>
           <a href="#" class="list-group-item list-group-item-action list-group-item-light">Japanese</a>
@@ -114,37 +109,35 @@
         
         </div>
 
-        <div class="d-flex">
-          <div class="mr-auto">
+        <div class="d-flex mt-5">
+          <div class="mr-3">
             <h3>Popular Restaurants</h3>
           </div>
           <div class="dropdown">
-              <button id = "dropDownButton" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Location</button>
+              <button id = "dropDownButton" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Downtown-Toronto</button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">North York</a>
-                <a class="dropdown-item" href="#">Downtown-Toronto</a>
-                <a class="dropdown-item" href="#">Markham</a>
+                <a id = "dropdownToronto" class="dropdown-item" href="#">Downtown-Toronto</a>
+                <a id = "dropdownMarkham" class="dropdown-item" href="#">Markham</a>
               </div>
           </div>
           
         </div>
-        <div class="row">
-          <div class="col-lg-5 col-md-6 mb-4">
+        <div id = "popularRestaurants"class="row mt-3">
+          <div class="col-lg-5 col-md-6 mb-4 mr-5">
             <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+              <a href="#"><img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"></a>
               <div class="card-body">
                 <h4 class="card-title">
-                  <a href="#">Item One</a>
+                  <a href="#">McDonald's</a>
                 </h4>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
               </div>
-              <div class="card-footer">
+              <!-- <div class="card-footer">
                 <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-              </div>
+              </div> -->
             </div>
           </div>
 
-          <div class="col-lg-5 col-md-6 mb-4">
+          <!-- <div class="col-lg-5 col-md-6 mb-4">
             <div class="card h-100">
               <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
               <div class="card-body">
@@ -158,7 +151,7 @@
                 <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!-- <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
@@ -222,7 +215,7 @@
                 <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
               </div>
             </div>
-          </div> 
+          </div>  -->
 
         </div>
    
@@ -235,9 +228,11 @@
 
   </div>
   
-  </footer> -->
+  </footer>
 
 
 </body>
+
+<script type="text/javascript" src="index.js"></script>
 
 </html>

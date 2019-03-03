@@ -3,6 +3,9 @@
   padding-top: 56px;
 } */
 
+#navBar{
+  height: 80px;
+}
 .peopleIcon {
 
 	/* Add properties below */
@@ -13,6 +16,9 @@
   /* margin-bottom: 5px; */
 }
 
+#searchBar{
+  margin-bottom: 40px;
+}
 .list-group-item-light{
   background-color: white;
   border-bottom: 3px solid black;
@@ -30,7 +36,7 @@
 
 #pageContent{
   position: relative;
-  top: 80px;
+  top: 50px;
   width: 100%;
 }
 
