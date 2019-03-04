@@ -1,36 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title>Account</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
 
+		<title>Account</title>
+
+		<!-- Bootstrap core CSS -->
     	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
-    	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
+		<!-- Custom styles for this template -->
 		<link rel="stylesheet" type="text/css" href="account.css">
 	</head>
+
 	<body>
+
+		<!-- header -->
 		<div class="container-fluid">
 			<div id="header" class="row p-3 bg-danger text-white">
+				<!-- logo part -->
 				<div class="col-md-9">
-					<!-- <h2>logo here</h2> -->
 					<a class="reviewLink" href="index.html">
 						<div class="logoContainer">
-							<img src="" class="img-thumbnail" alt="logo Picture"/>
+							<img src="logo.png" class="img-thumbnail" alt="logo Picture"/>
+							<span class="logo text-dark">Restaurant Rev.</span>
 						</div>
 					</a>
 				</div>
+				<!-- portrait part -->
 				<div class="col-md-1">
 					<div class="portraitContainer">
-					<img src="avatar.jpg" class="float-right img-thumbnail rounded-circle" alt="avatar Picture"/>
+					<img src="https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg" class="float-right img-thumbnail rounded-circle" alt="avatar Picture"/>
 					</div>
 				</div>
+				<!-- user name part -->
 				<div class="userName col-md-1">
 					<p>user</p>
 				</div>
+				<!-- sign out part -->
 				<div class="col-md-1">
 					<p class="signOut float-left">
 						<a href="index.html" target="_self">Sign out</a>
@@ -38,8 +48,11 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- top navigation -->
 		<div class="container-fluid">
 			<div id="topNavBar" class="row bg-light">
+				<!-- reviews part -->
 				<div class="navContainer col-md-4">
 					<p class="navButton">
 						<a class="navChoice" href="individual_account.html" target="_self">
@@ -47,6 +60,7 @@
 						</a>
 					</p>
 				</div>
+				<!-- favourites part -->
 				<div class="navContainer col-md-4">
 					<p class="navButton">
 						<a class="navInitialChoice" href='' target="_self">
@@ -54,6 +68,7 @@
 						</a>
 					</p>
 				</div>
+				<!-- settings part -->
 				<div class="navContainer col-md-4">
 					<p class="navButton">
 						<a class="navChoice" href="individual_setting.html" target="_self">
@@ -64,11 +79,14 @@
 			</div>
 		</div>
 
+		<!-- account body -->
 		<div class="container-fluid">
 			<div id="accountBody" class="p-3">
+				<!-- Initial part (empty) -->
 				<!-- <div class="bodyInitial">
 					<p class="emptyReview"><strong>(Empty)</strong></p>
 				</div> -->
+				<!-- dropDown part -->
 				<div id="dropDown" class="container-fluid">
 					<div class="float-right btn-group">
   						<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -82,25 +100,27 @@
   						</div>
 					</div>
 				</div>
-
+				<!-- main body part -->
 				<div id="mainBody">
 				</div>
-
+				<!-- pager part -->
 				<div id="pager" class="float-right">
 					<nav aria-label="Page navigation example">
   						<ul class="pagination">
+  							<!-- previous button -->
     						<li class="page-item">
       							<a class="previous page-link" href="#" aria-label="Previous">&laquo;</a>
     						</li>
+    						<!-- next button -->
     						<li class="page-item">
       							<a class="next page-link" href="#" aria-label="Next">&raquo;</a>
     						</li>
   						</ul>
 					</nav>
 				</div>
-
 			</div>
 		</div>
+
 		<script type="text/javascript" src="individual_favourite.js"></script>
 	</body>
 </html>

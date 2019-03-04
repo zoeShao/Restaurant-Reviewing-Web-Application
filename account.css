@@ -38,8 +38,20 @@ img {
 	height: 50px;
 }
 
+.logo {
+	position: absolute;
+	font-family:Impact;
+	top: 10%;
+	font-size: 24px;
+	letter-spacing: 1px;
+	padding-left: 10px;
+	font-weight: bolder;
+}
+
 .portraitContainer {
 	height: 50px;
+	width: 50px;
+	float: right;
 }
 
 .userName {

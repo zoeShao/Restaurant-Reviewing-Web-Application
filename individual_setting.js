@@ -1,3 +1,4 @@
+/* Class */
 class User {
 	constructor(image, name, email, password, type, reviews){
         this.image = image;
@@ -10,18 +11,18 @@ class User {
 }
 
 // global arrays
-const Users = []
-// Adding these users does not change the DOM - we are simply setting up the 
-// book and patron arrays as they appear initially in the DOM.
-// Users.push(new User())
+// const Users = []
 
-/* Full patrons entries element */
+/* Select all DOM form elements you'll need. */ 
 const infoForm = document.querySelector('#infoForm')
 
 /* Event listeners for button submit and button click */
 infoForm.addEventListener('click', modifyUserInfo);
 
-
+/*-----------------------------------------------------------*/
+/*** 
+Functions can call DOM functions 
+***/
 function modifyUserInfo(e) {
 	e.preventDefault();
 	if (e.target.classList.contains('editInfo')) {
@@ -50,6 +51,8 @@ function modifyUserInfo(e) {
 	}
 }
 
+/*-----------------------------------------------------------*/
+/*** DOM functions below - use these to create and edit DOM objects ***/
 function addTaskTextBox(task) {
 	const spanElement = task.firstElementChild.nextElementSibling
 	const taskText = spanElement.innerText;
@@ -92,9 +95,7 @@ function addProfileSelector(task) {
 function removeProfileSelector(task) {
 	const fileLoadingDiv = task.firstElementChild.firstElementChild.nextElementSibling.firstElementChild
 	const newProfileImg = document.querySelector('#avatar').files[0];
-	// console.log(newProfileImg)
 	const profileImg = task.firstElementChild.firstElementChild.firstElementChild
-	console.log(newProfileImg)
 	if (newProfileImg) {
 		profileImg.src = URL.createObjectURL(newProfileImg);
 	}

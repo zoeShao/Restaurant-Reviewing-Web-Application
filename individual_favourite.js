@@ -1,3 +1,4 @@
+/* Class */
 class User {
 	constructor(image, name, email, password, type){
         this.image = image;
@@ -21,33 +22,49 @@ class Restaurant{
     }
 }
 
-let maxReviews = 3
-let currentPage = 1
+/* Global variables */
+let maxReviews = 3 // max Contents one page can show
+let currentPage = 1 // current page number
 
-const storeImg1 = new File([""], "filename");
-const storeImg2 = new File([""], "filename");
+/* Examples(hardcode part) */
+const storeImg1 = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
+const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
 const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1)
 const store2 = new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", 4, 2)
-
-const userImg = document.createElement('img')
-userImg.src = "avatar.jpg"
-userImg.alt = "avatar Picture";
+//These examples are just for test purpose (sort)
+const storeImg3 = "http://4designer.t7yb.net/files/2017110610/Cartoon-Pizza-Restaurant-26180.jpg"
+const storeImg4 = "http://4designer.t7yb.net/files/2017110610/Cartoon-Pizza-Restaurant-26180.jpg"
+const storeImg5 = "http://4designer.t7yb.net/files/2017110610/Cartoon-Pizza-Restaurant-26180.jpg"
+const store3 = new Restaurant(storeImg3, "ATest1", "1234567890", "1 (name) St, City1", 5, 3)
+const store4 = new Restaurant(storeImg4, "BTest2", "0987654321", "2 (name) St, City2", 1, 3)
+const store5 = new Restaurant(storeImg5, "CTest3", "1234567890", "3 (name) St, City3", 2, 1)
+// create a user
+const userImg = "avatar.jpg"
 const user = new User(userImg, "user", "user@mail.com", "user", "i")
+// Add these restaurants to the user's favourite array (does not change the DOM)
 user.favourite.push(store1)
 user.favourite.push(store2)
-// console.log(user)
+// These examples are just for test purpose (sort)
+user.favourite.push(store3)
+user.favourite.push(store4)
+user.favourite.push(store5)
 
-/* Full patrons entries element */
+/* Select all DOM form elements you'll need. */ 
 const dropDown = document.querySelector('#dropDown')
 const contentBody = document.querySelector('#mainBody')
 const pager = document.querySelector('#pager')
 
+/* Load the initial page. */ 
 showPage(currentPage)
 
 /* Event listeners for button submit and button click */
 dropDown.addEventListener('click', sortTheItem);
 pager.addEventListener('click', changePage)
 
+/*-----------------------------------------------------------*/
+/*** 
+Functions that don't edit DOM themselves, but can call DOM functions 
+***/
 function sortTheItem(e) {
 	e.preventDefault();
 	if (e.target.classList.contains('dropdown-name')) {
@@ -83,27 +100,8 @@ function changePage(e) {
 	}
 }
 
-function showPage(currentPage) {
-	let restPage = user.favourite.length - currentPage * 3
-	if (restPage >= 0) {
-		contentBody.innerText = ""
-		for (let i = 0; i < maxReviews; i++) {
-			let j = ((currentPage-1)*3) + i
-			// console.log(j)
-			addFavouriteToDom(user.favourite[j])
-		}
-	} else {
-		restPage = maxReviews+restPage
-		contentBody.innerText = ""
-		for (let i = 0; i < restPage; i++) {
-			let j = ((currentPage-1)*3) + i
-			// console.log(j)
-			addFavouriteToDom(user.favourite[j])
-		}
-	}
-}
-
-
+/*-----------------------------------------------------------*/
+/*** DOM functions below - use these to create and edit DOM objects ***/
 function addFavouriteToDom(restaurant) {
 	const contentBoxElement = document.createElement('div')
 	contentBoxElement.className = "contentBox"
@@ -114,7 +112,7 @@ function addFavouriteToDom(restaurant) {
 	storeImgElement.classNmae = "storeImgContainer"
 	const storeImg = document.createElement('img')
 	storeImg.className = "storeImg"
-	storeImg.src = URL.createObjectURL(restaurant.image)
+	storeImg.src = restaurant.image
 	storeImg.alt = "Store Picture";
 	storeImgElement.appendChild(storeImg)
 	aElement.appendChild(storeImgElement)
@@ -133,6 +131,28 @@ function addFavouriteToDom(restaurant) {
 	aElement.appendChild(favouriteElement)
 	contentBoxElement.appendChild(aElement)
 	contentBody.appendChild(contentBoxElement)
+}
+
+/*-----------------------------------------------------------*/
+/*** helper functions ***/
+function showPage(currentPage) {
+	let restPage = user.favourite.length - currentPage * 3
+	if (restPage >= 0) {
+		contentBody.innerText = ""
+		for (let i = 0; i < maxReviews; i++) {
+			let j = ((currentPage-1)*3) + i
+			// console.log(j)
+			addFavouriteToDom(user.favourite[j])
+		}
+	} else {
+		restPage = maxReviews+restPage
+		contentBody.innerText = ""
+		for (let i = 0; i < restPage; i++) {
+			let j = ((currentPage-1)*3) + i
+			// console.log(j)
+			addFavouriteToDom(user.favourite[j])
+		}
+	}
 }
 
 function sortByName(user) {

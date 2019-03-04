@@ -1,36 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title>Account</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
 
+		<title>Account</title>
+
+		<!-- Bootstrap core CSS -->
     	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
-    	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
+		<!-- Custom styles for this template -->
 		<link rel="stylesheet" type="text/css" href="account.css">
 	</head>
+
 	<body>
+
+		<!-- header -->
 		<div class="container-fluid">
 			<div id="header" class="row p-3 bg-danger text-white">
+				<!-- logo part -->
 				<div class="col-md-9">
-					<!-- <h2>logo here</h2> -->
 					<a class="reviewLink" href="index.html">
 						<div class="logoContainer">
-							<img src="" class="img-thumbnail" alt="logo Picture"/>
+							<img src="logo.png" class="img-thumbnail" alt="logo Picture"/>
+							<span class="logo text-dark">Restaurant Rev.</span>
 						</div>
 					</a>
 				</div>
+				<!-- portrait part (empty)-->
 				<div class="col-md-1">
-					<!-- <div class="portraitContainer">
-					<img src="avatar.jpg" class="portraitIcon rounded float-right img-thumbnail rounded-circle">
-					</div> -->
 				</div>
+				<!-- user name part (empty)-->
 				<div class="col-md-1">
-					<!-- <p>Jack Chen</p> -->
 				</div>
+				<!-- sign out part -->
 				<div class="col-md-1">
 					<p class="signOut float-left">
 						<a href="index.html" target="_self">Sign out</a>
@@ -38,8 +44,11 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- top navigation -->
 		<div class="container-fluid">
 			<div id="topNavBar" class="row bg-light">
+				<!-- reviews part -->
 				<div class="navContainer col-md-4">
 					<p class="navButton">
 						<a class="navChoice" href="individual_account.html" target="_self">
@@ -47,6 +56,7 @@
 						</a>
 					</p>
 				</div>
+				<!-- favourites part -->
 				<div class="navContainer col-md-4">
 					<p class="navButton">
 						<a class="navChoice" href="individual_favourite.html" target="_self">
@@ -54,6 +64,7 @@
 						</a>
 					</p>
 				</div>
+				<!-- settings part -->
 				<div class="navContainer col-md-4">
 					<p class="navButton">
 						<a class="navInitialChoice" href="" target="_self">
@@ -63,40 +74,43 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- account body -->
 		<div class="container-fluid">
 			<div id="accountBody" class="p-3">
+				<!-- info header part -->
 				<div class="container-fluid">
 					<div class="infoHeader row p-3">
 						<div class="col-md-12">
 							<p class="lead text-dark">Basic Information</p>
 						</div>
 					</div>
+					<!-- info body part -->
 					<div class="infoBody row p-3">
+						<!-- info portrait part -->
 						<div class="col-md-4">
 							<div class="portraitSetting">
-								<img src="avatar.jpg" id="fileUpload" class="portraitIcon rounded img-thumbnail rounded-circle" alt="avatar Picture"/>
+								<img src="https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg" id="fileUpload" class="portraitIcon rounded img-thumbnail rounded-circle" alt="avatar Picture"/>
 							</div>
 							<div class="kv-avatar">
-                				<!-- <div class="file-loading">
-                					<label for="avatar">
-                					<strong>Choose a profile picture:</strong>
-                					</label>
-                    				<input id="avatar" name="avatar" type="file" accept="image/*">
-                				</div> -->
             				</div>
 						</div>
+						<!-- basic info edit part -->
 						<div class="col-md-8">
 							<form id="infoForm">
+								<!-- basic info: user name-->
 								<div class="form-group">
-    								<label for="exampleInputEmail1">User name: </label>
+    								<label for="InputEmail">User name: </label>
     								<span class="info">user</span>
   								</div>
+  								<!-- basic info: email address-->
   								<div class="form-group">
-    								<label for="exampleInputEmail1">Email address: </label>
+    								<label for="InputEmail">Email address: </label>
     								<span class="info">user@mail.com</span>
   								</div>
+  								<!-- basic info: password-->
   								<div class="form-group">
-    								<label for="exampleInputPassword1"></label>
+    								<label for="InputPassword"></label>
   								</div>
   								<button class="editInfo">edit</button>
 							</form>
