@@ -1,3 +1,19 @@
+class User {
+	constructor(image, name, email, password, type){
+        this.image = image;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.type = type;
+    }
+}
+
+// global arrays
+const Users = []
+// Adding these users does not change the DOM - we are simply setting up the 
+// book and patron arrays as they appear initially in the DOM.
+// Users.push(new User())
+
 /* Full patrons entries element */
 const infoForm = document.querySelector('#infoForm')
 
@@ -9,7 +25,6 @@ function modifyUserInfo(e) {
 	e.preventDefault();
 	if (e.target.classList.contains('editInfo')) {
 		if (e.target.innerText === 'edit') {
-			console.log(e.target.parentElement.parentElement.parentElement)
 			e.target.parentElement.style.position = "static"
 			addProfileSelector(e.target.parentElement.parentElement.parentElement)
 			addTaskTextBox(e.target.parentElement.firstElementChild)
@@ -67,14 +82,21 @@ function addProfileSelector(task) {
 	inputElement.type = "file"
 	inputElement.name = "avatar"
 	inputElement.accept ="image/*"
+	inputElement.required = ""
 	divElement.appendChild(labelElement)
 	divElement.appendChild(inputElement)
 	task.firstElementChild.firstElementChild.nextElementSibling.appendChild(divElement)
-	console.log(task.firstElementChild.firstElementChild.nextElementSibling)
 }
 
 function removeProfileSelector(task) {
 	const fileLoadingDiv = task.firstElementChild.firstElementChild.nextElementSibling.firstElementChild
+	const newProfileImg = document.querySelector('#avatar').files[0];
+	const profileImg = task.firstElementChild.firstElementChild.firstElementChild
+	console.log(newProfileImg)
+	if (newProfileImg) {
+		profileImg.src = URL.createObjectURL(newProfileImg);
+	}
+	profileImg.alt = "Profile Picture";
 	task.firstElementChild.firstElementChild.nextElementSibling.removeChild(fileLoadingDiv)
 }
 
