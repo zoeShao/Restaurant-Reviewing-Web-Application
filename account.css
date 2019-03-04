@@ -82,7 +82,7 @@ a.navInitialChoice {
 	pointer-events: none;
 }
 
-.dropDown {
+#dropDown {
     height: 40px;
     padding-right: 20px;
 
@@ -190,13 +190,13 @@ a.navInitialChoice {
 	top: 75%;
 }
 
-.mainBody {
+#mainBody {
 	height: 100%;
 }
 
 .contentBox {
-	min-height: 150px;
-	max-height: 200px;
+	min-height: 200px;
+	max-height: 250px;
 	background-color: white;
 	padding: 15px;
 	margin-bottom: 15px;
@@ -217,10 +217,6 @@ a.reviewLink {
 
 a.reviewLink:hover {
   	color: black;
-}
-
-.reviewContent strong{
-	font-size: 18px;
 }
 
 .checked {
