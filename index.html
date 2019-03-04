@@ -28,7 +28,14 @@
   <!-- Navigation -->
   <nav id = "navBar" class="navbar navbar-expand-sm bg-danger navbar-dark">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Restaurant Reviewer</a>
+      <div class="col-md-9">
+        <a class="reviewLink" href="index.html">
+          <div class="logoContainer">
+            <img id = "logoImg" src="logo.png" class="img-thumbnail" alt="logo Picture"/>
+            <span class="logo text-dark">Restaurant Rev.</span>
+          </div>
+        </a>
+      </div>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="login.html">Log In
@@ -116,8 +123,8 @@
           <div class="dropdown">
               <button id = "dropDownButton" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Downtown-Toronto</button>
               <div class="dropdown-menu">
-                <a id = "dropdownToronto" class="dropdown-item" href="#">Downtown-Toronto</a>
-                <a id = "dropdownMarkham" class="dropdown-item" href="#">Markham</a>
+                <a id = "dropdownToronto" class="dropdown-item" href="#dropDownButton">Downtown-Toronto</a>
+                <a id = "dropdownMarkham" class="dropdown-item" href="#dropDownButton">Markham</a>
               </div>
           </div>
           
