@@ -60,3 +60,31 @@ margin-left: 10px;
 #restaurantSignUp{
     display: none;
 }
+
+#logoImg {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  
+.reviewLink {
+    display:block;
+}
+
+.col-md-9 {
+    height: 100%;
+}
+
+.logoContainer {
+    margin-left: 55px;
+    height: 50px;
+}
+
+.logo {
+    position: absolute;
+    font-family:Impact;
+    top: 10%;
+    font-size: 24px;
+    letter-spacing: 1px;
+    padding-left: 10px;
+    font-weight: bolder;
+}
