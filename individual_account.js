@@ -28,12 +28,19 @@ userImg.alt = "avatar Picture";
 const user = new User(userImg, "user", "user@mail.com", "user", "i")
 const review1 = new Review("McDonald's", "user", 3, 1, "here is the review.here is the review.here is the review.here is the review.")
 const review2 = new Review("Osaka Sushi", "user", 4, 2, "here is the review.here is the review.")
-const review3 = new Review("Asaka Sushi", "user", 5, 3, "here is the review.")
-const review4 = new Review("Bsaka Sushi", "user", 5, 3, "here is the review.")
+
+// These examples are just for test purpose (sort)
+const review3 = new Review("Atest", "user", 5, 3, "here is the review.")
+const review4 = new Review("Btest", "user", 1, 1, "here is the review.")
+const review5 = new Review("Ctest", "user", 4, 3, "here is the review.")
+const review6 = new Review("Dtest", "user", 5, 2, "here is the review.")
 user.reviews.push(review2)
 user.reviews.push(review1)
+// These examples are just for test purpose (sort)
 user.reviews.push(review3)
 user.reviews.push(review4)
+user.reviews.push(review5)
+user.reviews.push(review6)
 // console.log(user)
 
 /* Full patrons entries element */
@@ -42,9 +49,6 @@ const contentBody = document.querySelector('#mainBody')
 const pager = document.querySelector('#pager')
 
 showPage(currentPage)
-// for (let i = 0; i < user.reviews.length; i++) {
-// 	addReviewToDom(user.reviews[i])
-// }
 
 /* Event listeners for button submit and button click */
 dropDown.addEventListener('click', sortTheItem);
@@ -183,20 +187,3 @@ function addPriceToDom(rate) {
 	paraElement.innerHTML = '<strong>Price: </strong>' + priceRate
 	return paraElement
 }
-
-
-// function showPage(currentPage) {
-// 	for (let i = 0; i < maxReviews; i++) {
-// 		let j = ((currentPage-1)*3) + i
-// 		// console.log(j)
-// 		addReviewToDom(user.reviews[j])
-// 	}
-// }
-
-// function showRestPage(restPage) {
-// 	for (let i = 0; i < restPage; i++) {
-// 		let j = ((currentPage-1)*3) + i
-// 		console.log(j)
-// 		addReviewToDom(user.reviews[j])
-// 	}
-// }

@@ -40,6 +40,8 @@ img {
 
 .portraitContainer {
 	height: 50px;
+	width: 50px;
+	float: right;
 }
 
 .userName {

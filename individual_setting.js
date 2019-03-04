@@ -92,9 +92,8 @@ function addProfileSelector(task) {
 function removeProfileSelector(task) {
 	const fileLoadingDiv = task.firstElementChild.firstElementChild.nextElementSibling.firstElementChild
 	const newProfileImg = document.querySelector('#avatar').files[0];
-	// console.log(newProfileImg)
 	const profileImg = task.firstElementChild.firstElementChild.firstElementChild
-	console.log(newProfileImg)
+	// console.log(newProfileImg)
 	if (newProfileImg) {
 		profileImg.src = URL.createObjectURL(newProfileImg);
 	}
