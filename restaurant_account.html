@@ -23,26 +23,30 @@
 </head>
 
 <body>
-	<div class="container-fluid">
-		<div id="header" class="row p-3 bg-danger text-white">
-			<div class="col-md-9">
-				<h2>logo here</h2>
-			</div>
-			<div class="col-md-1">
-				<div class="portraitContainer">
-					<img src="avatar.jpg" class="portraitIcon rounded float-right img-thumbnail rounded-circle">
+		<div class="container-fluid">
+				<div id="header" class="row p-3 bg-danger text-white">
+					<div class="col-md-9">
+						<a class="reviewLink" href="index.html">
+							<div class="logoContainer">
+								<img src="" class="img-thumbnail" alt="logo Picture"/>
+							</div>
+						</a>
+					</div>
+					<div class="col-md-1">
+						<div class="portraitContainer">
+						<img src="avatar.jpg" class="float-right img-thumbnail rounded-circle" alt="avatar Picture"/>
+						</div>
+					</div>
+					<div class="userName col-md-1">
+						<p>user</p>
+					</div>
+					<div class="col-md-1">
+						<p class="signOut float-left">
+							<a href="index.html" target="_self">Sign out</a>
+						</p>
+					</div>
 				</div>
 			</div>
-			<div class="col-md-1">
-				<p>John Jiang</p>
-			</div>
-			<div class="col-md-1">
-				<p class="signOut float-left">
-					<a href="" target="_self">Sign out</a>
-				</p>
-			</div>
-		</div>
-	</div>
 	<div class="container-fluid">
 		<div id="topNavBar" class="row bg-light">
 			<div class="navContainer col-md-4">
@@ -88,8 +92,9 @@
 				<div class="contentBox">
 					<a class="reviewLink" style="display:block" href="#">
 						<div class='storeContainer'>
-							<p><strong>Restaurant name: </strong>Osaka Sushi
+							<p><strong>Restaurant name: </strong>Osaka Sushi</p>
 								<!-- Add icon library -->
+							<p><strong>Rate:</strong>
 								<link rel="stylesheet"
 									href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 								<span class="fa fa-star checked"></span>
@@ -98,7 +103,7 @@
 								<span class="fa fa-star checked"></span>
 								<span class="fa fa-star"></span>
 							</p>
-							<p><strong>Restaurant address: </strong>5762 Hwy 7, Markham</p>
+							<p><strong>From user: </strong>user1</p>
 						</div>
 						<div class='reviewContent'>
 							<p><strong>Review:" </strong>here is the review.here is the review.here is the review.here is the
@@ -106,6 +111,29 @@
 						</div>
 					</a>
 				</div>
+
+				<div class="contentBox">
+						<a class="reviewLink" style="display:block" href="#">
+							<div class='storeContainer'>
+								<p><strong>Restaurant name: </strong>Osaka Sushi</p>
+									<!-- Add icon library -->
+								<p><strong>Rate:</strong>
+									<link rel="stylesheet"
+										href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+								</p>
+								<p><strong>From user: </strong>user3</p>
+							</div>
+							<div class='reviewContent'>
+								<p><strong>Review:" </strong>here is the review.here is the review.here is the review.here is the
+									review.here is the review.here is the review.here is the review.<strong>"</strong></p>
+							</div>
+						</a>
+					</div>
 			</div>
 
 			<div class="pager float-right">
