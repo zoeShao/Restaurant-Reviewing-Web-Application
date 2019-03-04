@@ -1,0 +1,418 @@
+/*
+classification
+*/
+input {
+  outline: none;
+}
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+.f_left {
+  float: left;
+}
+.f_right {
+  float: right;
+}
+ul,
+ol {
+  list-style: none;
+}
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  line-height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.container {
+  width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+.warp {
+  width: 1200px;
+  border: 4px solid #000;
+  margin: 50px auto;
+  overflow: hidden;
+}
+header {
+  width: 100%;
+  height: 112px;
+}
+header .logo {
+  margin: 16px 0 0px;
+  width: 300px;
+  height: 80px;
+  border: 1px solid #000;
+}
+nav {
+  height: 100px;
+  width: 100%;
+  border-bottom: 1px solid #000;
+}
+nav span {
+  display: inline-block;
+  width: 32%;
+  text-align: center;
+}
+nav span a {
+  padding: 10px;
+  line-height: 100px;
+  font-size: 20px;
+  color: #333;
+}
+nav span.currten a {
+  background-color: #999;
+  border-radius: 10px;
+}
+.EssentialInformation .container {
+  padding-bottom: 100px;
+}
+.EssentialInformation .container p {
+  padding: 50px 0;
+}
+.EssentialInformation .container .Information {
+  width: 100%;
+}
+.EssentialInformation .container .Information > form {
+  width: 100%;
+}
+.EssentialInformation .container .Information > form > .left {
+  width: 30%;
+}
+.EssentialInformation .container .Information > form > .left > .HeadPortrait {
+  width: 178px;
+  height: 178px;
+  border-radius: 50%;
+  border: 1px solid #000;
+  line-height: 178px;
+}
+.EssentialInformation .container .Information > form > .left > .HeadPortrait > img {
+  display: block;
+  width: 120px;
+  height: 120px;
+  margin: 15px auto;
+}
+.EssentialInformation .container .Information > form > .left > button {
+  display: block;
+  width: 120px;
+  height: 45px;
+  background-color: #999;
+  margin: 30px 0 0 30px;
+  text-align: center;
+  border-radius: 5px;
+  border: none;
+}
+.EssentialInformation .container .Information > form > .right {
+  width: 70%;
+}
+.EssentialInformation .container .Information > form > .right > .name,
+.EssentialInformation .container .Information > form > .right .email,
+.EssentialInformation .container .Information > form > .right .password {
+  margin-bottom: 30px;
+}
+.EssentialInformation .container .Information > form > .right > .name > label,
+.EssentialInformation .container .Information > form > .right .email > label,
+.EssentialInformation .container .Information > form > .right .password > label {
+  padding-right: 20px;
+}
+.EssentialInformation .container .Information > form > .right > .name > input,
+.EssentialInformation .container .Information > form > .right .email > input,
+.EssentialInformation .container .Information > form > .right .password > input {
+  display: inline-block;
+  height: 50px;
+  width: 415px;
+}
+.EssentialInformation .container .Information > form > .right .email > label {
+  padding-left: 53px;
+}
+.EssentialInformation .container .Information > form > .right .password > label {
+  padding-left: 9px;
+}
+.EssentialInformation .container .Information > form > .right > button {
+  display: block;
+  width: 120px;
+  height: 45px;
+  margin-right: 290px;
+  border-radius: 5px;
+  border: none;
+  margin-top: 30px;
+}
+
+
+/*MyAccountSettingsPage*/
+.sss {
+  padding: 10px 0;
+}
+.sss .logo {
+  width: 30%;
+}
+.sss .center {
+  width: 50%;
+  margin-right: 50px;
+}
+.sss .center > .btns {
+  padding-right: 10px;
+}
+.sss .center > .btns > a {
+  padding: 0 10px;
+  color: #49b8ff;
+}
+.sss .center > .search {
+  width: 100%;
+  position: relative;
+}
+.sss .center > .search > input {
+  display: block;
+  width: 450px;
+  height: 55px;
+  float: left;
+}
+.sss .center > .search > button {
+  display: block;
+  width: 114px;
+  height: 59px;
+  position: absolute;
+  top: 0px;
+  right: 8px;
+}
+.sss .btn {
+  margin-top: 15px;
+  width: 10%;
+}
+.RestaurantReview {
+  padding: 0 15px;
+  width: 760px;
+  height: 330px;
+  border: 2px solid #000;
+  margin: 30px auto 0;
+}
+.RestaurantReview > .left {
+  padding: 20px 0;
+}
+.RestaurantReview > .left .name {
+  width: 452px;
+  border-bottom: 1px solid #000;
+}
+.RestaurantReview > .left .name > input {
+  padding-left: 10px;
+  border: none;
+}
+.RestaurantReview > .left > .RestaurantInformation > .left {
+  margin-top: 20px;
+  width: 200px;
+  height: 225px;
+  border: 1px solid #000;
+}
+.RestaurantReview > .left > .RestaurantInformation > .right > .none {
+  padding-top: 16px;
+  margin-left: 35px;
+  width: 150px;
+  border-bottom: 1px solid #000;
+}
+.RestaurantReview > .left > .RestaurantInformation > .right > .none > input {
+  border: none;
+}
+.RestaurantReview > .left > .RestaurantInformation > .right > .Address,
+.RestaurantReview > .left > .RestaurantInformation > .right > .tel {
+  padding-top: 15px;
+  margin-left: 35px;
+  width: 150px;
+  border-bottom: 1px solid #000;
+}
+.RestaurantReview > .left > .RestaurantInformation > .right > .Address > input,
+.RestaurantReview > .left > .RestaurantInformation > .right > .tel > input {
+  border: none;
+  color: #333;
+}
+.RestaurantReview > .right {
+  margin-top: 30px;
+}
+.RestaurantReview > .right > .map-img {
+  width: 225px;
+  height: 265px;
+  border: 1px solid #000000;
+  margin-right: 20px;
+}
+.review {
+  width: 760px;
+  line-height: 80px;
+  margin: 20px auto 0;
+}
+.review > button {
+  width: 210px;
+  height: 50px;
+  border: none;
+  border-radius: 50px;
+  margin-bottom: 20px;
+}
+.review > .Five-pointedStar {
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+}
+.review > .Five-pointedStar > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.CommentsOnRestaurants {
+  width: 790px;
+  border: 2px solid #000;
+  margin: 0px auto 20px;
+}
+.CommentsOnRestaurants .box {
+  width: 100%;
+  border-bottom: 1px solid #000;
+}
+.CommentsOnRestaurants .box > .left > .shop-img {
+  margin: 15px;
+  width: 102px;
+  height: 102px;
+  border-radius: 50%;
+  border: 1px solid #000;
+}
+.CommentsOnRestaurants .box > .right {
+  padding-top: 15px;
+  width: 450px;
+  margin-left: 10px;
+  padding-bottom: 50px;
+}
+.CommentsOnRestaurants .box > .right > .name,
+.CommentsOnRestaurants .box > .right .none {
+  width: 100%;
+  border-bottom: 1px solid #000;
+  padding-bottom: 30px;
+}
+.SwitchPage {
+  padding: 0px 205px 0 0px;
+  width: 100%;
+  margin-bottom: 50px;
+}
+.SwitchPage > .left {
+  margin-right: 0px;
+}
+.SwitchPage > .left > img {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+.SwitchPage > .right {
+  width: 30px;
+  height: 30px;
+}
+.SwitchPage > .right > img {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+/*ClassificationPage*/
+.FoodCategories-main {
+  width: 690px;
+  height: 370px;
+  border: 2px solid #000;
+  margin: 50px auto 10px;
+  padding: 0 50px;
+}
+.FoodCategories-main .Categories {
+  padding-top: 20px;
+}
+.FoodCategories-main .FoodClassification {
+  width: 100%;
+  padding-top: 20px;
+}
+.FoodCategories-main .FoodClassification > ul > li {
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 10px;
+  float: left;
+  margin: 0 20px;
+}
+.FoodCategories-main .FoodClassification > ul > li > a {
+  text-decoration: none;
+}
+.FoodCategories-main .FoodClassification > ul > li:nth-of-type(1) {
+  margin-left: 0;
+}
+.FoodCategories-main .FoodClassification > ul > li:hover {
+  background-color: #999999;
+}
+.FoodCategories-main .FoodClassification > ul > li.currten {
+  background-color: #999999;
+}
+.FoodCategories-main .border {
+  margin-top: 85px;
+  width: 100%;
+  height: 2px;
+  background-color: #999999;
+}
+.FoodCategories-main .location {
+  margin-top: 20px;
+  width: 205px;
+  border-bottom: 1px solid #000;
+}
+.FoodCategories-main .location > a {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+}
+.FoodCategories-main .ShopName {
+  margin-top: 20px;
+}
+.FoodCategories-main .ShopName > ul > li {
+  float: left;
+  padding: 10px 10px;
+  margin-left: 15px;
+  border-radius: 10px;
+}
+.FoodCategories-main .ShopName > ul > li > a {
+  text-decoration: none;
+}
+.FoodCategories-main .ShopName > ul > li.currten {
+  background-color: #999999;
+}
+.FoodCategories-main .ShopName > ul > li:hover {
+  background-color: #999999;
+}
+.FoodCategories-main .ShopName > ul > li:nth-of-type(1) {
+  margin-left: 0;
+}
+.select {
+  margin-bottom: 10px;
+}
+.select > select {
+  width: 130px;
+  height: 40px;
+  margin-right: 205px;
+  border-radius: 30px;
+  background-color: #999999;
+}
+.CommentsOnRestaurantsSgin > .box > .left > .shop-img {
+  width: 165px;
+  height: 130px;
+  border-radius: 0;
+}
+.CommentsOnRestaurantsSgin > .box > .right > .name > strong {
+  padding: 0 20px;
+}
+.CommentsOnRestaurantsSgin > .box > .right > .name > .star {
+  display: inline-block;
+  background-color: #d7ff72;
+}
+.CommentsOnRestaurantsSgin > .box > .right > .name > .star > img {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  vertical-align: bottom;
+}
+
