@@ -171,8 +171,22 @@ a.navInitialChoice {
     text-align: center;
 }
 
-.infoForm {
+#infoForm {
+	position: relative;
+	font-size: 18px;
+	font-weight: bold;
+	top: 10%;
+}
+
+.info {
+	color: #6d6d6d;
+	font-weight: normal;
+}
+
+.editInfo {
+	position: absolute;
 	font-size: 15px;
+	top: 75%;
 }
 
 .mainBody {

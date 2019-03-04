@@ -74,37 +74,37 @@
 					<div class="infoBody row p-3">
 						<div class="col-md-4">
 							<div class="portraitSetting">
-								<img src="avatar.jpg" class="portraitIcon rounded img-thumbnail rounded-circle" alt="avatar Picture"/>
+								<img src="avatar.jpg" id="fileUpload" class="portraitIcon rounded img-thumbnail rounded-circle" alt="avatar Picture"/>
 							</div>
 							<div class="kv-avatar">
-                				<div class="file-loading">
+                				<!-- <div class="file-loading">
                 					<label for="avatar">
                 					<strong>Choose a profile picture:</strong>
                 					</label>
-                    				<input id="avatar" name="avatar" type="file" accept="image/*" required>
-                				</div>
+                    				<input id="avatar" name="avatar" type="file" accept="image/*">
+                				</div> -->
             				</div>
 						</div>
 						<div class="col-md-8">
-							<form class="infoForm">
+							<form id="infoForm">
 								<div class="form-group">
-    								<label for="exampleInputEmail1">User name</label>
-    								<input type="text" class="form-control" id="exampleInputEmail1" placeholder="user">
+    								<label for="exampleInputEmail1">User name: </label>
+    								<span class="info">user</span>
   								</div>
   								<div class="form-group">
-    								<label for="exampleInputEmail1">Email address</label>
-    								<input type="email" class="form-control" id="exampleInputEmail1" placeholder="user@mail.com">
+    								<label for="exampleInputEmail1">Email address: </label>
+    								<span class="info">user@mail.com</span>
   								</div>
   								<div class="form-group">
-    								<label for="exampleInputPassword1">Password</label>
-    								<input type="password" class="form-control" id="exampleInputPassword1" placeholder="****">
+    								<label for="exampleInputPassword1"></label>
   								</div>
-  								<button class="float-right" type="submit">Save</button>
+  								<button class="editInfo">edit</button>
 							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<script type="text/javascript" src="individual_setting.js"></script>
 	</body>
 </html>
