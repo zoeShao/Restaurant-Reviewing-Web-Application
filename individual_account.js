@@ -6,6 +6,7 @@ class User {
         this.password = password;
         this.type = type;
         this.reviews = [];
+        this.favourite = [];
     }
 }
 
@@ -66,6 +67,24 @@ function sortTheItem(e) {
 	}
 }
 
+function changePage(e) {
+	e.preventDefault();
+	if (e.target.classList.contains('previous')) {
+		if (currentPage > 1) {
+			currentPage = currentPage - 1
+			showPage(currentPage)
+		}
+		// console.log(currentPage)
+
+	} else if (e.target.classList.contains('next')) {
+		if ((currentPage * 3) < user.reviews.length) {
+			currentPage = currentPage + 1
+		}
+		showPage(currentPage)		
+		// console.log(currentPage)
+	}
+}
+
 function showPage(currentPage) {
 	let restPage = user.reviews.length - currentPage * 3
 	if (restPage >= 0) {
@@ -83,24 +102,6 @@ function showPage(currentPage) {
 			// console.log(j)
 			addReviewToDom(user.reviews[j])
 		}
-	}
-}
-
-function changePage(e) {
-	e.preventDefault();
-	if (e.target.classList.contains('previous')) {
-		if (currentPage > 1) {
-			currentPage = currentPage - 1
-			showPage(currentPage)
-		}
-		// console.log(currentPage)
-
-	} else if (e.target.classList.contains('next')) {
-		if ((currentPage * 3) < user.reviews.length) {
-			currentPage = currentPage + 1
-		}
-		showPage(currentPage)		
-		// console.log(currentPage)
 	}
 }
 

@@ -1,10 +1,11 @@
 class User {
-	constructor(image, name, email, password, type){
+	constructor(image, name, email, password, type, reviews){
         this.image = image;
         this.name = name;
         this.email = email;
         this.password = password;
         this.type = type;
+        this.reviews = [];
     }
 }
 
@@ -91,6 +92,7 @@ function addProfileSelector(task) {
 function removeProfileSelector(task) {
 	const fileLoadingDiv = task.firstElementChild.firstElementChild.nextElementSibling.firstElementChild
 	const newProfileImg = document.querySelector('#avatar').files[0];
+	// console.log(newProfileImg)
 	const profileImg = task.firstElementChild.firstElementChild.firstElementChild
 	console.log(newProfileImg)
 	if (newProfileImg) {
