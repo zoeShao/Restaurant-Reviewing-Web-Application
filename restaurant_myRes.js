@@ -20,8 +20,9 @@ class Restaurant{
     }
 }
 
-let maxReviews = 3
-let currentPage = 1
+let maxReviews = 3;
+let currentPage = 1;
+let editing = false;
 const storeImg1 = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
 const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1)
 
@@ -45,10 +46,9 @@ user.res.push(store5)
 
 const dropDown = document.querySelector('#dropDown')
 const contentBody = document.querySelector('#mainBody');
-const newResForm = document.querySelector('#newResForm');
 const pager = document.querySelector('#pager')
 
-// newResForm.addEventListener('submit', addNewRes);
+
 dropDown.addEventListener('click', changeMain);
 pager.addEventListener('click', changePage);
 contentBody.addEventListener('click', editRes);
@@ -58,11 +58,13 @@ showPage(currentPage);
 function changeMain(e){
     e.preventDefault();
     if(e.target.innerText === 'add new'){
+        editing = true;
         e.target.parentElement.parentElement.parentElement.style.position = 'static';
-        contentBody.innerText = ""
+        contentBody.innerText = "";
         addNewResBox();
         const newResForm = document.querySelector('#newResForm');
         newResForm.addEventListener('submit', addNewRes);
+        newResForm.addEventListener('reset', backToLst);
         const imgInput = document.querySelector('#newRestaurantImg');
         const imgView = document.querySelector('#newPreview');
         imgInput.onchange = function(){
@@ -105,15 +107,25 @@ function sortByName(user) {
 }
 
 function editRes(e){
-    if(e.target.innerText === 'Edit'){
-        const address = e.target.parentElement.childNodes[1].lastElementChild.lastElementChild.innerText;
+    if(e.target.classList.contains('btn') && !(editing)){
+        let index = null;
+        const address = e.target.parentElement.firstElementChild.childNodes[1].lastElementChild.lastElementChild.innerText;
         for(let i = 0; i < user.res.length; i++){
             if(user.res[i].address === address){
-                
+                index = i;
+                break;
             }
+        }
+        if(e.target.innerText === 'Edit'){ 
+            contentBody.innerText = "";
+            addNewResBox();
+            const editRes = buildNewRes(user.res[index].rate, user.res[index].price);
+
         }
     }
 }
+
+
 
 function addNewResBox(){
     const newBoxDiv = document.createElement('div');
@@ -165,7 +177,7 @@ function addNewResBox(){
     newBtnDiv2.className = 'form-group';
     const newBtnInput2 = document.createElement('input');
     newBtnInput2.id = 'newResCancel';
-    newBtnInput2.type = 'submit';
+    newBtnInput2.type = 'reset';
     newBtnInput2.value = 'Cancel';
     newBtnInput2.className = 'btn float-right btn-secondary'
     newBtnDiv2.appendChild(newBtnInput2);
@@ -203,19 +215,31 @@ function createInputForm(id, labelText, holderText){
 
 function addNewRes(e){
     e.preventDefault();
-    if(e.target.innerText === 'Save'){
+    const newRes = buildNewRes(0, 0);
+    user.res.unshift(newRes);
+    dropDown.style.visibility = 'visible';
+    pager.style.visibility = 'visible';
+    editing = false;
+    showPage(currentPage);
+}
+
+function backToLst(e){
+    e.preventDefault();
+    dropDown.style.visibility = 'visible';
+    pager.style.visibility = 'visible';
+    editing = false;
+    showPage(currentPage);
+}
+
+function buildNewRes(rate, price){
     const files = document.querySelector('#newRestaurantImg').files[0];
     const newResImg = URL.createObjectURL(files);
     const newResName = document.querySelector('#newRestaurantName').value;
     const newResPhone = document.querySelector('#newRestaurantPhone').value;
     const newResAddr = document.querySelector('#newRestaurantAddr').value;
 
-    const newRes = new Restaurant(newResImg, newResName, newResPhone, newResAddr, 0, 0);
-    user.res.unshift(newRes);
-    }
-    dropDown.style.visibility = 'visible';
-    pager.style.visibility = 'visible';
-    showPage(currentPage);
+    const newRes = new Restaurant(newResImg, newResName, newResPhone, newResAddr, rate, price);
+    return newRes;
 }
 
 function showPage(currentPage) {
