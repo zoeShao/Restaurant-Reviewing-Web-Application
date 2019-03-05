@@ -1,3 +1,4 @@
+/* Class */
 class User {
 	constructor(image, name, email, password, type){
         this.image = image;
@@ -10,7 +11,7 @@ class User {
 }
 
 class Restaurant{
-    constructor(image, name, phone, address, rate, price){
+    constructor(image, name, phone, address, rate, price, category, position){
         this.image = image;
         this.name = name;
         this.phone = phone;
@@ -24,7 +25,7 @@ let maxReviews = 3;
 let currentPage = 1;
 let editing = false;
 const storeImg1 = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
-const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1)
+const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1, 'Fastfood', 'DownTown')
 
 // These examples are just for test purpose (sort)
 const storeImg3 = "res.jpg"

@@ -19,21 +19,23 @@ class Review {
         this.content = content;
     }
 }
+/* Global variables */
+let maxReviews = 3 // max Contents one page can show
+let currentPage = 1 // current page number
 
-let maxReviews = 3
-let currentPage = 1
+/* Examples(hardcode part) */
+// create a user
 const userImg = document.createElement('img')
 userImg.src = "avatar.jpg"
-userImg.alt = "avatar Picture";
 const user = new User(userImg, "user", "user@mail.com", "user", "i")
+// create reviews the user add
 const review1 = new Review("McDonald's", "user", 3, 1, "here is the review.here is the review.here is the review.here is the review.")
-
 // These examples are just for test purpose (sort)
 const review3 = new Review("Atest", "user", 5, 3, "here is the review.")
 const review4 = new Review("Btest", "user", 1, 1, "here is the review.")
 const review5 = new Review("Ctest", "user", 4, 3, "here is the review.")
 const review6 = new Review("Dtest", "user", 5, 2, "here is the review.")
-
+// Add these reviews to the user's review array (does not change the DOM)
 user.reviews.push(review1)
 // These examples are just for test purpose (sort)
 user.reviews.push(review3)
@@ -52,6 +54,11 @@ showPage(currentPage)
 dropDown.addEventListener('click', sortTheItem);
 pager.addEventListener('click', changePage)
 
+/*-----------------------------------------------------------*/
+/*** 
+Functions that don't edit DOM themselves, but can call DOM functions 
+***/
+// event handler function for sort 
 function sortTheItem(e) {
 	e.preventDefault();
 	if (e.target.classList.contains('dropdown-name')) {
@@ -65,6 +72,7 @@ function sortTheItem(e) {
 	} 
 }
 
+// event handler function for change page
 function changePage(e) {
 	e.preventDefault();
 	if (e.target.classList.contains('previous')) {
@@ -81,6 +89,9 @@ function changePage(e) {
 	}
 }
 
+/*-----------------------------------------------------------*/
+/*** DOM functions below - use these to create and edit DOM objects ***/
+// show the content box for current page
 function showPage(currentPage) {
 	let restPage = user.reviews.length - currentPage * 3
 	if (restPage >= 0) {
@@ -101,6 +112,7 @@ function showPage(currentPage) {
 	}
 }
 
+// add the given review to the main body
 function addReviewToDom(review) {
 	const contentBoxElement = document.createElement('div')
 	contentBoxElement.className = "contentBox"
@@ -124,22 +136,7 @@ function addReviewToDom(review) {
 	contentBody.appendChild(contentBoxElement)
 }
 
-function sortByName(user) {
-	user.reviews.sort(function(a, b){
-    if(a.rName < b.rName) { return -1; }
-    if(a.rName > b.rName) { return 1; }
-    return 0;
-	})
-}
-
-function sortByRate(user) {
-	user.reviews.sort(function(a, b){
-    if(a.rate < b.rate) { return 1; }
-    if(a.rate > b.rate) { return -1; }
-    return 0;
-	})
-}
-
+//add the rate star to the DOM by given rate score
 function addRateToDom(rate) {
 	const paraElement = document.createElement('p')
 	const strongElement = document.createElement('strong')
@@ -162,8 +159,28 @@ function addRateToDom(rate) {
 	return paraElement
 }
 
+// add user name to DOM
 function addUNameToDom(name) {
 	const paraElement = document.createElement('p')
 	paraElement.innerHTML = '<strong>From user: </strong>' + name
 	return paraElement
+}
+
+/*-----------------------------------------------------------*/
+/*** helper functions ***/
+// sort function by name
+function sortByName(user) {
+	user.reviews.sort(function(a, b){
+    if(a.rName < b.rName) { return -1; }
+    if(a.rName > b.rName) { return 1; }
+    return 0;
+	})
+}
+// sort function by rate
+function sortByRate(user) {
+	user.reviews.sort(function(a, b){
+    if(a.rate < b.rate) { return 1; }
+    if(a.rate > b.rate) { return -1; }
+    return 0;
+	})
 }
