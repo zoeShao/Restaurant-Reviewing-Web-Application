@@ -33,4 +33,8 @@ Instructions:
       1. He can ban/recover users. When a user is banned, he is restricted to log in his account. We decide to take away delete users, change user's password/username from the proposal since it is unnecessary. 
       2. He can delete comments. There is a remove button on every comment, if the admin click it, the comment would be removed
       3. He can remove restaurants as well.
+      
+* For restaurant user:
+      username: user2
+      password: user2
 
