@@ -70,7 +70,7 @@ Button event listeners functions
 function showChineseRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const chineseRes = []
-        //make server call to get all the Chinese restaurants in the array
+        //server part TODO: make server call to get all the Chinese restaurants in the array
         showRestaurants(chineseRes);
     }
 }
@@ -78,7 +78,7 @@ function showChineseRes(e){
 function showFastFoodRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const fastFoodRes = []
-        //make server call to get all the fast food restaurants in the array
+        //server part TODO: make server call to get all the fast food restaurants in the array
         fastFoodRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1))
         showRestaurants(fastFoodRes);
     }
@@ -87,7 +87,7 @@ function showFastFoodRes(e){
 function showJapaneseRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const japaneseRes = []
-        //make server call to get all the Japanese food restaurants in the array
+        //server part TODO: make server call to get all the Japanese food restaurants in the array
         const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
         japaneseRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
         showRestaurants(japaneseRes);
@@ -97,7 +97,7 @@ function showJapaneseRes(e){
 function showMarkhamRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const markhamRes = []
-        //make server call to get all the Markham restaurants in the array
+        //server part TODO: make server call to get all the Markham restaurants in the array
         const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
         markhamRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "review_page.html", 4, 2))
         showRestaurants(markhamRes);
@@ -107,7 +107,7 @@ function showMarkhamRes(e){
 function showDowntownRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const downtownRes = []
-        //make server call to get all the downtown Toronto restaurants in the array
+        //server part TODO: make server call to get all the downtown Toronto restaurants in the array
         downtownRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "#", 3, 1))
         showRestaurants(downtownRes);
     }
