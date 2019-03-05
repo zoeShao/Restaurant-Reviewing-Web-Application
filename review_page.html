@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Account</title>
+
+		<!-- Bootstrap core CSS -->
+    	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+    	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+		<!-- Custom styles for this template -->
+		<link rel="stylesheet" type="text/css" href="review_page.css">
+	</head>
+
+	<body>
+
+		<!-- header -->
+		<div class="container-fluid">
+			<div id="header" class="row p-3 bg-danger text-white">
+				<!-- logo part -->
+				<div class="col-md-5">
+					<a class="reviewLink" href="index.html">
+						<div class="logoContainer">
+							<img src="logo.png" class="img-thumbnail" alt="logo Picture"/>
+							<span class="logo text-dark">Restaurant Rev.</span>
+						</div>
+					</a>
+				</div>
+				<!-- search part -->
+				<div class="col-md-4">
+					<div id = "searchBar" class="input-group border border-danger mb-5">
+      					<input class="form-control" type="text" placeholder="Search Restaurants">
+      					<div class="input-group-append">
+        					<button class="btn btn-secondary" type="submit"><i class="fas fa-search text-white"></i></button> 
+      					</div>
+    				</div>
+				</div>
+				<!-- portrait part -->
+				
+				<div class="col-md-1">
+					<a class="reviewLink" href="individual_account.html">
+					<div class="portraitContainer">
+					<img src="https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg" class="float-right img-thumbnail rounded-circle" alt="avatar Picture"/>
+					</div>
+					</a>
+				</div>
+				<!-- user name part -->
+				<div class="userName col-md-1">
+					<p>user</p>
+				</div>
+				<!-- sign out part -->
+				<div class="col-md-1">
+					<p class="signOut float-left">
+						<a href="#" target="_self">Sign out</a>
+					</p>
+				</div>
+				
+			</div>
+		</div>
+
+		<!-- restaurant body -->
+		<div class="container-fluid">
+			<div id="restaurantBody" class="p-3">
+				<p class="storeName text-dark"><strong>McDonald's</strong></p>
+				<div id="restaurantInfo" class="row p-3">
+					<!-- restaurant picture body -->
+					<div class="col-md-3">
+						<div class="RestaurantImgContainer">
+							<img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg" alt="Store Picture">
+						</div>
+					</div>
+					<!-- restaurant info body -->
+					<div class="col-md-7">
+						<p><strong>Restaurant address: </strong>552 Yonge St, Toronto</p>
+						<p><strong>Restaurant tel: </strong>1234567890</p>
+						<p><strong>Rate: </strong>
+						<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star"></span>
+						<span class="fa fa-star"></span>
+						</p>
+						<p><strong>Price: </strong>$</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- account body -->
+		<div class="container-fluid">
+			<div id="reviewBody" class="row p-3">
+				<!-- review part -->
+				<div class="reviewContainer col-md-8">
+					<!-- review are added to here -->
+					<div id="reviewPart">
+					</div>
+				<!-- pager part -->
+				<div id="pager" class="float-right">
+					<nav aria-label="Page navigation example">
+  						<ul class="pagination">
+  							<!-- previous button -->
+    						<li class="page-item">
+      							<a class="previous page-link" href="#" aria-label="Previous">&laquo;</a>
+    						</li>
+    						<!-- next button -->
+    						<li class="page-item">
+      							<a class="next page-link" href="#" aria-label="Next">&raquo;</a>
+    						</li>
+  						</ul>
+					</nav>
+				</div>
+				</div>
+				<!-- review form part -->
+				<div class="col-md-4">
+					<p class="reviewHeader"><strong>Write your review:</strong></p>
+					<form id="reviewForm">
+						<!-- rate price -->
+	  					<div class="form-group">
+	    					<label for="FormControlSelect1">Price</label>
+	    					<select class="form-control" id="FormControlSelect1">
+	      					<option>1</option>
+	      					<option>2</option>
+					      	<option>3</option>
+					    	</select>
+					  	</div>
+					  	<!-- rate  -->
+					  	<div class="form-group">
+					    	<label for="FormControlSelect2">Rate</label>
+					    	<select class="form-control" id="FormControlSelect2">
+					      	<option>1</option>
+					      	<option>2</option>
+					      	<option>3</option>
+					      	<option>4</option>
+					      	<option>5</option>
+					    	</select>
+					  	</div>
+					  	<!-- write review -->
+				  		<div class="form-group">
+				    		<label for="FormControlTextarea">review:</label>
+				    		<textarea class="form-control" id="FormControlTextarea1" rows="3"></textarea>
+				  		</div>
+	  					<button type="submit" class="float-right btn btn-info">Submit</button>
+					</form>
+				</div>
+
+			</div>
+		</div>
+		<script type="text/javascript" src="review_page.js"></script>
+	</body>
+</html>
