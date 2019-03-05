@@ -45,6 +45,9 @@ const store = new Restaurant(storeImg, "McDonald's", "1234567890", "552 Yonge St
 // create a review
 const review1 = new Review("McDonald's", "user1", 3, 1, "here is the review.here is the review.here is the review.here is the review.")
 const review2 = new Review("McDonald's", "user2", 2, 1, "here is the review.here is the review.")
+// create a user
+const userImg = "avatar.jpg"
+const user = new User(userImg, "user", "user@mail.com", "user", "i")
 // Add these reviews to the user's review array (does not change the DOM)
 store.reviews.push(review1)
 store.reviews.push(review2)
@@ -53,14 +56,16 @@ store.reviews.push(review2)
 const reviewForm = document.querySelector('#reviewForm')
 const reviewPart = document.querySelector('#reviewPart')
 const pager = document.querySelector('#pager')
+const bookmark = document.querySelector('#bookmark')
 
 /* Load the initial page. */ 
 showPage(currentPage)
 
 /* Event listeners for button submit and button click */
 reviewForm.addEventListener('submit', addNewReview);
-pager.addEventListener('click', changePage)
+pager.addEventListener('click', changePage);
 reviewForm.addEventListener('keydown', modifyButton);
+bookmark.addEventListener('click', changeBookmark);
 
 /*-----------------------------------------------------------*/
 /*** 
@@ -121,6 +126,21 @@ function changePage(e) {
             currentPage = currentPage + 1
         }
         showPage(currentPage)       
+    }
+}
+
+function changeBookmark(e) {
+    e.preventDefault();
+    if (e.target.classList.contains('notbookmarked')) {
+        e.target.parentElement.innerHTML = "<i class=\"bookmarked fas fa-bookmark\"></i>"
+        //Server part TODO: Get user data from server and push the store to his/her favourite list
+        // code below requires server call
+        user.favourite.push(store)
+    } else if (e.target.classList.contains('bookmarked')) {
+        e.target.parentElement.innerHTML = "<i class=\"notbookmarked far fa-bookmark\"></i>"
+        //Server part TODO: Get user data from server and remove the store to his/her favourite list
+        // code below requires server call
+        user.favourite.splice(user.favourite.indexOf(store), 1)
     }
 }
 

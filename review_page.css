@@ -39,6 +39,14 @@ img {
 	height: 100%;
 }
 
+/*.col-md-9 {
+	height: 100%;
+}
+
+.col-md-2 {
+	height: 100%;
+}
+*/
 .navContainer {
 	border-left-style: solid;
 	border-width: 1px;
@@ -89,9 +97,15 @@ img {
 	border-radius: 25px;
 }
 
+.bookmarkIcon {
+	position: relative;
+	left: 50%;
+	font-size: 1.5em;
+}
+
 .storeName {
 	font-size: 24px;
-	margin-left: 70px;
+	margin-left: 80px;
 	margin-top: 10px;
 	font-family:;
 	letter-spacing:1px;

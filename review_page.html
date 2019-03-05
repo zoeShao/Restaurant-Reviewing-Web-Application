@@ -3,14 +3,15 @@
 	<head>
 		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>Account</title>
+		<title>Restaurant Page</title>
 
 		<!-- Bootstrap core CSS -->
     	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
     	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 		<!-- Custom styles for this template -->
 		<link rel="stylesheet" type="text/css" href="review_page.css">
@@ -65,7 +66,16 @@
 		<!-- restaurant body -->
 		<div class="container-fluid">
 			<div id="restaurantBody" class="p-3">
-				<p class="storeName text-dark"><strong>McDonald's</strong></p>
+				<div id="restaurantHeader" class="row">
+					<div class="col-md-10">
+						<p class="storeName text-dark"><strong>McDonald's</strong></p>
+					</div>
+					<div id="bookmark" class="col-md-2">
+						<a class="bookmarkIcon" href="#">
+         					<i class="notbookmarked far fa-bookmark"></i>
+        				</a>
+					</div>
+				</div>
 				<div id="restaurantInfo" class="row p-3">
 					<!-- restaurant picture body -->
 					<div class="col-md-3">
