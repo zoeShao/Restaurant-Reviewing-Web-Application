@@ -107,6 +107,7 @@ function sortByName(user) {
 }
 
 function editRes(e){
+
     if(e.target.classList.contains('btn') && !(editing)){
         let index = null;
         const address = e.target.parentElement.firstElementChild.childNodes[1].lastElementChild.lastElementChild.innerText;
@@ -117,13 +118,17 @@ function editRes(e){
             }
         }
         if(e.target.innerText === 'Edit'){ 
+            editing = true;
             contentBody.innerText = "";
             addNewResBox();
-            const editRes = buildNewRes(user.res[index].rate, user.res[index].price);
-
+            const newResForm = document.querySelector('#newResForm');
+            newResForm.addEventListener('submit', addEditRes(index));
+            newResForm.addEventListener('reset', backToLst);
         }
     }
 }
+
+
 
 
 
@@ -229,6 +234,18 @@ function backToLst(e){
     pager.style.visibility = 'visible';
     editing = false;
     showPage(currentPage);
+}
+
+function addEditRes(index){
+    return function(e){
+        e.preventDefault();
+        const editRes = buildNewRes(user.res[index].rate, user.res[index].price);
+        user.res[index] = editRes;
+        dropDown.style.visibility = 'visible';
+        pager.style.visibility = 'visible';
+        editing = false;
+        showPage(currentPage);
+    }
 }
 
 function buildNewRes(rate, price){
