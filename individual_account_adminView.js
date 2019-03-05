@@ -39,10 +39,6 @@ const accountBody = document.getElementById("accountBody");
 if(accountBody){
     accountBody.style.overflow = "auto";
 }
-const userBanButton = document.getElementById("userBanButton");
-if(userBanButton){
-    userBanButton.addEventListener("click", banUser);
-}
 
 const popularRestaurants = document.getElementById("popularRestaurants");
 if(popularRestaurants){
@@ -54,14 +50,21 @@ if(commentsMainbody){
     commentsMainbody.addEventListener("click", removeComments);
 }
 
+const banMainbody = document.getElementById("banMainbody");
+if(banMainbody){
+	banMainbody.addEventListener("click", banUser);
+    loadUsers("user2", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png");
+}
+
 const pager = document.querySelector('#pager');
 if(pager){
     pager.addEventListener('click', changePage);
 }
-
+//server part TODO: get data from server, and load it when page loads
 function banUser(e){
     if (e.target.classList.contains("btn")){
-        //should label the user "banned" in database
+		//server part TODO: should label the user "banned" in database
+		const userBanButton = e.target;
         if(userBanButton.innerText == "Ban"){
             userBanButton.innerText = "Recover";
         } else if(userBanButton.innerText == "Recover"){
@@ -72,7 +75,7 @@ function banUser(e){
 }
 
 function removeRestaurants(e){
-    //should remove restaurants in database
+    //server part TODO: should remove restaurants in database
     if (e.target.classList.contains("remove")){
         const restaurantToRemove = e.target.parentElement.parentElement.parentElement;
 		popularRestaurants.removeChild(restaurantToRemove);
@@ -81,7 +84,7 @@ function removeRestaurants(e){
 }
 
 function removeComments(e){
-    //should remove comments in database
+    //server part TODO: should remove comments in database
     if (e.target.classList.contains("remove")){
         const commentToRemove = e.target.parentElement;
 		commentsMainbody.removeChild(commentToRemove);
@@ -188,5 +191,30 @@ function addPriceToDom(rate) {
 		priceRate = priceRate + '$'
 	}
 	paraElement.innerHTML = '<strong>Price: </strong>' + priceRate
-	return paraElement
+	return paraElement;
+}
+
+function loadUsers(name, imgSrc){
+	const row = banMainbody.children[0];
+	const col = document.createElement("div");
+	col.className = "col-lg-2 mt-4 mb-4";
+	const dFlexOuter = document.createElement("div");
+	dFlexOuter.className = "d-flex flex-column bg-light";
+	const dFlexInner = document.createElement("div");
+	dFlexInner.className = "d-flex justify-content-center";
+	const profilePicture = document.createElement("img");
+	profilePicture.src = imgSrc;
+	const username = document.createElement("h4");
+	username.className = "mb-1";
+	username.innerText = name;
+	const banButton = document.createElement("button");
+	banButton.type = "button";
+	banButton.className =  "btn btn-dark";
+	banButton.innerText = "Ban";
+	dFlexInner.appendChild(profilePicture);
+	dFlexInner.appendChild(username);
+	dFlexOuter.appendChild(dFlexInner);
+	dFlexOuter.append(banButton);
+	col.appendChild(dFlexOuter)
+	row.appendChild(col);
 }
