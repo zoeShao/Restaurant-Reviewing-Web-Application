@@ -9,7 +9,7 @@ function checkIdentity(e){
     e.preventDefault();
     const username = document.querySelector('#usernameInput').value;
     const password = document.querySelector('#pwInput').value;
-    //should check username/password with the server 
+    //server part TODO: should check username/password with the server 
     if(username == 'user' && password == 'user'){
         window.location.href = "index_user.html";
     } else if(username == 'admin' && password == 'admin'){
