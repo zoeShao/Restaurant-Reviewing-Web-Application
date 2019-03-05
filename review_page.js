@@ -58,23 +58,51 @@ showPage(currentPage)
 /* Event listeners for button submit and button click */
 reviewForm.addEventListener('submit', addNewReview);
 pager.addEventListener('click', changePage)
+reviewForm.addEventListener('keydown', modifyButton);
 
 /*-----------------------------------------------------------*/
 /*** 
-Functions that don't edit DOM themselves, but can call DOM functions 
+Functions can call DOM functions 
 ***/
+function modifyButton(e) {
+    e.target.parentElement.nextElementSibling.className = "float-right btn btn-info"
+}
+
 function addNewReview(e) {
     e.preventDefault();
-
-    const userName = "user";
-    const storeName = "McDonald's";
-    const price = document.querySelector('#FormControlSelect1').value;
-    const rate = document.querySelector('#FormControlSelect2').value;
-    const content = document.querySelector('#FormControlTextarea1').value;
-    const newReview = new Review(storeName, userName, rate, price, content)
-    store.reviews.unshift(newReview)
-    showPage(currentPage)
-    // addReviewToDom(newReview)
+    if (e.target.lastElementChild.innerText === 'Submit') {
+        const userName = "user";
+        const storeName = "McDonald's";
+        const price = document.querySelector('#FormControlSelect1').value;
+        const rate = document.querySelector('#FormControlSelect2').value;
+        const content = document.querySelector('#FormControlTextarea1').value;
+        if (content) {
+            const newReview = new Review(storeName, userName, rate, price, content)
+            store.reviews.unshift(newReview)
+            showPage(currentPage)
+            e.target.lastElementChild.innerText = 'Resubmit'
+        } else {
+            e.target.lastElementChild.className = "float-right btn btn-info disabled"
+        }
+    } else {
+        const userName = "user";
+        const storeName = "McDonald's";
+        const price = document.querySelector('#FormControlSelect1').value;
+        const rate = document.querySelector('#FormControlSelect2').value;
+        const content = document.querySelector('#FormControlTextarea1').value;
+        if (content) {
+            for (let i = 0; i < store.reviews.length; i++) {
+                if (store.reviews[i].uName === userName) {
+                    store.reviews[i].rate = rate
+                    store.reviews[i].price = price 
+                    store.reviews[i].content = content
+                }
+            }
+            showPage(currentPage)
+        } else {
+            e.target.lastElementChild.className = "float-right btn btn-info disabled"
+        }
+    }
 }
 
 function changePage(e) {
