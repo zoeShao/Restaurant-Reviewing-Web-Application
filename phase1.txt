@@ -11,6 +11,12 @@ Info:
 			   	3. individual_favourite.html, individual_favourite.js (my favourites page)
 			   	4. individual_setting.html, individual_setting.js (individual account setting page)
 
+* For restaurant account page: 
+    -file used: 1. CSS: account.css
+                2. restaurant_account.html, restaurant_account.js (All reviews page)
+                3. restaurant_myRes.html, restaurant_myRes.js (My restaurants page)
+                4. restaurant_setting.html, individual_setting.js (restaurant account setting page)
+
 
 
 Instructions:
@@ -38,3 +44,7 @@ Instructions:
       username: user2
       password: user2
 
+      1.For user2, you will login to the restaurant account page that you can view all reviews from your restaurants at All reviews page, you can also sort the reviews by click the sort by name or rate in up-right corner. You can change page by click the buttons at the down-right corner. 
+      2.At My restaurants page, you can view all your restaurants and you can edit them or remove them by click the buttons in each restaurant content. If you want to add a new restaurant, you can do so by click the button at top-left corner. By clicking 'add new' or 'edit' button, you will entry restaurant editing page that you can edit all information of your restaurant and click save to submit or cancel to exist back to review page.
+      3.The setting page of user2 is pretty same as setting page of user.
+      4.For all these three pages, you can click log out at top right corner to go back to index page. Since user2 is a restaurant owner account, it cannot go to restaurant page to write review.
