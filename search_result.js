@@ -99,7 +99,7 @@ function showMarkhamRes(e){
         const markhamRes = []
         //server part TODO: make server call to get all the Markham restaurants in the array
         const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
-        markhamRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "review_page.html", 4, 2))
+        markhamRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
         showRestaurants(markhamRes);
     }
 }
@@ -108,7 +108,7 @@ function showDowntownRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const downtownRes = []
         //server part TODO: make server call to get all the downtown Toronto restaurants in the array
-        downtownRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "#", 3, 1))
+        downtownRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1))
         showRestaurants(downtownRes);
     }
 }
