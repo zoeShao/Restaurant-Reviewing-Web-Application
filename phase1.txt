@@ -1,0 +1,16 @@
+Info:
+* For restaurant review page:
+	-file used: 1. CSS: review_page.css
+				2. review_page.html, review_page.js (page for reading and writing a review)
+
+* For individual account page: 
+	-file used: 1. CSS: account.css
+			   	2. individual_account.html, individual_account.js (my reviews page)
+			   	3. individual_favourite.html, individual_favourite.js (my favourites page)
+			   	4. individual_setting.html, individual_setting.js (individual account setting page)
+
+
+Instructions:
+* For restaurant review page: We have made an example of a restaurant's main page called McDonald's. 
+
+
