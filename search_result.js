@@ -13,13 +13,15 @@
 // }
 
 class Restaurant{
-    constructor(image, name, phone, address, rate, price){
+    constructor(image, name, phone, address, page, rate, price){
         this.image = image;
         this.name = name;
         this.phone = phone;
         this.address = address;
+        this.page = page;
         this.rate = rate;
         this.price = price;
+        
     }
 }
 
@@ -30,7 +32,7 @@ let currentPageRestaurants = [];
 
 /* Examples(hardcode part) */
 const storeImg1 = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
-const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1)
+const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1)
 
 
 // create a currentPageRestaurants
@@ -77,7 +79,7 @@ function showFastFoodRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const fastFoodRes = []
         //make server call to get all the fast food restaurants in the array
-        fastFoodRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1))
+        fastFoodRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1))
         showRestaurants(fastFoodRes);
     }
 }
@@ -87,7 +89,7 @@ function showJapaneseRes(e){
         const japaneseRes = []
         //make server call to get all the Japanese food restaurants in the array
         const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
-        japaneseRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", 4, 2))
+        japaneseRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
         showRestaurants(japaneseRes);
     }
 }
@@ -97,7 +99,7 @@ function showMarkhamRes(e){
         const markhamRes = []
         //make server call to get all the Markham restaurants in the array
         const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
-        markhamRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", 4, 2))
+        markhamRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "review_page.html", 4, 2))
         showRestaurants(markhamRes);
     }
 }
@@ -106,7 +108,7 @@ function showDowntownRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const downtownRes = []
         //make server call to get all the downtown Toronto restaurants in the array
-        downtownRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1))
+        downtownRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "#", 3, 1))
         showRestaurants(downtownRes);
     }
 }
@@ -157,7 +159,7 @@ function addFavouriteToDom(restaurant) {
 	contentBoxElement.className = "contentBox"
 	const aElement = document.createElement('a')
 	aElement.className = "reviewLink"
-	aElement.href = "#"
+	aElement.href = restaurant.page;
 	const storeImgElement = document.createElement('div')
 	storeImgElement.classNmae = "storeImgContainer"
 	const storeImg = document.createElement('img')
@@ -170,7 +172,7 @@ function addFavouriteToDom(restaurant) {
 	favouriteElement.className = "storeInfoContainer"
 	const nameElement = document.createElement('p')
 	nameElement.innerHTML = "<strong>Restaurant name: </strong>" + `${restaurant.name}`
-	const rateElement = addRateToDom(restaurant.rate)
+    const rateElement = addRateToDom(restaurant.rate)
 	const priceElement = addPriceToDom(restaurant.price)
 	const addressElement = document.createElement('p')
 	addressElement.innerHTML = "<strong>Restaurant address: </strong>" + `${restaurant.address}`
