@@ -55,25 +55,30 @@ contentBody.addEventListener('click', editRes);
 
 showPage(currentPage);
 
+function editingSetting(){
+    editing = true;
+    const newResForm = document.querySelector('#newResForm');
+    newResForm.addEventListener('reset', backToLst);
+    const imgInput = document.querySelector('#newRestaurantImg');
+    const imgView = document.querySelector('#newPreview');
+    imgInput.onchange = function(){
+    if(this.files && this.files[0]){
+        imgView.src = URL.createObjectURL(this.files[0]);
+        }
+    };
+    dropDown.style.visibility = 'hidden';
+    pager.style.visibility = 'hidden';
+}
+
 function changeMain(e){
     e.preventDefault();
     if(e.target.innerText === 'add new'){
-        editing = true;
         e.target.parentElement.parentElement.parentElement.style.position = 'static';
         contentBody.innerText = "";
         addNewResBox();
         const newResForm = document.querySelector('#newResForm');
         newResForm.addEventListener('submit', addNewRes);
-        newResForm.addEventListener('reset', backToLst);
-        const imgInput = document.querySelector('#newRestaurantImg');
-        const imgView = document.querySelector('#newPreview');
-        imgInput.onchange = function(){
-            if(this.files && this.files[0]){
-                imgView.src = URL.createObjectURL(this.files[0]);
-            }
-        };
-        dropDown.style.visibility = 'hidden';
-        pager.style.visibility = 'hidden';
+        editingSetting();
     }
     else if(e.target.classList.contains('dropdown-name')){
         contentBody.innerText = ""
@@ -107,7 +112,6 @@ function sortByName(user) {
 }
 
 function editRes(e){
-
     if(e.target.classList.contains('btn') && !(editing)){
         let index = null;
         const address = e.target.parentElement.firstElementChild.childNodes[1].lastElementChild.lastElementChild.innerText;
@@ -118,19 +122,18 @@ function editRes(e){
             }
         }
         if(e.target.innerText === 'Edit'){ 
-            editing = true;
             contentBody.innerText = "";
             addNewResBox();
             const newResForm = document.querySelector('#newResForm');
             newResForm.addEventListener('submit', addEditRes(index));
-            newResForm.addEventListener('reset', backToLst);
+            editingSetting()
+        }
+        else if(e.target.innerText === 'Delete'){
+            user.res.splice(index, 1);
+            showPage(currentPage);
         }
     }
 }
-
-
-
-
 
 function addNewResBox(){
     const newBoxDiv = document.createElement('div');
@@ -141,7 +144,7 @@ function addNewResBox(){
     newForm.id = 'newResForm';
 
     const newH2 = document.createElement('h2');
-    newH2.appendChild(document.createTextNode('Add a new restaurant'));
+    newH2.appendChild(document.createTextNode('Editing your restaurant'));
 
     const imgDiv = document.createElement('div');
     imgDiv.className = "form-group";
