@@ -19,23 +19,14 @@ $("#imgChooser").change(function() {readImage(this);});
 
 function showOwnerSignUpInfo(e){
     if (e.target.classList.contains("form-check-input")){
-        document.querySelector("#card").className = "card h-75";
-        log(restaurantSignUp.style);
-        if(restaurantSignUp.style.display == "none"){
-            restaurantSignUp.style.display = "block";
-        }
-        signUpButtonForm.style.position = "absolute";
-        signUpButtonForm.style.bottom = "20px";
-        signUpButtonForm.style.right = "20px";
+
+       //Server part TODO: change to restaurant user mode
     }
 }
 
 function showUserSignUpInfo(e){
     if (e.target.classList.contains("form-check-input")){
-        document.querySelector("#card").className = "card h-50";
-        if(restaurantSignUp.style.display == "block"){
-            restaurantSignUp.style.display = "none";
-        }
+        //Server part TODO: change to restaurant user mode
         
     }
 }
@@ -46,12 +37,11 @@ function signUp(e){
         if (!radioButton.checked && !userRadioButton.checked){
             alert("Please to choose your account type.")
         }
-
+        //Server part TODO: upload the information of new user to the server 
     }
 }
 
 function readImage(input) {
-
     if (input.files && input.files[0]) {
       var reader = new FileReader();
       
