@@ -59,7 +59,7 @@ showPage(currentPage)
 
 /* Event listeners for button submit and button click */
 dropDown.addEventListener('click', sortTheItem);
-pager.addEventListener('click', changePage)
+pager.addEventListener('click', changePage);
 
 /*-----------------------------------------------------------*/
 /*** 
@@ -107,7 +107,11 @@ function addFavouriteToDom(restaurant) {
 	contentBoxElement.className = "contentBox"
 	const aElement = document.createElement('a')
 	aElement.className = "reviewLink"
-	aElement.href = "#"
+	if (restaurant.name == "McDonald's") {
+		aElement.href = "review_page.html"
+	} else {
+		aElement.href = "#"
+	}
 	const storeImgElement = document.createElement('div')
 	storeImgElement.classNmae = "storeImgContainer"
 	const storeImg = document.createElement('img')

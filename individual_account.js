@@ -102,7 +102,11 @@ function addReviewToDom(review) {
 	contentBoxElement.className = "contentBox"
 	const aElement = document.createElement('a')
 	aElement.className = "reviewLink"
-	aElement.href = "#"
+	if (review.rName == "McDonald's") {
+		aElement.href = "review_page.html"
+	} else {
+		aElement.href = "#"
+	}
 	const reviewElement = document.createElement('div')
 	reviewElement.className = "storeContainer"
 	const nameElement = document.createElement('p')
