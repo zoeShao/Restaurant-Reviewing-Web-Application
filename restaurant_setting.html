@@ -1,108 +1,128 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Account</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
 
+		<title>Account</title>
+
+		<!-- Bootstrap core CSS -->
     	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
-    	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
+		<!-- Custom styles for this template -->
 		<link rel="stylesheet" type="text/css" href="account.css">
 	</head>
 	<body>
-            <div class="container-fluid">
-                    <div id="header" class="row p-3 bg-danger text-white">
-                        <div class="col-md-9">
-                            <a class="reviewLink" href="index.html">
-                                <div class="logoContainer">
-                                    <img src="" class="img-thumbnail" alt="logo Picture"/>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-1">
-                            <!-- <div class="portraitContainer">
-                            <img src="avatar.jpg" class="portraitIcon rounded float-right img-thumbnail rounded-circle">
-                            </div> -->
-                        </div>
-                        <div class="col-md-1">
-                        </div>
-                        <div class="col-md-1">
-                            <p class="signOut float-left">
-                                <a href="index.html" target="_self">Sign out</a>
-                            </p>
-                        </div>
+         <!-- header -->
+    <div class="container-fluid">
+        <div id="header" class="row p-3 bg-danger text-white">
+            <!-- logo part -->
+            <div class="col-md-9">
+                <a class="reviewLink" href="restaurant_account.html">
+                    <div class="logoContainer">
+                        <img src="logo.png" class="img-thumbnail" alt="logo Picture" />
+                        <span class="logo text-dark">Restaurant Rev.</span>
                     </div>
+                </a>
+            </div>
+            <!-- portrait part -->
+            <div class="col-md-1">
+                <div class="portraitContainer">
+                    <img src="https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg"
+                        class="float-right img-thumbnail rounded-circle" alt="avatar Picture" />
                 </div>
-		<div class="container-fluid">
-			<div id="topNavBar" class="row bg-light">
-				<div class="navContainer col-md-4">
-					<p class="navButton">
-						<a class="navChoice" href="restaurant_account.html" target="_self">
-							<strong>All reviews</strong>
-						</a>
-					</p>
-				</div>
-				<div class="navContainer col-md-4">
-					<p class="navButton">
-						<a class="navChoice" href="restaurant_myRes.html" target="_self">
-							<strong>My retaurants</strong>
-						</a>
-					</p>
-				</div>
-				<div class="navContainer col-md-4">
-					<p class="navButton">
-						<a class="navInitialChoice" href="" target="_self">
-						<strong>Settings</strong>
-						</a>
-					</p>
-				</div>
-			</div>
-		</div>
+            </div>
+            <!-- user name part -->
+            <div class="userName col-md-1">
+                <p>user2</p>
+            </div>
+            <!-- sign out part -->
+            <div class="col-md-1">
+                <p class="signOut float-left">
+                    <a href="index.html" target="_self">Sign out</a>
+                </p>
+            </div>
+        </div>
+	</div>
+	
+
+    <!-- top navigation -->
+    <div class="container-fluid">
+        <div id="topNavBar" class="row bg-light">
+            <!-- reviews part -->
+            <div class="navContainer col-md-4">
+                <p class="navButton">
+                    <a class="navInitialChoice" href="" target="_self">
+                        <strong>All reviews</strong>
+                    </a>
+                </p>
+            </div>
+            <!-- retaurants part -->
+            <div class="navContainer col-md-4">
+                <p class="navButton">
+                    <a class="navChoice" href="restaurant_myRes.html" target="_self">
+                        <strong>My retaurants</strong>
+                    </a>
+                </p>
+            </div>
+            <!-- settings part -->
+            <div class="navContainer col-md-4">
+                <p class="navButton">
+                    <a class="navChoice" href="restaurant_setting.html" target="_self">
+                        <strong>Settings</strong>
+                    </a>
+                </p>
+            </div>
+        </div>
+	</div>
+	
+		<!-- account body -->
 		<div class="container-fluid">
 			<div id="accountBody" class="p-3">
+				<!-- info header part -->
 				<div class="container-fluid">
 					<div class="infoHeader row p-3">
 						<div class="col-md-12">
 							<p class="lead text-dark">Basic Information</p>
 						</div>
 					</div>
+					<!-- info body part -->
 					<div class="infoBody row p-3">
+						<!-- info portrait part -->
 						<div class="col-md-4">
 							<div class="portraitSetting">
-								<img src="avatar.jpg" class="portraitIcon rounded img-thumbnail rounded-circle">
+								<img src="https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg" id="fileUpload" class="portraitIcon rounded img-thumbnail rounded-circle" alt="avatar Picture"/>
 							</div>
 							<div class="kv-avatar">
-                				<div class="file-loading">
-                					<label for="avatar">
-                					<strong>Choose a profile picture:</strong>
-                					</label>
-                    				<input id="avatar" name="avatar" type="file" accept="image/*" required>
-                				</div>
             				</div>
 						</div>
+						<!-- basic info edit part -->
 						<div class="col-md-8">
-							<form class="infoForm">
+							<form id="infoForm">
+								<!-- basic info: user name-->
 								<div class="form-group">
-    								<label for="exampleInputEmail1">User name</label>
-    								<input type="text" class="form-control" id="exampleInputEmail1" placeholder="User name">
+    								<label for="InputEmail">User name: </label>
+    								<span class="info">user2</span>
   								</div>
+  								<!-- basic info: email address-->
   								<div class="form-group">
-    								<label for="exampleInputEmail1">Email address</label>
-    								<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+    								<label for="InputEmail">Email address: </label>
+    								<span class="info">user2@mail.com</span>
   								</div>
+  								<!-- basic info: password-->
   								<div class="form-group">
-    								<label for="exampleInputPassword1">Password</label>
-    								<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    								<label for="InputPassword"></label>
   								</div>
-  								<button class="float-right" type="submit">Save</button>
+  								<button class="editInfo">edit</button>
 							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<script type="text/javascript" src="individual_setting.js"></script>
 	</body>
 </html>
