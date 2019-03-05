@@ -24,4 +24,13 @@ Instructions:
       On the home page, if you click on the "Fast Food", it will bring you to the search result page with McDonald's as the search result. If you click on different food category or location links, it would show you different restaurants that satisfy the condition. You can click on the Mcdonald's link and it would open up the restaurant page for McDonald's. You can browse the information, read and write review of the restaurant there. You can always click on the logo of the navigation bar and bring you back to the home page. The search function is not working yet since it requires server part works. Notice that for phase1, we only make the search result for "Fast Food" and McDonald's restaurant page to prove our understanding of front end, so clicking the other links wouldn't work for now. Once our server part works are done, clicking the other links would automatically build up the page you want for you. For "Popular Restaurants" section in home page, if you pull down the dropdown button, you can select the location and view the popular restaurant at the location you choose. For now, if you switch to Markham, it would show "Osaka Sushi", but once again, clicking the link wouldn't work since we haven't hardcoded the restaurant page for "Osaka Sushi" for phase1, but you should see our ideas.  
       
       If you click on the profile image at the top right corner on the nav bar, you should be navigated to your account page. You can see all the reviews you made, your favourite restaurants, and you can always edit your account information here. There is a sort function for favourite page, so you can sort the restaurants in the order you choose. Search result page also has the same function. 
+      
+* For admin:
+      username: admin
+      password: admin
+      
+      For admin, after you log in, you would be directed to admin account page and this is the view of admin. The admin can't go to other page other than the admin account page because he can access or the information and do all his jobs here. 
+      1. He can ban/recover users. When a user is banned, he is restricted to log in his account. We decide to take away delete users, change user's password/username from the proposal since it is unnecessary. 
+      2. He can delete comments. There is a remove button on every comment, if the admin click it, the comment would be removed
+      3. He can remove restaurants as well.
 
