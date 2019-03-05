@@ -16,7 +16,21 @@ Info:
                 2. restaurant_account.html, restaurant_account.js (All reviews page)
                 3. restaurant_myRes.html, restaurant_myRes.js (My restaurants page)
                 4. restaurant_setting.html, individual_setting.js (restaurant account setting page)
+		
+*For admin account page:
+ -file used: 1. CSS: account.css
+                2. individual_account_adminView_banUser.html, individual_account_adminView_comments.html ,   individual_account_adminView_restaurants.html, individual_account_adminView_banUser.js
 
+*For log in/sign up page:
+-file used 1. css: login_style.css
+           2. login.html, login.js
+	   3. sign_up.html, sign_up.js
+	   
+home page:
+     1. index.html, index.js, index.css, index_user.html
+
+search result:
+     1. restaurants_search_result.html, search_result.css, search_result.js
 
 
 Instructions:
