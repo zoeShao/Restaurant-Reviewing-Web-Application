@@ -25,6 +25,7 @@ let currentPage = 1 // current page number
 
 /* Examples(hardcode part) */
 // create a user
+// get user information from server for phase2
 const userImg = document.createElement('img')
 userImg.src = "avatar.jpg"
 const user = new User(userImg, "user", "user@mail.com", "user", "i")

@@ -13,6 +13,8 @@ class User {
 // global arrays
 // const Users = []
 
+// get user information from server to build user class
+
 /* Select all DOM form elements you'll need. */ 
 const infoForm = document.querySelector('#infoForm')
 
@@ -70,6 +72,7 @@ function removeTaskTextBox(task) {
 	const textBox = task.lastElementChild
 	const taskText = document.createTextNode(textBox.value)
 	taskLabel.appendChild(taskText)
+	// sent the new information to server
 	textBox.before(taskLabel)
 	task.removeChild(textBox)
 }
@@ -100,6 +103,7 @@ function removeProfileSelector(task) {
 		profileImg.src = URL.createObjectURL(newProfileImg);
 	}
 	profileImg.alt = "Profile Picture";
+	//update the new user image to server
 	task.firstElementChild.firstElementChild.nextElementSibling.removeChild(fileLoadingDiv)
 }
 

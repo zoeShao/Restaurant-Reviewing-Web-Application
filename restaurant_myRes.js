@@ -38,6 +38,7 @@ const store3 = new Restaurant(storeImgSort, "ATest1", "1234567890", "1 (name) St
 const store4 = new Restaurant(storeImgSort, "BTest2", "0987654321", "2 (name) St, City2", 1, 3, 'Markham', 'Chinese')
 const store5 = new Restaurant(storeImgSort, "CTest3", "1234567890", "3 (name) St, City3", 2, 1,'DownTown', 'Japanese')
 // create a user
+// get user information and list of restaurant from server for phase2
 const userImg = "avatar.jpg"
 const user = new User(userImg, "user2", "user2@mail.com", "user2", "i");
 // Add these restaurants to the user's favourite array (does not change the DOM)
@@ -121,6 +122,7 @@ function editRes(e){
         // delete restaurant event
         else if(e.target.innerText === 'Delete'){
             user.res.splice(index, 1);
+            // sent the delete information to server
             showPage(currentPage);
         }
     }
@@ -139,6 +141,7 @@ function addNewRes(e){
     pager.style.visibility = 'visible';
     editing = false;
     showPage(currentPage);
+    // sent the new restaurant to server
 }
 
 // event holder function that hold the submit event for editing restaurant
@@ -152,6 +155,7 @@ function addEditRes(index){
         pager.style.visibility = 'visible';
         editing = false;
         showPage(currentPage);
+        // sent the changed restaurant to server
     }
 }
 
