@@ -15,7 +15,7 @@ function showMarkhamRestaurants(e) {
     
     for (let i = 0; i < restaurants.children.length; i++){
         const restaurant = restaurants.children[i]
-        //the restaurant should get from the server
+        //Server part TODO: the restaurant should get from the server
         changeRestaurant(restaurant, "#", "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg",
                 "Osaka Sushi");
     }
@@ -30,7 +30,7 @@ function showDowntownRestaurants(e) {
     
     for (let i = 0; i < restaurants.children.length; i++){
         const restaurant = restaurants.children[i]
-        //the restaurant should get from the server
+        //Server part TODO: the restaurant should get from the server
         changeRestaurant(restaurant, "review_page.html", "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg",
                 "McDonald's");
     }

@@ -20,6 +20,9 @@ class Review {
         this.content = content;
     }
 }
+
+//Server part TODO: get data from the server and load them to the page
+
 let maxReviews = 3
 let currentPage = 1
 const userImg = document.createElement('img')
@@ -60,7 +63,7 @@ const pager = document.querySelector('#pager');
 if(pager){
     pager.addEventListener('click', changePage);
 }
-//server part TODO: get data from server, and load it when page loads
+
 function banUser(e){
     if (e.target.classList.contains("btn")){
 		//server part TODO: should label the user "banned" in database
@@ -130,7 +133,7 @@ function showPage(currentPage) {
 	}
 }
 
-{/* <button type="button" class="btn btn-light remove">Remove</button> */}
+
 function addReviewToDom(review) {
 	const contentBoxElement = document.createElement('div')
 	contentBoxElement.className = "contentBox"

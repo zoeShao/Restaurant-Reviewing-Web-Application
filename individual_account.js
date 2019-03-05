@@ -25,6 +25,8 @@ class Review {
 let maxReviews = 3 // max Contents one page can show
 let currentPage = 1 // current page number
 
+//Server part TODO: get data from the server and load them to the page
+
 /* Examples(hardcode part) */
 // create a user
 const userImg = "avatar.jpg"

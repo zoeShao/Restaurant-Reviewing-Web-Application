@@ -37,6 +37,8 @@ class Review {
 let maxReviews = 4 // max Contents one page can show
 let currentPage = 1 // current page number
 
+//Server part TODO: get data from the server and load them to the page
+
 /* Examples(hardcode part) */
 const storeImg = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
 const store = new Restaurant(storeImg, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1)
@@ -70,6 +72,7 @@ function modifyButton(e) {
 
 function addNewReview(e) {
     e.preventDefault();
+    //Server part TODO: add the review to the server
     if (e.target.lastElementChild.innerText === 'Submit') {
         const userName = "user";
         const storeName = "McDonald's";

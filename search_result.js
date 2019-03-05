@@ -30,6 +30,8 @@ let maxReviews = 3 // max Contents one page can show
 let currentPage = 1 // current page number
 let currentPageRestaurants = [];
 
+//Server part TODO: get data from the server and load them to the page
+
 /* Examples(hardcode part) */
 const storeImg1 = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
 const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1)
