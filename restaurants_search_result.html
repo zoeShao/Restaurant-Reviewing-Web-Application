@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <title>Restaurant Search Results</title>
+
+  <!-- Bootstrap core CSS -->
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+  <!-- Custom styles for this template -->
+  <link href="search_result.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div id="header" class="row p-3 bg-danger text-white">
+            <!-- logo part -->
+            <div class="col-md-5">
+                <a class="reviewLink" href="index_user.html">
+                    <div class="logoContainer">
+                        <img src="logo.png" class="img-thumbnail" alt="logo Picture"/>
+                        <span class="logo text-dark">Restaurant Rev.</span>
+                    </div>
+                </a>
+            </div>
+            <!-- search part -->
+            <div class="col-md-4">
+                <div id = "searchBar" class="input-group border border-danger mb-5">
+                        <input class="form-control" type="text" placeholder="Search Restaurants">
+                        <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit"><i class="fas fa-search text-white"></i></button> 
+                        </div>
+                </div>
+            </div>
+            <!-- portrait part -->
+            
+            <div class="col-md-1">
+                <a class="reviewLink" href="individual_account.html">
+                <div class="portraitContainer">
+                <img src="https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg" class="float-right img-thumbnail rounded-circle" alt="avatar Picture"/>
+                </div>
+                </a>
+            </div>
+            <!-- user name part -->
+            <div class="userName col-md-1">
+                <p>user</p>
+            </div>
+            <!-- sign out part -->
+            <div class="col-md-1">
+                <p class="signOut float-left">
+                    <a href="#" target="_self">Sign out</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class = "container-fluid">
+        <div id = "CatBtnContainer" class="p-3"> 
+            <!-- Food Categories -->
+            <div id = "foodCategories">
+                <h4 class = "ml-5">Food Categories:</h4><br>
+                <ul id = "foodCatList" class = "catList ml-5">
+                    <li class = ""><a id = "chineseLink" class = "foodCatLink" href ="#">Chinese</a></li>
+                    <li class = ""><a id = "fastFoodLink" class = "foodCatLink" href ="#">Fast Food</a></li>
+                    <li class = ""><a id = "japaneseLink" class = "foodCatLink" href ="#">Japanese</a></li>
+                </ul>
+            </div>
+            
+            <!-- Location -->
+            <div id = "location">
+                <h4 class = "ml-5">Location:</h4><br>
+                <ul id = "locationList" class = "catList ml-5">
+                    <li class = ""><a id = "markhamLink" class = "foodCatLink" href ="#">Markham</a></li>
+                    <li class = ""><a id = "downtownLink" class = "foodCatLink" href ="#">Downtown-Totonto</a></li>
+                </ul>
+            </div>
+            
+        </div>
+
+            
+        </div>
+    <!-- account body -->
+    <div id = "searchResults" class="container-fluid">
+        <div id="accountBody" class="p-3">
+            <!-- dropDown part -->
+            <div id="dropDown" class="container-fluid">
+                <div class="float-right btn-group">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    sort by
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <!-- <a class="dropdown-item" href="#">time</a> -->
+                        <a class="dropdown-name dropdown-item" href="#">name</a>
+                        <a class="dropdown-rate dropdown-item" href="#">rate (from high to low)</a>
+                        <a class="dropdown-price dropdown-item" href="#">price (from low to high)</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- main body part -->
+            <div id="mainBody">
+            </div>
+            <!-- pager part -->
+            <div id="pager" class="float-right">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <!-- previous button -->
+                        <li class="page-item">
+                            <a class="previous page-link" href="#" aria-label="Previous">&laquo;</a>
+                        </li>
+                        <!-- next button -->
+                        <li class="page-item">
+                            <a class="next page-link" href="#" aria-label="Next">&raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+  
+
+
+</body>
+
+<script type="text/javascript" src="search_result.js"></script>
+
+</html>
