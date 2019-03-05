@@ -50,9 +50,10 @@ const pager = document.querySelector('#pager')
 
 // newResForm.addEventListener('submit', addNewRes);
 dropDown.addEventListener('click', changeMain);
-pager.addEventListener('click', changePage)
+pager.addEventListener('click', changePage);
+contentBody.addEventListener('click', editRes);
 
-showPage(currentPage)
+showPage(currentPage);
 
 function changeMain(e){
     e.preventDefault();
@@ -62,6 +63,13 @@ function changeMain(e){
         addNewResBox();
         const newResForm = document.querySelector('#newResForm');
         newResForm.addEventListener('submit', addNewRes);
+        const imgInput = document.querySelector('#newRestaurantImg');
+        const imgView = document.querySelector('#newPreview');
+        imgInput.onchange = function(){
+            if(this.files && this.files[0]){
+                imgView.src = URL.createObjectURL(this.files[0]);
+            }
+        };
         dropDown.style.visibility = 'hidden';
         pager.style.visibility = 'hidden';
     }
@@ -96,6 +104,17 @@ function sortByName(user) {
 	})
 }
 
+function editRes(e){
+    if(e.target.innerText === 'Edit'){
+        const address = e.target.parentElement.childNodes[1].lastElementChild.lastElementChild.innerText;
+        for(let i = 0; i < user.res.length; i++){
+            if(user.res[i].address === address){
+                
+            }
+        }
+    }
+}
+
 function addNewResBox(){
     const newBoxDiv = document.createElement('div');
     newBoxDiv.id = 'newResBox';
@@ -121,6 +140,14 @@ function addNewResBox(){
     imgDiv.appendChild(imgLabel);
     imgDiv.appendChild(imgInput);
 
+    const newImgDiv = document.createElement('div');
+    newImgDiv.className = 'storeImgContainer';
+    const newImg = document.createElement('img');
+    newImg.id = 'newPreview';
+    newImg.src = "#";
+    newImg.alt = "Store Picture";
+    newImgDiv.appendChild(newImg);
+
     const newNameDiv = createInputForm('newRestaurantName', 'Restaurant name:', "Restaurant name");
     const newPhoneDiv = createInputForm('newRestaurantPhone', 'Telephone:', 'Restaurant phone number');
     const newAddrDiv = createInputForm('newRestaurantAddr', 'Restaurant address:', 'Restaurant address');
@@ -134,12 +161,23 @@ function addNewResBox(){
     newBtnInput.className = 'btn float-right btn-primary'
     newBtnDiv.appendChild(newBtnInput);
 
+    const newBtnDiv2 = document.createElement('div');
+    newBtnDiv2.className = 'form-group';
+    const newBtnInput2 = document.createElement('input');
+    newBtnInput2.id = 'newResCancel';
+    newBtnInput2.type = 'submit';
+    newBtnInput2.value = 'Cancel';
+    newBtnInput2.className = 'btn float-right btn-secondary'
+    newBtnDiv2.appendChild(newBtnInput2);
+
     newForm.appendChild(newH2);
     newForm.appendChild(imgDiv);
+    newForm.appendChild(newImgDiv);
     newForm.appendChild(newNameDiv);
     newForm.appendChild(newPhoneDiv);
     newForm.appendChild(newAddrDiv);
     newForm.appendChild(newBtnDiv);
+    newForm.appendChild(newBtnDiv2);
     newCloDiv.appendChild(newForm);
     newBoxDiv.appendChild(newCloDiv);
 
@@ -165,7 +203,7 @@ function createInputForm(id, labelText, holderText){
 
 function addNewRes(e){
     e.preventDefault();
-
+    if(e.target.innerText === 'Save'){
     const files = document.querySelector('#newRestaurantImg').files[0];
     const newResImg = URL.createObjectURL(files);
     const newResName = document.querySelector('#newRestaurantName').value;
@@ -174,6 +212,7 @@ function addNewRes(e){
 
     const newRes = new Restaurant(newResImg, newResName, newResPhone, newResAddr, 0, 0);
     user.res.unshift(newRes);
+    }
     dropDown.style.visibility = 'visible';
     pager.style.visibility = 'visible';
     showPage(currentPage);
@@ -196,7 +235,7 @@ function showPage(currentPage) {
 			// console.log(j)
 			addNewResToDom(user.res[j])
 		}
-	}
+    }
 }
 
 //add the given restaurant to the main content body
@@ -223,21 +262,27 @@ function addNewResToDom(newRes){
 
     const newNameP = document.createElement('p');
     const newNameS = document.createElement('strong');
+    const newNameS2 = document.createElement('span');
     newNameS.appendChild(document.createTextNode('Restaurant name: '));
+    newNameS2.appendChild(document.createTextNode(newRes.name));
     newNameP.appendChild(newNameS);
-    newNameP.appendChild(document.createTextNode(newRes.name));
+    newNameP.appendChild(newNameS2);
 
     const newPhoneP = document.createElement('p');
     const newPhoneS = document.createElement('strong');
+    const newPhoneS2 = document.createElement('span');
     newPhoneS.appendChild(document.createTextNode('Telephone: '));
+    newPhoneS2.appendChild(document.createTextNode(newRes.phone));
     newPhoneP.appendChild(newPhoneS);
-    newPhoneP.appendChild(document.createTextNode(newRes.phone));
+    newPhoneP.appendChild(newPhoneS2);
 
     const newAddrP = document.createElement('p');
     const newAddrS = document.createElement('strong');
+    const newAddrS2 = document.createElement('span');
     newAddrS.appendChild(document.createTextNode('Restaurant address: '));
+    newAddrS2.appendChild(document.createTextNode(newRes.address));
     newAddrP.appendChild(newAddrS);
-    newAddrP.appendChild(document.createTextNode(newRes.address));
+    newAddrP.appendChild(newAddrS2);
 
     newInfoDiv.appendChild(newNameP);
     newInfoDiv.appendChild(newPhoneP);
@@ -246,6 +291,18 @@ function addNewResToDom(newRes){
     newA.appendChild(newImgDiv);
     newA.appendChild(newInfoDiv);
 
+    const newBtn = document.createElement('button');
+    newBtn.className = 'btn btn-light float-right';
+    newBtn.type = 'button';
+    newBtn.appendChild(document.createTextNode('Edit'));
+
+    const newBtn2 = document.createElement('button');
+    newBtn2.className = 'btn btn-danger float-right';
+    newBtn2.type = 'button';
+    newBtn2.appendChild(document.createTextNode('Delete'));
+
     newDiv.appendChild(newA);
+    newDiv.appendChild(newBtn2);
+    newDiv.appendChild(newBtn);
     contentBody.appendChild(newDiv);
 }
