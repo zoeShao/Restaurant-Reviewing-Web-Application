@@ -255,3 +255,131 @@ a.reviewLink:hover {
 	float: left;
 	margin-top: 12px;
 }
+
+/* Search Result styles */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+.catList li {
+float: left;
+margin-left:100px;
+}
+
+.catList li a {
+    text-align: center;
+    color: blue;
+    padding: 16px;
+    text-decoration: none;
+  }
+  
+.catList li a:hover {
+    text-decoration: underline;
+}
+
+.catList li a:active{
+    color: green;
+}
+
+
+#foodCategories {
+    border-bottom: 1px solid black;
+}
+
+#CatBtnContainer{
+    height: auto;
+	background-color: #e6eaef;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: lightgrey;
+	border-radius: 25px;
+}
+
+
+/* Restaurant review page styles */
+#restaurantBody {
+	height: 300px;
+	background-color: #e6eaef;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: lightgrey;
+	border-radius: 25px;
+}
+
+.bookmarkIcon {
+	position: relative;
+	left: 50%;
+	font-size: 1.5em;
+}
+
+.storeName {
+	font-size: 24px;
+	margin-left: 80px;
+	margin-top: 10px;
+	font-family:;
+	letter-spacing:1px;
+}
+
+#restaurantInfo {
+	height: 200px;
+}
+
+.col-md-3 {
+	height: 100%;
+}
+
+.col-md-7 {
+	height: 100%;
+}
+
+.RestaurantImgContainer {
+	margin-left: 30px;
+	height: 150px;	
+}
+
+#reviewBody {
+	height: 100vh;
+	margin-left: 3px;
+	margin-right: 3px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: lightgrey;
+	border-radius: 25px;
+}
+
+.reviewContainer {
+	border-right-style: solid;
+	border-width: 1px;
+	border-color: lightgrey;
+}
+
+#reviewPart {
+	height: 95%;
+}
+
+.userImg {
+	margin-left: 10px;
+	margin-right: 40px;
+	margin-top: 10px;
+	height: 100px;
+	float: left;
+}
+
+
+.userImgContainer {
+	width: 30%;
+	height: 100%;
+}
+
+.reviewHeader {
+	font-size: 18px;
+}
