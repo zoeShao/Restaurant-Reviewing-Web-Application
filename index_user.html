@@ -20,13 +20,14 @@
 
   <!-- Custom styles for this template -->
   <link href="index.css" rel="stylesheet">
+  <link href="account.css" rel="stylesheet">
 
 </head>
 
 <body>
 
   <!-- Navigation -->
-  <nav id = "navBar" class="navbar navbar-expand-sm bg-danger navbar-dark">
+  <!-- <nav id = "navBar" class="navbar navbar-expand-sm bg-danger navbar-dark">
     <div class="container">
       <div class="col-md-9">
         <a class="reviewLink" href="index.html">
@@ -51,7 +52,49 @@
                 <a href="index.html" target="_self">Sign out</a>
         </div>
     </div>
-  </nav>
+  </nav> -->
+  <div class="container-fluid">
+    <div id="header" class="row p-3 bg-danger text-white">
+        <!-- logo part -->
+        <div class="col-md-5">
+            <a class="reviewLink" href="index_user.html">
+                <div class="logoContainer">
+                    <img src="logo.png" class="img-thumbnail" alt="logo Picture"/>
+                    <span class="logo text-dark">Restaurant Rev.</span>
+                </div>
+            </a>
+        </div>
+        <!-- search part -->
+        <div class="col-md-4">
+          <!-- <div id = "searchBar" class="input-group border border-danger mb-5">
+                  <input class="form-control" type="text" placeholder="Search Restaurants">
+                  <div class="input-group-append">
+                  <button class="btn btn-secondary" type="submit"><i class="fas fa-search text-white"></i></button> 
+                  </div>
+          </div> -->
+      </div>
+        <!-- portrait part -->
+        <!-- <div id = "profileInfoContainer" class = "col-md-4">  -->
+          <div class="col-md-1">
+              <a class="reviewLink" href="individual_account.html">
+              <div class="portraitContainer">
+              <img src="https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg" class="float-right img-thumbnail rounded-circle" alt="avatar Picture"/>
+              </div>
+              </a>
+          </div>
+          <!-- user name part -->
+          <div class="userName col-md-1">
+              <p>user</p>
+          </div>
+          <!-- sign out part -->
+          <div class="col-md-1">
+              <p class="signOut float-left">
+                  <a href="index.html" target="_self">Sign out</a>
+              </p>
+          </div>
+      <!-- </div> -->
+    </div>
+</div>
 
   
   <!-- Page Content -->
