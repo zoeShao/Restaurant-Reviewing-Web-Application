@@ -17,6 +17,29 @@ const signUpButtonForm = document.querySelector("#signUpButtonForm")
 
 $("#imgChooser").change(function() {readImage(this);});
 
+//server part
+const express = require('express');
+const router = express.Router();
+const user = require('user');
+
+router.post('/sign_up', function(req, res){
+    const username = req.body.username;
+    const password = req.body.password;
+    const accountType = req.body.accountType;
+
+    const newUser = new user();
+    newUser.username = username;
+    newUser.password = password;
+    newUser.accountType = accountType;
+    newUser.save(function(err, saveUser){
+        if(err){
+            console.log(err)
+            return res.status(500).send();
+        }
+        return res.status(200).send();
+    })
+})
+
 function showOwnerSignUpInfo(e){
     if (e.target.classList.contains("form-check-input")){
 
@@ -56,5 +79,3 @@ function readImage(input) {
       $("#imgChooserBreak").after(img);
     }
   }
-  
-  
