@@ -2,6 +2,12 @@
 const log = console.log;
 document.getElementById("dropdownMarkham").addEventListener("click", showMarkhamRestaurants);
 document.getElementById("dropdownToronto").addEventListener("click", showDowntownRestaurants);
+
+//server part
+const express = require('express');
+const router = express.Router();
+const User = require('user');
+
 //hardcode
 const restaurants = document.getElementById("popularRestaurants");
 changeRestaurant(restaurants.children[0], "review_page.html", "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg",
@@ -60,5 +66,19 @@ function changeRestaurant(restaurant, link, imgSrc, resName){
 }
 
 
+//server 
+
+router.get('/', function(req, res){
+  if(!req.session.user){ //user or User?
+    return res.status(401).send();
+  }
+
+  return res.status(200).send("logged In");
+})
 
 
+router.get('/', function(req, res){
+  req.session.destroy();
+
+  return res.status(200).send();
+})
