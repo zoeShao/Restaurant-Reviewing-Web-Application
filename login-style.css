@@ -1,6 +1,6 @@
 
 html,body{
-background-color: white;
+background-color: lightgray;
 background-size: cover;
 height: 100%;
 }
@@ -29,7 +29,7 @@ color: white;
 
 .input-group-prepend span{
 width: 50px;
-background-color: rgb(255, 18, 18);
+/* background-color: rgb(255, 18, 18); */
 color: rgb(10, 0, 0);
 border:0px;
 }
@@ -87,4 +87,12 @@ margin-left: 10px;
     letter-spacing: 1px;
     padding-left: 10px;
     font-weight: bolder;
+}
+
+#signUpHere{
+    color: black;
+}
+
+.form-group{
+    margin-top: 30px;
 }
