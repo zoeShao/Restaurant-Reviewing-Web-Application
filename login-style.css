@@ -96,3 +96,7 @@ margin-left: 10px;
 .form-group{
     margin-top: 30px;
 }
+
+.card{
+    height: auto;
+}
