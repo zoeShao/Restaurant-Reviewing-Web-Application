@@ -45,7 +45,14 @@ if(accountBody){
 
 const popularRestaurants = document.getElementById("popularRestaurants");
 if(popularRestaurants){
-    popularRestaurants.addEventListener("click", removeRestaurants);
+	popularRestaurants.addEventListener("click", removeRestaurants);
+	addRestaurant();
+	changeRestaurant(popularRestaurants.children[0], "review_page.html", "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg",
+				"McDonald's", "address here");
+	popularRestaurants.addEventListener("click", removeRestaurants);
+	addRestaurant();
+	changeRestaurant(popularRestaurants.children[1], "review_page.html", "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg",
+				"McDonald's", "address here");
 }
 
 const commentsMainbody = document.getElementById("commentsMainbody");
@@ -56,7 +63,8 @@ if(commentsMainbody){
 const banMainbody = document.getElementById("banMainbody");
 if(banMainbody){
 	banMainbody.addEventListener("click", banUser);
-    loadUsers("user2", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png");
+	loadUsers("user2", "lawrence_zhou@hotmail.com", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png");
+	loadUsers("user3", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png");
 }
 
 const pager = document.querySelector('#pager');
@@ -197,27 +205,126 @@ function addPriceToDom(rate) {
 	return paraElement;
 }
 
-function loadUsers(name, imgSrc){
-	const row = banMainbody.children[0];
-	const col = document.createElement("div");
-	col.className = "col-lg-2 mt-4 mb-4";
-	const dFlexOuter = document.createElement("div");
-	dFlexOuter.className = "d-flex flex-column bg-light";
-	const dFlexInner = document.createElement("div");
-	dFlexInner.className = "d-flex justify-content-center";
-	const profilePicture = document.createElement("img");
-	profilePicture.src = imgSrc;
-	const username = document.createElement("h4");
-	username.className = "mb-1";
-	username.innerText = name;
-	const banButton = document.createElement("button");
-	banButton.type = "button";
-	banButton.className =  "btn btn-dark";
-	banButton.innerText = "Ban";
-	dFlexInner.appendChild(profilePicture);
-	dFlexInner.appendChild(username);
-	dFlexOuter.appendChild(dFlexInner);
-	dFlexOuter.append(banButton);
-	col.appendChild(dFlexOuter)
-	row.appendChild(col);
+function loadUsers(name, userEmail, imgSrc){
+	// const row = banMainbody.children[0];
+	// const col = document.createElement("div");
+	// col.className = "col-lg-4 mt-4 mb-4";
+	// const dFlexOuter = document.createElement("div");
+	// dFlexOuter.className = "d-flex flex-column bg-light";
+	// const dFlexInner = document.createElement("div");
+	// dFlexInner.className = "d-flex justify-content-center";
+	// // const profilePicture = document.createElement("img");
+	// // profilePicture.src = imgSrc;
+	// const username = document.createElement("h4");
+	// username.className = "mb-1";
+	// username.innerText = name;
+	// const email = document.createElement("span");
+	// email.className = "mb-1";
+	// email.innerText = userEmail;
+	// const banButton = document.createElement("button");
+	// banButton.type = "button";
+	// banButton.className =  "btn btn-dark";
+	// banButton.innerText = "Ban";
+	// // dFlexInner.appendChild(profilePicture);
+	// dFlexInner.appendChild(username);
+	// dFlexOuter.appendChild(dFlexInner);
+	// dFlexOuter.appendChild(email);
+	// dFlexOuter.append(banButton);
+	// col.appendChild(dFlexOuter)
+	// row.appendChild(col);
+
+	const contentBoxElement = document.createElement('div')
+	contentBoxElement.className = "contentBox"
+	const aElement = document.createElement('a')
+	aElement.className = "reviewLink"
+	aElement.href = "#"
+	const reviewElement = document.createElement('div')
+	reviewElement.className = "storeContainer"
+	const nameElement = document.createElement('p')
+	nameElement.innerHTML = "<strong>Username: </strong>" + `${name}`
+	const contentElement = document.createElement('p')
+	contentElement.innerHTML = "<strong>User email: </strong>" + `${userEmail}`
+	const profilePicDiv = document.createElement('div');
+	const profilePic = document.createElement('img');
+	profilePic.src = imgSrc;
+	profilePic.className = "rounded-circle";
+	profilePicDiv.className = "float-left mr-3 portraitContainer";
+	profilePicDiv.appendChild(profilePic); 
+	aElement.appendChild(profilePicDiv);
+	reviewElement.appendChild(nameElement);
+	reviewElement.appendChild(contentElement);
+	aElement.appendChild(reviewElement)
+    contentBoxElement.appendChild(aElement)
+    //make remove button
+    const button = document.createElement('button')
+    button.type = "button";
+	button.className = "btn btn-dark remove";
+	button.style.float = "right";
+    button.innerText = "Ban";
+    contentBoxElement.appendChild(button);
+    contentBoxElement.style.minHeight = "150px";
+    log(contentBoxElement);
+	banMainbody.appendChild(contentBoxElement)
 }
+
+//helper function
+function changeRestaurant(restaurant, link, imgSrc, resName, address){
+	//change link
+	const aElement = restaurant.children[0].children[0];
+	aElement.href = link;
+	//change image source
+	const img = restaurant.children[0].children[0].children[0];
+	img.src = imgSrc
+  
+	//change restaurant name
+	const cardBody = restaurant.children[0].children[1];
+	log(cardBody)
+	const h4 = cardBody.children[0]
+	const name = document.createElement("a")
+	name.href = link;
+	name.appendChild(document.createTextNode(resName));
+	h4.appendChild(name);
+
+	//change address
+	const addressSpan = cardBody.children[1];
+	addressSpan.appendChild(document.createTextNode(address));
+
+	log(cardBody);
+  }
+  
+  function addRestaurant(){
+	const colDiv = document.createElement('div');
+	colDiv.className = "col-lg-5 col-md-6 mb-4 mr-5";
+	const card = document.createElement('div');
+	card.className = "card h-100";
+	const link = document.createElement('a');
+	const img = document.createElement('img');
+	img.className = "card-img-top";
+	link.appendChild(img);
+	const cardBody = document.createElement('div');
+	cardBody.className = "card-body";
+	const h4Title = document.createElement('h4');
+	h4Title.className = "card-title";
+	// address
+	const addressSpan = document.createElement("span");
+	//remove button
+	const removeButton = document.createElement('button');
+	removeButton.type = "button";
+	removeButton.className = "btn btn-dark remove";
+	removeButton.appendChild(document.createTextNode("Remove"));
+	//show comments
+	const showCommentBtn = document.createElement('button');
+	showCommentBtn.type = "button";
+	showCommentBtn.className = "btn btn-dark ml-3 remove";
+	showCommentBtn.appendChild(document.createTextNode("show comment"));
+	h4Title.appendChild(document.createElement('a'));
+	cardBody.appendChild(h4Title);
+	cardBody.appendChild(addressSpan);
+	cardBody.appendChild(document.createElement("br"));
+	cardBody.appendChild(removeButton);
+	cardBody.appendChild(showCommentBtn);
+	card.appendChild(link)
+	card.appendChild(cardBody);
+	colDiv.appendChild(card);
+	popularRestaurants.appendChild(colDiv);
+  }
