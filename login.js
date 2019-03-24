@@ -5,36 +5,45 @@ loginForm.addEventListener('submit', checkIdentity);
 console.log(loginForm);
 
 //server part
-const express = require('express');
-const router = express.Router();
-const User = require('user');
+// const express = require('express');
+// const app = express();
+// const router = express.Router();
+// const {userSchema} = require('./user');
+// const bodyParser = require('body-parser')
+// const port = process.env.PORT || 3000
+// app.use(bodyParser.json())
 
-router.post('/login', function(req, res){
-    const username = req.body.username;
-    const password = req.body.password;
+// app.get('/', function(req, res){
+//     res.send("test get");
+// })
+
+// app.post('/login', function(req, res){
+//     log(req.body);
+//     const username = req.body.username;
+//     const password = req.body.password;
     
+    
+//     User.findone({username: username}, function(err, user){
+//         if(err){
+//             console.log(err)
+//             return res.status(500).send();
+//         }
 
-    User.findone({username: username}, function(err, user){
-        if(err){
-            console.log(err)
-            return res.status(500).send();
-        }
+//         if(!user){
+//             return res.status(404).send();
+//         }
 
-        if(!user){
-            return res.status(404).send();
-        }
-
-        user.comparePassword(password, function(err, isMatch)){
-            if(isMatch && isMatch == true){
-                req,session.user = user; 
-                return res.status(200).send();
-            } else{
-                return res.status(401).send();
-            }
-        }
+//         user.comparePassword(password, function(err, isMatch){
+//             if(isMatch && isMatch == true){
+//                 req,session.user = user; 
+//                 return res.status(200).send();
+//             } else{
+//                 return res.status(401).send();
+//             }
+//         })
         
-    })
-})
+//     })
+// })
 
 function checkIdentity(e){
     console.log("here");
