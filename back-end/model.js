@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt'),
 const userSchema = new mongoose.Schema({
     profilePicture: {
         type: String,
-        //default:
+        default: ""
     },
     name: {
         type: String, 
@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     password: {
-        type: Number,
+        type: String,
         required: true,
         minlength: 8
     },
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
             message:'Not a valid email address'
         }
     },
-    type: {
+    accountType: {
         type: String,
         required: true
     },
