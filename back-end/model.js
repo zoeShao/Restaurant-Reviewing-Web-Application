@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const uniqueVali = require('mongoose-unique-validator');
+// const uniqueVali = require('mongoose-unique-validator');
 const validator = require('validator')
 
-const bcrypt = require('bcrypt'),
+const bcrypt = require('bcryptjs'),
     SALT_WORK_FACTOR = 10;
 const userSchema = new mongoose.Schema({
     profilePicture: {
@@ -127,32 +127,49 @@ const resSchema = new mongoose.Schema({
   });
 //run before save
 userSchema.pre('save', function(next) {
-    var user = this;
+	const user = this
 
-    // only hash the password if it has been modified (or is new)
-    if (!user.isModified('password')) return next();
+	if (user.isModified('password')) {
+		bcrypt.genSalt(10, (error, salt) => {
+			bcrypt.hash(user.password, salt, (error, hash) => {
+				user.password = hash
+				next()
+			})
+		})
+	} else {
+		next();
+	}
 
-    // generate a salt
-    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-        if (err) return next(err);
+})
 
-        // hash the password using our new salt
-        bcrypt.hash(user.password, salt, function(err, hash) {
-            if (err) return next(err);
+// Our own student finding function 
+userSchema.statics.findByNamePassword = function(name, password) {
+	const User = this
 
-            // override the cleartext password with the hashed one
-            user.password = hash;
-            next();
-        });
-    });
-});
+	return User.findOne({name: name}).then((user) => {
+		if (!user) {
+			return Promise.reject()
+		}
 
-userSchema.methods.comparePassword = function(candidatePassword, cb) {
-    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-        if (err) return cb(err);
-        cb(null, isMatch);
-    });
-};
+		return new Promise((resolve, reject) => {
+			bcrypt.compare(password, user.password, (error, result) => {
+				if (result) {
+					resolve(user);
+				} else {
+					reject();
+				}
+			})
+		})
+	})
+}
+
+
+// userSchema.methods.comparePassword = function(candidatePassword, cb) {
+//     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+//         if (err) return cb(err);
+//         cb(null, isMatch);
+//     });
+// };
 
 const User = mongoose.model('User', userSchema);
 const Restaurant = mongoose.model('Restaurant', resSchema);

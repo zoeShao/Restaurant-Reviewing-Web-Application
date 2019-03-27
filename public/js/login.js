@@ -23,7 +23,7 @@ console.log(loginForm);
 //     const password = req.body.password;
     
     
-//     User.findone({username: username}, function(err, user){
+//     User.findone({name: username}, function(err, user){
 //         if(err){
 //             console.log(err)
 //             return res.status(500).send();
