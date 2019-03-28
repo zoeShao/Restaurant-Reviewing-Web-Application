@@ -53,6 +53,10 @@ const userSchema = new mongoose.Schema({
 }); 
 
 const resSchema = new mongoose.Schema({
+    // owner:{
+    //   type: mongoose.Schema.Types.ObjectId,
+		//   required: true
+    // },
     picture: {
       type: String,
       required: true

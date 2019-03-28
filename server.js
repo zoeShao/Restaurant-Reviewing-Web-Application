@@ -5,7 +5,8 @@ const bodyParser = require('body-parser')
 const { ObjectID } = require('mongodb')
 const session = require('express-session')
 const hbs = require('hbs')
-const { mongoose } = require('./back-end/db/mongoose')
+const multer = require('multer')
+const {mongoose, storage} = require('./back-end/db/mongoose')
 
 const {User, Restaurant, Review} = require('./back-end/model')
 
@@ -18,6 +19,8 @@ app.use(bodyParser.urlencoded({ extended:true }))
 
 // set the view library
 // app.set('view engine', 'hbs')
+
+const upload = multer({storage})
 
 // static file directory
 app.use("/js", express.static(__dirname + '/public/js'))
@@ -134,6 +137,49 @@ app.get('/users/logout', (req, res) => {
 	})
 })
 
+const authenticate = (req, res, next) =>{
+	if(req.session.user){
+		User.findById(req.session.user).then((user) =>{
+			if((!user) || user.banned){
+				return Promise.reject()
+			}else{
+				req.user = user
+				next()
+			}
+		})
+	}
+	else{
+		res.redirect('/login')
+	}
+}
+
+//post for create new restaurant
+app.post('/restaurants', upload.single('resImg'), (req, res) =>{
+	const restaurant = new Restaurant({
+		// owner: req.user._id,
+		picture: req.file.filename,
+		name: req.body.name,
+		phone: req.body.phone,
+		address: req.body.address,
+		location: req.body.location,
+		category: req.body.category
+	})
+	restaurant.save().then((result) =>{
+		res.send(result)
+	},(error) =>{
+		res.status(400).send(error)
+	})
+})
+
+app.get('/restaurants', authenticate, (req, res) =>{
+	Restaurant.find({
+		owner: req.user._id
+	}).then((restaurants) => {
+		res.send({restaurants})
+	}, (error) =>{
+		res.status(450).send(error)
+	})
+})
 
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
