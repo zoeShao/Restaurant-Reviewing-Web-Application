@@ -3,10 +3,7 @@ const log = console.log;
 document.getElementById("dropdownMarkham").addEventListener("click", showMarkhamRestaurants);
 document.getElementById("dropdownToronto").addEventListener("click", showDowntownRestaurants);
 
-//server part
-// const express = require('express');
-// const router = express.Router();
-// const User = require('user');
+getLogInInfo();
 
 //hardcode
 const restaurants = document.getElementById("popularRestaurants");
@@ -21,6 +18,121 @@ document.getElementById("searchButtonLink").href = "restaurants_search_result.ht
 // addPopularRestaurant();
 // changeRestaurant(restaurants.children[2], "review_page.html", "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg",
 //                 "McDonald's");
+
+//send request to server to get log in status
+function getLogInInfo(){
+  const url = '/getLogInInfo';
+  const request = new Request(url, {
+    method: 'get',
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+  });
+  fetch(request).then((res) => {
+    if(res.status == 204){
+      log("sign out status")
+      changeToSignOutStatus();
+    } else{
+      return res.json()
+    }
+    
+  }).then((data) =>{
+    if(data){
+      changeToLoggedInStatus(data.name, data.profileImg)
+    }
+    
+  }).catch(error => {log(error)})
+}
+
+//sign out user
+$(document).ready(function(){
+  $("#signInOut").click(function(){
+    const url = '/users/logout';
+    const request = new Request(url, {
+      method: 'get', 
+      headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+      },
+  });
+  fetch(request).then(function(res) {
+        // Handle response we get from the API
+        // Usually check the error codes to see what happened
+        if (res.status === 200) {
+            console.log('sign out')
+            changeToSignOutStatus();
+        } 
+    }).catch((error) => {
+        console.log(error)
+    })
+  })
+})
+
+function changeToSignOutStatus(){
+  const header = document.getElementById("header");
+  
+  //remove profile pic
+  const profilePic = header.children[2];
+  if(profilePic.children[0].children.length > 0){
+    profilePic.children[0].removeChild(
+      profilePic.children[0].firstElementChild);
+  }
+  
+  //remove username
+  const name = header.children[3];
+  name.className = "col-md-1";
+  const loginLink = document.createElement('a');
+  loginLink.href = "login.html";
+  loginLink.className = "nav-link";
+  loginLink.innerText = "Log in";
+  name.removeChild(name.firstElementChild);
+  name.appendChild(loginLink);
+
+  //change sign out to sign up
+  const signUp = header.children[4];
+  signUp.className = "col-md-1";
+  const signUpLink = document.createElement('a');
+  // signUpLink.href = "sign_up.html";
+  signUpLink.className = "nav-link";
+  signUpLink.innerText = "Sign up";
+  signUp.removeChild(signUp.firstElementChild);
+  signUp.appendChild(signUpLink);
+}
+
+function changeToLoggedInStatus(userName, imgSrc){
+  const header = document.getElementById("header");
+  
+  //add profile pic
+  const profilePic = header.children[2];
+  const imgLink = document.createElement("a");
+  imgLink.href = "individual_account.html";
+  const img = document.createElement('img');
+  img.src = imgSrc;
+  imgLink.appendChild(img);
+  img.className = "float-right img-thumbnail rounded-circle";
+  profilePic.children[0].appendChild(imgLink);
+  
+  //add username
+  const name = header.children[3];
+  name.className = "col-md-1";
+  const userLink = document.createElement('a');
+  userLink.href = "individual_account.html";
+  userLink.className = "userName nav-link";
+  userLink.innerText = userName;
+  name.removeChild(name.firstElementChild);
+  name.appendChild(userLink);
+
+  //change sign out to sign up
+  const signOut = header.children[4];
+  signOut.className = "col-md-1";
+  const signOutLink = document.createElement('a');
+  signOutLink.href = "#";
+  signOutLink.className = "signOut nav-link";
+  signOutLink.innerText = "Sign Out";
+  signOut.removeChild(signOut.firstElementChild);
+  signOut.appendChild(signOutLink);
+}
 
 function showMarkhamRestaurants(e) {
   if (e.target.classList.contains("dropdown-item")){
@@ -95,19 +207,4 @@ function addPopularRestaurant(){
   restaurants.appendChild(colDiv);
 }
 
-//server 
 
-// router.get('/', function(req, res){
-//   if(!req.session.user){ //user or User?
-//     return res.status(401).send();
-//   }
-
-//   return res.status(200).send("logged In");
-// })
-
-
-// router.get('/', function(req, res){
-//   req.session.destroy();
-
-//   return res.status(200).send();
-// })

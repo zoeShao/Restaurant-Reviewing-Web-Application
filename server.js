@@ -62,16 +62,33 @@ app.route('/login')
 		res.sendfile(__dirname + '/public/login.html')
 	})
 
+// get log in info by Nav Bar
+app.get('/getLogInInfo', (req, res) => {
+	if (req.session.user){
+		User.findById(req.session.user).then((user) => {
+			res.send({"name": user.name, "profileImg": user.profilePicture});
+		}).catch((error) => {
+			log(error)
+			res.redirect('/login')
+		})
+	} else{
+		log("signed out status")
+		//respond with no content, implying the user hasn't logged in
+		res.status(204).send();
+	}
+})
+
 app.get('/', (req, res) => {
 	// check if we have active session cookie
-	if (req.session.user) {
+	//if (req.session.user) {
 		res.sendFile(__dirname + '/public/index.html')
 		// res.render('index.hbs', {
 		// 	name: req.session.name
 		// })
-	} else {
-		res.redirect('/login')
-	}
+	//} 
+	// else {
+	// 	res.redirect('/login')
+	// }
 })
 
 
@@ -83,26 +100,28 @@ app.post('/users/login', function(req, res){
 		if(req.session.user){
 			log("already logged in")
 			res.redirect('/');
+		}else{
+			User.findByNamePassword(name, password).then((user) => {
+				if(!user) {
+					console.log("password not correct")
+					console.log(name);
+					console.log(password)
+					res.redirect('/login')
+				} else {
+					// Add the user to the session cookie that we will
+					// send to the client
+					console.log("password correct")
+					req.session.user = user._id;
+					req.session.name = user.name
+					res.redirect('/')
+					// res.send(user)
+				}
+			}).catch((error) => {
+				res.status(400).redirect('/login')
+			})
 		}
     
-    User.findByNamePassword(name, password).then((user) => {
-		if(!user) {
-			console.log("password not correct")
-			console.log(name);
-			console.log(password)
-			res.redirect('/login')
-		} else {
-			// Add the user to the session cookie that we will
-			// send to the client
-			console.log("password correct")
-			req.session.user = user._id;
-			req.session.name = user.name
-			res.redirect('/')
-			// res.send(user)
-		}
-	}).catch((error) => {
-		res.status(400).redirect('/login')
-	})
+    
 })
 
 app.get('/users/logout', (req, res) => {
