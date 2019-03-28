@@ -10,7 +10,7 @@
 	
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
-	<link rel="stylesheet" type="text/css" href="login-style.css">
+	<link rel="stylesheet" type="text/css" href="/css/login-style.css">
 </head>
 <body>
 
@@ -20,7 +20,7 @@
 			<div class="col-md-9">
 				<a class="reviewLink" href="index.html">
 				  <div class="logoContainer">
-					<img id = "logoImg" src="logo.png" class="img-thumbnail" alt="logo Picture"/>
+					<img id = "logoImg" src="/img/logo.png" class="img-thumbnail" alt="logo Picture"/>
 					<span class="logo text-dark">Restaurant Rev.</span>
 				  </div>
 				</a>
@@ -51,19 +51,19 @@
 					<h2>Log In</h2>
 				</div>
 				<div class="card-body">
-					<form id = 'loginForm' action = "/back-end/users/login" method="post">
+					<form id = 'loginForm' action = "http://localhost:3000/users/login" method="post">
 						<div class="form-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text"><i class="fas fa-user"></i></span>
 							</div>
-							<input id = 'usernameInput' type="text" class="form-control" placeholder="Username">
+							<input id = 'usernameInput' type="text" class="form-control" name="name">
 							
 						</div>
 						<div class="form-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text"><i class="fas fa-lock"></i></i></span>
 							</div>
-							<input id = 'pwInput' type="password" class="form-control" placeholder="Password">
+							<input id = 'pwInput' type="password" class="form-control" name="password">
 						</div>
 						<div class="form-group">
 							<input id = 'loginButton' type="submit" value="Log in" class="btn float-right login_btn">
@@ -78,6 +78,6 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="login.js"></script>
+	<script type="text/javascript" src="/js/login.js"></script>
 	</body>
 </html>

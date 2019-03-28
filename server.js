@@ -1,3 +1,4 @@
+const log = console.log;
 const express = require('express')
 const port = process.env.PORT || 3000
 const bodyParser = require('body-parser')
@@ -18,9 +19,10 @@ app.use(bodyParser.urlencoded({ extended:true }))
 // set the view library
 // app.set('view engine', 'hbs')
 
-// static js directory
+// static file directory
 app.use("/js", express.static(__dirname + '/public/js'))
-
+app.use("/css", express.static(__dirname + '/public/css'))
+app.use("/img", express.static(__dirname + '/public/img'))
 // Add express sesssion middleware
 app.use(session({
 	secret: 'oursecret',
@@ -56,7 +58,8 @@ app.post('/signUp', (req, res) => {
 // route for login
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
-		res.sendFile(__dirname + '/public/login.html')
+		console.log("going login.html")
+		res.sendfile(__dirname + '/public/login.html')
 	})
 
 app.get('/', (req, res) => {
@@ -75,15 +78,23 @@ app.get('/', (req, res) => {
 app.post('/users/login', function(req, res){
 
     const name = req.body.name;
-    const password = req.body.password;
+		const password = req.body.password;
+		
+		if(req.session.user){
+			log("already logged in")
+			res.redirect('/');
+		}
     
     User.findByNamePassword(name, password).then((user) => {
 		if(!user) {
+			console.log("password not correct")
+			console.log(name);
+			console.log(password)
 			res.redirect('/login')
 		} else {
 			// Add the user to the session cookie that we will
 			// send to the client
-			console.log("hererfe")
+			console.log("password correct")
 			req.session.user = user._id;
 			req.session.name = user.name
 			res.redirect('/')
