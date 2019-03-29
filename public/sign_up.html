@@ -51,35 +51,42 @@
 				<h2>Sign Up</h2>
 			</div>
 			<div class="card-body overflow-auto">
-					<div class="form-check-inline">
-            <label class="form-check-label">
-              <input id = "ownerRadioButton" type="radio" class="form-check-input" name="optradio">Restaurant Owner
-            </label>
-          </div>
-        	<div class="form-check-inline">
-            <label class="form-check-label">
-              <input id = "userRadioButton" type="radio" class="form-check-input" name="optradio">User
-            </label>
-					</div>
+				<form action = "/users/signUp" method = "post"> 
+						<div class="form-check-inline">
+								<label class="form-check-label">
+									<input id = "ownerRadioButton" type="radio" class="form-check-input" value = "o" name="type">Restaurant Owner
+								</label>
+							</div>
+							<div class="form-check-inline">
+								<label class="form-check-label">
+									<input id = "userRadioButton" type="radio" class="form-check-input" value = "u" name="type" checked>User
+								</label>
+							</div>
+							
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-envelope"></i></span>
+								</div>
+									<input id = 'EmailInput' type="text" class="form-control" placeholder = "Email Address" name="email">
+							</div>
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-user"></i></span>
+								</div>
+									<input id = 'usernameInput' type="text" class="form-control" placeholder = "UserName" name="name">
+							</div>
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-lock"></i></i></span>
+								</div>
+								<input id = 'pwInput' type="password" class="form-control" placeholder = "Password" name="password">
+							</div>
+
+							<div id = "signUpButtonForm" class="form-group">
+									<input id = 'signUpButton' type="submit" value="Sign up" class="btn float-right login_btn">
+							</div>
+				</form>
 					
-					<div class="form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-envelope"></i></span>
-						</div>
-							<input id = 'EmailInput' type="text" class="form-control" placeholder="Email Address">
-					</div>
-					<div class="form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-user"></i></span>
-						</div>
-							<input id = 'usernameInput' type="text" class="form-control" placeholder="Username">
-					</div>
-					<div class="form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-lock"></i></i></span>
-						</div>
-						<input id = 'pwInput' type="password" class="form-control" placeholder="Password">
-					</div>
 
 					<!-- <div id = "restaurantSignUp">
 
@@ -107,10 +114,7 @@
 
 					</div>  -->
 
-					<div id = "signUpButtonForm" class="form-group">
-						<input id = 'signUpButton' type="submit" value="Sign up" class="btn float-right login_btn">
-					</div>
-				</form>
+					
 			</div>
 		</div>
 	</div>
