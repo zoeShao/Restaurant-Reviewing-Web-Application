@@ -195,7 +195,8 @@ app.get('readImg/:filename', (req, res) =>{
 app.post('/searchRestaurants', (req, res) => { 
 	const content = req.body.content;
 	const searchType = req.body.searchType;
-
+	log(content);
+	log(searchType);
 	if(searchType == "resName"){
 		Restaurant.find({name: content.trim()}).then((result) =>
 		{
@@ -215,23 +216,16 @@ app.post('/searchRestaurants', (req, res) => {
 			log("got request")
 			res.redirect('/openSearchResult');
 		}).catch((error) => res.status(400).send(error))
+	} else{
+		res.status(400).send("invalid search type!");
 	}
 
 })
 
 app.get('/openSearchResult', (req, res) => {
 	// check if we have active session cookie
-	//if (req.session.user) {
 		log("before redirect");
 		res.sendFile(__dirname + '/public/restaurants_search_result.html')
-		// res.send()
-		// res.render('index.hbs', {
-		// 	name: req.session.name
-		// })
-	//} 
-	// else {
-	// 	res.redirect('/login')
-	// }
 })
 
 app.get('/getRestaurants', (req, res) => {

@@ -10,37 +10,37 @@
 //         this.reviews = [];
 //         this.favourite = [];
 //     }
+
+// class Restaurant{
+//     constructor(image, name, phone, address, page, rate, price){
+//         this.image = image;
+//         this.name = name;
+//         this.phone = phone;
+//         this.address = address;
+//         this.page = page;
+//         this.rate = rate;
+//         this.price = price;
+        
+//     }
 // }
 
-class Restaurant{
-    constructor(image, name, phone, address, page, rate, price){
-        this.image = image;
-        this.name = name;
-        this.phone = phone;
-        this.address = address;
-        this.page = page;
-        this.rate = rate;
-        this.price = price;
-        
-    }
-}
-
 /* Global variables */
+const log = console.log;
 let maxReviews = 3 // max Contents one page can show
 let currentPage = 1 // current page number
-let currentPageRestaurants = [];
+let allRestaurantsData = [];
 
 //Server part TODO: get data from the server and load them to the page
 
 /* Examples(hardcode part) */
-const storeImg1 = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
-const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1)
+// const storeImg1 = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
+// const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1)
 
 
-// create a currentPageRestaurants
+// create a allRestaurantsData
 const userImg = "avatar.jpg"
 // Add these restaurants to the user's favourite array (does not change the DOM)
-currentPageRestaurants.push(store1)
+// allRestaurantsData.push(store1)
 
 
 /* Select all DOM form elements you'll need. */ 
@@ -65,6 +65,38 @@ japaneseLink.addEventListener('click', showJapaneseRes);
 markhamLink.addEventListener('click', showMarkhamRes);
 downtownLink.addEventListener('click', showDowntownRes);
 
+/*-----------------------------------------------------------*/
+/*** 
+Get data from server
+***/
+getRestaurantDataFromServer();
+function getRestaurantDataFromServer(){
+	const url = '/getRestaurants';
+  const request = new Request(url, {
+    method: 'get',
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+  });
+  fetch(request).then((res) => {
+    if(res.status == 204){
+    //   log("sign out status")
+    //   changeToSignOutStatus();
+    } else{
+      return res.json()
+    }
+    
+  }).then((restaurants) =>{
+	log(restaurants.res);
+    if(restaurants){
+	  allRestaurantsData = restaurants.res;
+	  log(restaurants.res);
+	  showRestaurants(allRestaurantsData);
+    }
+    
+  }).catch(error => {log(error)})
+}
 /*-----------------------------------------------------------*/
 /*** 
 Button event listeners functions
@@ -146,7 +178,7 @@ function changePage(e) {
 		console.log(currentPage)
 
 	} else if (e.target.classList.contains('next')) {
-		if ((currentPage * 3) < currentPageRestaurants.length) {
+		if ((currentPage * 3) < allRestaurantsData.length) {
 			currentPage = currentPage + 1
 		}
 		showPage(currentPage)		
@@ -193,16 +225,16 @@ function addFavouriteToDom(restaurant) {
 function showRestaurants(restaurants){
     clearPage();
     for(let i = 0; i < restaurants.length; i++){
-        currentPageRestaurants.push(restaurants[i]);
+        allRestaurantsData.push(restaurants[i]);
     }
-    if(currentPageRestaurants.length > 0){
+    if(allRestaurantsData.length > 0){
         showPage(currentPage);
     }
     
 }
 
 function clearPage(){
-    currentPageRestaurants = [];
+    allRestaurantsData = [];
     const mainBody = document.getElementById("mainBody");
     while (mainBody.firstChild) {
         mainBody.removeChild(mainBody.firstChild);
@@ -210,13 +242,13 @@ function clearPage(){
 }
 
 function showPage(currentPage) {
-	let restPage = currentPageRestaurants.length - currentPage * 3
+	let restPage = allRestaurantsData.length - currentPage * 3
 	if (restPage >= 0) {
 		contentBody.innerText = ""
 		for (let i = 0; i < maxReviews; i++) {
 			let j = ((currentPage-1)*3) + i
 			// console.log(j)
-			addFavouriteToDom(currentPageRestaurants[j])
+			addFavouriteToDom(allRestaurantsData[j])
 		}
 	} else {
 		restPage = maxReviews+restPage
@@ -224,13 +256,13 @@ function showPage(currentPage) {
 		for (let i = 0; i < restPage; i++) {
 			let j = ((currentPage-1)*3) + i
 			// console.log(j)
-			addFavouriteToDom(currentPageRestaurants[j])
+			addFavouriteToDom(allRestaurantsData[j])
 		}
 	}
 }
 
 function sortByName() {
-	currentPageRestaurants.sort(function(a, b){
+	allRestaurantsData.sort(function(a, b){
     if(a.name < b.name) { return -1; }
     if(a.name > b.name) { return 1; }
     return 0;
@@ -238,7 +270,7 @@ function sortByName() {
 }
 
 function sortByRate() {
-	currentPageRestaurants.sort(function(a, b){
+	allRestaurantsData.sort(function(a, b){
     if(a.rate < b.rate) { return 1; }
     if(a.rate > b.rate) { return -1; }
     return 0;
@@ -246,7 +278,7 @@ function sortByRate() {
 }
 
 function sortByPrice() {
-	currentPageRestaurants.sort(function(a, b){
+	allRestaurantsData.sort(function(a, b){
     if(a.price < b.price) { return -1; }
     if(a.price > b.price) { return 1; }
     return 0;

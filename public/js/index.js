@@ -1,5 +1,6 @@
 
 const log = console.log;
+// import {requestSearchRestaurant} from './utility.js';
 document.getElementById("dropdownMarkham").addEventListener("click", showMarkhamRestaurants);
 document.getElementById("dropdownToronto").addEventListener("click", showDowntownRestaurants);
 
@@ -133,6 +134,14 @@ function changeToLoggedInStatus(userName, imgSrc){
   signOut.removeChild(signOut.firstElementChild);
   signOut.appendChild(signOutLink);
 }
+
+//Search functions/Show restaurant Functions
+// $(document).ready(function(){
+//   $("#searchJapaneseResBtn").click(function(){
+//     log("clickbutton")
+//     requestSearchRestaurant("Japanese", "category");
+//   })
+// })
 
 function showMarkhamRestaurants(e) {
   if (e.target.classList.contains("dropdown-item")){

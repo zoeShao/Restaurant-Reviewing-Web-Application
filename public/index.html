@@ -98,12 +98,13 @@
   <!-- Page Content -->
   <div id= "pageContent" class="container">
 
-    <div id = "searchBar" class="input-group border border-danger mb-5">
-      <input class="form-control" type="text" placeholder="Search Restaurants">
+    <form id = "searchBar" action = "/searchRestaurants" method = "post" class="input-group border border-danger mb-5">
+      <input class="form-control" type="text" name="content">
+      <input type = "hidden" value = "resName" name = "searchType"></input>
       <div class="input-group-append">
-        <a id = "searchButtonLink" href = "#"><button class="btn btn-danger" type="submit"><i class="fas fa-search text-white"></i></button></a> 
+        <a id = "searchButtonLink"><button class="btn btn-danger" type="submit"><i class="fas fa-search text-white"></i></button></a> 
       </div>
-    </div>
+    </form>
 
     <div id = "catogoriesAndPromotions" class="row">
 
@@ -111,11 +112,36 @@
 
         <h3 class = "display-4">Food Catogories</h3>
         <div class="list-group">
-          <a href="restaurants_search_result.html" class="list-group-item list-group-item-action list-group-item-light">Fast Food</a>
-          <a href="#" class="list-group-item list-group-item-action list-group-item-light">Chinese</a>
-          <a href="#" class="list-group-item list-group-item-action list-group-item-light">Japanese</a>
-          <a href="#" class="list-group-item list-group-item-action list-group-item-light">Korean</a>
-          <a href="#" class="list-group-item list-group-item-action list-group-item-light">American</a>
+            <form action = "/searchRestaurants" method = "post">
+              <input type = "hidden" value = "Fast food" name = "content"></input>
+              <input type = "hidden" value = "category" name = "searchType"></input>
+              <input type = "submit" value = "Fast food" class="list-group-item list-group-item-action list-group-item-light"></input>
+            </form>
+
+          <form action = "/searchRestaurants" method = "post">
+            <input type = "hidden" value = "Chinese" name = "content"></input>
+            <input type = "hidden" value = "category" name = "searchType"></input>
+            <input type = "submit" value = "Chinese" class="list-group-item list-group-item-action list-group-item-light"></input>
+          </form>
+
+          <form action = "/searchRestaurants" method = "post">
+            <input type = "hidden" value = "Japanese" name = "content"></input>
+            <input type = "hidden" value = "category" name = "searchType"></input>
+            <input type = "submit" value = "Japanese" class="list-group-item list-group-item-action list-group-item-light"></input>
+          </form>
+
+          <form action = "/searchRestaurants" method = "post">
+            <input type = "hidden" value = "Korean" name = "content"></input>
+            <input type = "hidden" value = "category" name = "searchType"></input>
+            <input type = "submit" value = "Korean" class="list-group-item list-group-item-action list-group-item-light"></input>
+          </form>
+
+          <form action = "/searchRestaurants" method = "post">
+            <input type = "hidden" value = "American" name = "content"></input>
+            <input type = "hidden" value = "category" name = "searchType"></input>
+            <input type = "submit" value = "American" class="list-group-item list-group-item-action list-group-item-light"></input>
+          </form>
+
         </div>
 
       </div>
