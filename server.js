@@ -54,19 +54,27 @@ const sessionChecker = (req, res, next) => {
 	}
 }
 
-app.post('/signUp', (req, res) => {
-
-    const saveUser = new User({
-		name: req.body.username,
-		password: req.body.password,
-		email: req.body.email,
-		accountType: req.body.type
-	})
-    saveUser.save().then((result) => {res.send(saveUser);}
-	), (error) => {res.status(400).send(error)}
+//root route
+app.get('/', (req, res) => {
+	// check if we have active session cookie
+	//if (req.session.user) {
+		res.sendFile(__dirname + '/public/index.html')
+		// res.render('index.hbs', {
+		// 	name: req.session.name
+		// })
+	//} 
+	// else {
+	// 	res.redirect('/login')
+	// }
 })
 
-// route for login
+//routes for log in and sign up
+app.route('/signUp')
+	.get((req, res) => {
+		res.sendfile(__dirname + '/public/sign_up.html')
+	})
+
+
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
 		console.log("going login.html")
@@ -88,20 +96,6 @@ app.get('/getLogInInfo', (req, res) => {
 		res.status(204).send();
 	}
 })
-
-app.get('/', (req, res) => {
-	// check if we have active session cookie
-	//if (req.session.user) {
-		res.sendFile(__dirname + '/public/index.html')
-		// res.render('index.hbs', {
-		// 	name: req.session.name
-		// })
-	//} 
-	// else {
-	// 	res.redirect('/login')
-	// }
-})
-
 
 app.post('/users/login', function(req, res){
 
@@ -131,8 +125,22 @@ app.post('/users/login', function(req, res){
 				res.status(400).redirect('/login')
 			})
 		}
-    
-    
+})
+
+app.post('/users/signUp', (req, res) => {
+
+	const saveUser = new User({
+	name: req.body.name,
+	password: req.body.password,
+	email: req.body.email,
+	accountType: req.body.type
+})
+	saveUser.save().then((user) => {
+		req.session.user = user._id;
+		req.session.name = user.name;
+		res.redirect('/');
+	}
+), (error) => {res.status(400).send(error)}
 })
 
 app.get('/users/logout', (req, res) => {
