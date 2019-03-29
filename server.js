@@ -181,6 +181,55 @@ app.get('/restaurants', authenticate, (req, res) =>{
 	})
 })
 
+//Codes for search result
+app.post('/searchRestaurants', (req, res) => { 
+	const content = req.body.content;
+	const searchType = req.body.searchType;
+
+	if(searchType == "resName"){
+		Restaurant.find({name: content.trim()}).then((result) =>
+		{
+			req.session.searchingRes = result;
+			res.redirect('/openSearchResult');
+		}).catch((error) => res.status(400).send(error))
+	} else if(searchType == "location"){
+		Restaurant.find({location: content.trim()}).then((result) =>
+		{
+			req.session.searchingRes = result;
+			res.redirect('/openSearchResult');
+		}).catch((error) => res.status(400).send(error))
+	}else if(searchType == "category"){
+		Restaurant.find({category: content.trim()}).then((result) =>
+		{
+			req.session.searchingRes = result;
+			log("got request")
+			res.redirect('/openSearchResult');
+		}).catch((error) => res.status(400).send(error))
+	}
+
+})
+
+app.get('/openSearchResult', (req, res) => {
+	// check if we have active session cookie
+	//if (req.session.user) {
+		log("before redirect");
+		res.sendFile(__dirname + '/public/restaurants_search_result.html')
+		// res.send()
+		// res.render('index.hbs', {
+		// 	name: req.session.name
+		// })
+	//} 
+	// else {
+	// 	res.redirect('/login')
+	// }
+})
+
+app.get('/getRestaurants', (req, res) => {
+	if(req.session.searchingRes){
+		res.send({res: req.session.searchingRes});
+	}
+})
+
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
 }) 
