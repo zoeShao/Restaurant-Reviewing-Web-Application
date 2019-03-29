@@ -38,15 +38,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    reviews: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Review'
-    }], 
     favourites: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Restaurant'
-    }],
-    restaurants: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Restaurant'
     }]
@@ -97,11 +89,7 @@ const resSchema = new mongoose.Schema({
     category: {
       type: String,
       required: true,
-    },
-    reviews: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Revies'
-    }]
+    }
   });
 
   const reviewSchema = new mongoose.Schema({

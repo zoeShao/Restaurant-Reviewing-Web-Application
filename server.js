@@ -3,12 +3,20 @@ const express = require('express')
 const port = process.env.PORT || 3000
 const bodyParser = require('body-parser')
 const { ObjectID } = require('mongodb')
+const Grid = require('gridfs-stream')
 const session = require('express-session')
 const hbs = require('hbs')
 const multer = require('multer')
-const {mongoose, storage, gfs} = require('./back-end/db/mongoose')
+const {mongoose, storage} = require('./back-end/db/mongoose')
 
 const {User, Restaurant, Review} = require('./back-end/model')
+
+const conn = mongoose.connection;
+let gfs;
+conn.once('open', () =>{
+    gfs = Grid(conn.db, mongoose.mongo)
+    gfs.collection('images');
+})
 
 // express
 const app = express();
@@ -172,7 +180,7 @@ app.post('/restaurants', [authenticate, upload.single('resImg')], (req, res) =>{
 })
 
 //get all restaurants
-app.get('/restaurants', authenticate, (req, res) =>{
+app.get('/restaurants', (req, res) =>{
 	Restaurant.find().then((restaurants) => {
 		res.send({restaurants})
 	}, (error) =>{
@@ -181,13 +189,13 @@ app.get('/restaurants', authenticate, (req, res) =>{
 })
 
 //read one image by name
-app.get('readImg/:filename', (req, res) =>{
+app.get('/readImg/:filename', (req, res) =>{
 	gfs.files.findOne({filename: req.params.filename}, (err, file) =>{
-		if(file.length === 0 || !file){
+		if( !file || file.length === 0 ){
 			res.status(404).send(err)
 		}
 		const readstream = gfs.createReadStream(file.filename)
-		readstream.pip(res)
+		readstream.pipe(res)
 	})
 })
 
