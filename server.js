@@ -154,9 +154,9 @@ const authenticate = (req, res, next) =>{
 }
 
 //post for create new restaurant
-app.post('/restaurants', upload.single('resImg'), (req, res) =>{
+app.post('/restaurants', [authenticate, upload.single('resImg')], (req, res) =>{
 	const restaurant = new Restaurant({
-		// owner: req.user._id,
+		owner: req.user._id,
 		picture: req.file.filename,
 		name: req.body.name,
 		phone: req.body.phone,
@@ -171,10 +171,9 @@ app.post('/restaurants', upload.single('resImg'), (req, res) =>{
 	})
 })
 
+//get all restaurants
 app.get('/restaurants', authenticate, (req, res) =>{
-	Restaurant.find({
-		owner: req.user._id
-	}).then((restaurants) => {
+	Restaurant.find().then((restaurants) => {
 		res.send({restaurants})
 	}, (error) =>{
 		res.status(450).send(error)
