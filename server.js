@@ -6,7 +6,7 @@ const { ObjectID } = require('mongodb')
 const session = require('express-session')
 const hbs = require('hbs')
 const multer = require('multer')
-const {mongoose, storage} = require('./back-end/db/mongoose')
+const {mongoose, storage, gfs} = require('./back-end/db/mongoose')
 
 const {User, Restaurant, Review} = require('./back-end/model')
 
@@ -177,6 +177,17 @@ app.get('/restaurants', authenticate, (req, res) =>{
 		res.send({restaurants})
 	}, (error) =>{
 		res.status(450).send(error)
+	})
+})
+
+//read one image by name
+app.get('readImg/:filename', (req, res) =>{
+	gfs.files.findOne({filename: req.params.filename}, (err, file) =>{
+		if(file.length === 0 || !file){
+			res.status(404).send(err)
+		}
+		const readstream = gfs.createReadStream(file.filename)
+		readstream.pip(res)
 	})
 })
 

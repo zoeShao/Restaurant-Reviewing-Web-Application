@@ -32,4 +32,4 @@ const storage = new GridFsStorage({
         });
     }
 })
-module.exports = {mongoose, storage}
+module.exports = {mongoose, storage, gfs}
