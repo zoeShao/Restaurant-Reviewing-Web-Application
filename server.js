@@ -200,6 +200,7 @@ app.get('/readImg/:filename', (req, res) =>{
 })
 
 //Codes for search result
+//search type can only be: "resName", "location", "category"
 app.post('/searchRestaurants', (req, res) => { 
 	const content = req.body.content;
 	const searchType = req.body.searchType;
