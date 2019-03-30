@@ -235,31 +235,46 @@ app.delete('/removeRes/:id', (req, res) =>{
 app.post('/searchRestaurants', (req, res) => { 
 	const content = req.body.content;
 	const searchType = req.body.searchType;
-	log(content);
-	log(searchType);
+	const from = req.body.from;
+	log("content: "+ content);
+	log("search type: "+ searchType);
+	log("from: "+ from);
 	if(searchType == "resName"){
 		Restaurant.find({name: content.trim()}).then((result) =>
 		{
 			req.session.searchingRes = result;
-			res.redirect('/openSearchResult');
+			//promise has delay, so we can only put this comment code here
+			if(from == "search_page"){
+				res.send({res: req.session.searchingRes});
+			} else{
+				res.redirect('/openSearchResult');
+			}
 		}).catch((error) => res.status(400).send(error))
 	} else if(searchType == "location"){
 		Restaurant.find({location: content.trim()}).then((result) =>
 		{
 			req.session.searchingRes = result;
-			res.redirect('/openSearchResult');
+			if(from == "search_page"){
+				res.send({res: req.session.searchingRes});
+			} else{
+				res.redirect('/openSearchResult');
+			}
 		}).catch((error) => res.status(400).send(error))
 	}else if(searchType == "category"){
 		Restaurant.find({category: content.trim()}).then((result) =>
 		{
+			log("result" + result);
 			req.session.searchingRes = result;
-			log("got request")
-			res.redirect('/openSearchResult');
+			if(from == "search_page"){
+				res.send({res: req.session.searchingRes});
+			} else{
+				res.redirect('/openSearchResult');
+			}
 		}).catch((error) => res.status(400).send(error))
 	} else{
 		res.status(400).send("invalid search type!");
 	}
-
+	
 })
 
 app.get('/openSearchResult', (req, res) => {
@@ -269,6 +284,7 @@ app.get('/openSearchResult', (req, res) => {
 })
 
 app.get('/getRestaurants', (req, res) => {
+	log(req.session.searchingRes)
 	if(req.session.searchingRes){
 		res.send({res: req.session.searchingRes});
 	}
