@@ -42,6 +42,8 @@ const userImg = "avatar.jpg"
 // Add these restaurants to the user's favourite array (does not change the DOM)
 // allRestaurantsData.push(store1)
 
+// call get data function 
+getRestaurantDataFromServer();
 
 /* Select all DOM form elements you'll need. */ 
 const dropDown = document.querySelector('#dropDown')
@@ -62,16 +64,21 @@ pager.addEventListener('click', changePage);
 chineseLink.addEventListener('click', showChineseRes);
 fastfoodLink.addEventListener('click', showFastFoodRes);
 japaneseLink.addEventListener('click', showJapaneseRes);
+koreanLink.addEventListener('click', showKoreanRes);
+americanLink.addEventListener('click', showAmericanRes);
 markhamLink.addEventListener('click', showMarkhamRes);
 downtownLink.addEventListener('click', showDowntownRes);
+
+
+
 
 /*-----------------------------------------------------------*/
 /*** 
 Get data from server
 ***/
-getRestaurantDataFromServer();
+
 function getRestaurantDataFromServer(){
-	const url = '/getRestaurants';
+  const url = '/getRestaurants';
   const request = new Request(url, {
     method: 'get',
     headers: {
@@ -97,15 +104,48 @@ function getRestaurantDataFromServer(){
     
   }).catch(error => {log(error)})
 }
+
+function sendOutSearchRequest(content, searchType){
+	const url = '/searchRestaurants';
+    // The data we are going to send in our request
+    let data = {
+        content: content,
+		searchType: searchType,
+		from: "search_page"
+    }
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'post', 
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+    fetch(request).then((res) => {
+		if(res.status == 204){
+		} else{
+		  return res.json()
+		}
+		
+	  }).then((restaurants) =>{
+		log(restaurants.res);
+		if(restaurants){
+		  allRestaurantsData = restaurants.res;
+		  log(restaurants.res);
+		  showRestaurants(allRestaurantsData);
+		}
+		
+	}).catch(error => {log(error)})
+}
 /*-----------------------------------------------------------*/
 /*** 
 Button event listeners functions
 ***/
 function showChineseRes(e){
     if(e.target.classList.contains("foodCatLink")){
-        const chineseRes = []
         //server part TODO: make server call to get all the Chinese restaurants in the array
-        showRestaurants(chineseRes);
+        sendOutSearchRequest("Chinese", "category");
     }
 }
 
@@ -113,8 +153,7 @@ function showFastFoodRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const fastFoodRes = []
         //server part TODO: make server call to get all the fast food restaurants in the array
-        fastFoodRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1))
-        showRestaurants(fastFoodRes);
+        sendOutSearchRequest("Fast Food", "category");
     }
 }
 
@@ -122,9 +161,30 @@ function showJapaneseRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const japaneseRes = []
         //server part TODO: make server call to get all the Japanese food restaurants in the array
-        const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
-        japaneseRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
-        showRestaurants(japaneseRes);
+        // const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
+        // japaneseRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
+		// showRestaurants(japaneseRes);
+		sendOutSearchRequest("Japanese", "category");
+    }
+}
+function showKoreanRes(e){
+    if(e.target.classList.contains("foodCatLink")){
+        const japaneseRes = []
+        //server part TODO: make server call to get all the Japanese food restaurants in the array
+        // const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
+        // japaneseRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
+		// showRestaurants(japaneseRes);
+		sendOutSearchRequest("Korean", "category");
+    }
+}
+function showAmericanRes(e){
+    if(e.target.classList.contains("foodCatLink")){
+        const japaneseRes = []
+        //server part TODO: make server call to get all the Japanese food restaurants in the array
+        // const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
+        // japaneseRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
+		// showRestaurants(japaneseRes);
+		sendOutSearchRequest("American", "category");
     }
 }
 
@@ -132,9 +192,10 @@ function showMarkhamRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const markhamRes = []
         //server part TODO: make server call to get all the Markham restaurants in the array
-        const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
-        markhamRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
-        showRestaurants(markhamRes);
+        // const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
+        // markhamRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
+		// showRestaurants(markhamRes);
+		sendOutSearchRequest("Markham", "location");
     }
 }
 
@@ -142,10 +203,17 @@ function showDowntownRes(e){
     if(e.target.classList.contains("foodCatLink")){
         const downtownRes = []
         //server part TODO: make server call to get all the downtown Toronto restaurants in the array
-        downtownRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1))
-        showRestaurants(downtownRes);
+        // downtownRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1))
+		// showRestaurants(downtownRes);
+		sendOutSearchRequest("Downtown", "location");
     }
 }
+//search bar
+$("#searchBtn").click(
+	function(){
+		sendOutSearchRequest($("#searchInput").val(), "resName");
+	}
+)
 
 /*-----------------------------------------------------------*/
 /*** 
