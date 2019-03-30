@@ -47,15 +47,16 @@ function getLogInInfo(){
 }
 
 //sign out user
-$(document).ready(function(){
-  $("#signInOut").click(function(){
-    const url = '/users/logout';
-    const request = new Request(url, {
-      method: 'get', 
-      headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-      },
+function signOutUser(){
+    log($('#sioSubmitInput').attr("value"))
+    if($('#sioSubmitInput').attr("value") == "Sign Out"){
+      const url = '/users/logout';
+      const request = new Request(url, {
+        method: 'get', 
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
   });
   fetch(request).then(function(res) {
         // Handle response we get from the API
@@ -67,81 +68,77 @@ $(document).ready(function(){
     }).catch((error) => {
         console.log(error)
     })
-  })
-})
+    }
+}
+
 
 function changeToSignOutStatus(){
   const header = document.getElementById("header");
   
   //remove profile pic
-  const profilePic = header.children[2];
-  if(profilePic.children[0].children.length > 0){
-    profilePic.children[0].removeChild(
-      profilePic.children[0].firstElementChild);
-  }
+    $('#portraitContainer').empty();
   
   //remove username
-  const name = header.children[3];
-  name.className = "col-md-1";
-  const loginLink = document.createElement('a');
-  loginLink.href = "login.html";
-  loginLink.className = "nav-link";
-  loginLink.innerText = "Log in";
-  name.removeChild(name.firstElementChild);
-  name.appendChild(loginLink);
+  //set form
+  $('#loginOrUsername').attr({
+    'action': '/login',
+    'method': 'get'
+  })
+  //set submit input
+  $('#louSubmitInput').attr({
+    'value': "Log in",
+    'class': "nav-link submitLink"
+  });
+  //set hidden input
+  $('#louHideInput').attr({
+    'value': '',
+    'name': ''
+  })
 
   //change sign out to sign up
-  const signUp = header.children[4];
-  signUp.className = "col-md-1";
-  const signUpLink = document.createElement('a');
-  // signUpLink.href = "sign_up.html";
-  signUpLink.className = "nav-link";
-  signUpLink.innerText = "Sign up";
-  signUp.removeChild(signUp.firstElementChild);
-  signUp.appendChild(signUpLink);
+  $('#signInOutForm').attr({
+    'action': '/signUp',
+    'method': 'get'
+  })
+  $('#sioSubmitInput').attr({
+    'value': 'Sign Up',
+    'class': 'nav-link submitLink'
+  })
 }
 
 function changeToLoggedInStatus(userName, imgSrc){
   const header = document.getElementById("header");
   
   //add profile pic
-  const profilePic = header.children[2];
-  const imgLink = document.createElement("a");
-  imgLink.href = "individual_account.html";
   const img = document.createElement('img');
-  img.src = imgSrc;
-  imgLink.appendChild(img);
+  img.src = "https://img.icons8.com/ios/50/000000/gender-neutral-user.png"//imgSrc;
   img.className = "float-right img-thumbnail rounded-circle";
-  profilePic.children[0].appendChild(imgLink);
-  
+  $("#portraitContainer").append(img);
+
   //add username
-  const name = header.children[3];
-  name.className = "col-md-1";
-  const userLink = document.createElement('a');
-  userLink.href = "individual_account.html";
-  userLink.className = "userName nav-link";
-  userLink.innerText = userName;
-  name.removeChild(name.firstElementChild);
-  name.appendChild(userLink);
+  $("#loginOrUsername").attr({
+    'action': '',
+    'method': ''
+  })
+  $("#louSubmitInput").attr({
+    'value': userName,
+    'class': "nav-link userName submitLink"
+  })
+  $("#louHideInput").attr({
+    'name': 'name',
+    'value': userName
+  })
+  //change sign up to sign out
+  $('#signInOutForm').attr({
+    'action': 'javascript:signOutUser()',
+    'method': ''
+  })
+  $('#sioSubmitInput').attr({
+    'value': 'Sign Out',
+    'class': 'nav-link signOut submitLink'
+  })
 
-  //change sign out to sign up
-  const signOut = header.children[4];
-  signOut.className = "col-md-1";
-  const signOutLink = document.createElement('a');
-  signOutLink.href = "#";
-  signOutLink.className = "signOut nav-link";
-  signOutLink.innerText = "Sign Out";
-  signOut.removeChild(signOut.firstElementChild);
-  signOut.appendChild(signOutLink);
 }
-
-//Search functions/Show restaurant Functions
-// $(document).ready(function(){
-//   $("#searchJapaneseResBtn").click(function(){
-//     log("clickbutton")
-//     requestSearchRestaurant("Japanese", "category");
-//   })
-// })
 
 function showMarkhamRestaurants(e) {
   if (e.target.classList.contains("dropdown-item")){
