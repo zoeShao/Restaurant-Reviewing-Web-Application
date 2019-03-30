@@ -61,4 +61,11 @@
 .submitLink{
   background: transparent;
   border: 0px;
+  color: rgb(56, 47, 138);
+}
+
+.resTitleLink{
+  background: transparent;
+  border: 0px;
+  color: rgb(78, 180, 228);
 }
