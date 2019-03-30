@@ -152,11 +152,9 @@ app.get('/users/logout', (req, res) => {
 app.post('/popularRestaurants', (req, res) =>{
 	const location = req.body.location;
 
-	Restaurant.find({location: location}).then((result) =>
-		{
-			sortByRate(result)
-			res.send(result);
-		}).catch((error) => res.status(400).send(error))
+	Restaurant.find({location: location}).sort({rate: 1}).then((result) =>{
+		res.send(result);
+	}).catch((error) => res.status(400).send(error))
 
 })
 
@@ -297,15 +295,6 @@ app.get('/getRestaurants', (req, res) => {
 		res.send({res: req.session.searchingRes});
 	}
 })
-
-//helper function
-function sortByRate(restaurants) {
-	restaurants.sort(function(a, b){
-    if(a.rate < b.rate) { return 1; }
-    if(a.rate > b.rate) { return -1; }
-    return 0;
-	})
-}
 
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
