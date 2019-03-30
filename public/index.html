@@ -31,12 +31,14 @@
     <div id="header" class="row p-3 bg-danger text-white">
         <!-- logo part -->
         <div class="col-md-5">
-            <a class="reviewLink" href="index_user.html">
+          <form action = "/" method = "get">
+            <button class="restaurantLogo" type="submit">
                 <div class="logoContainer">
-                    <img src="./img/logo.png" class="img-thumbnail" alt="logo Picture"/>
+                    <img src="./img/logo.png" class="float-left img-thumbnail" alt="logo Picture"/>
                     <span class="logo text-dark">Restaurant Rev.</span>
                 </div>
-            </a>
+            </button>
+          </form>
         </div>
         <!-- search part -->
         <div class="col-md-4">
@@ -74,7 +76,7 @@
   <div id= "pageContent" class="container">
 
     <form id = "searchBar" action = "/searchRestaurants" method = "post" class="input-group border border-danger mb-5">
-      <input class="form-control" type="text" name="content">
+      <input class="form-control" type="text" name="content" placeholder="Search Restaurants Names">
       <input type = "hidden" value = "resName" name = "searchType"></input>
       <div class="input-group-append">
         <a id = "searchButtonLink"><button class="btn btn-danger" type="submit"><i class="fas fa-search text-white"></i></button></a> 
@@ -172,7 +174,7 @@
         </div>
         <div id = "popularRestaurants" class="row mt-3">
           
-          <div class="col-lg-5 col-md-6 mb-4 mr-5">
+          <!-- <div class="col-lg-5 col-md-6 mb-4 mr-5">
             <div class="card h-100">
               <a href=""><img class="card-img-top" src=""></a>
               <div class="card-body">
@@ -181,7 +183,7 @@
                 </h4>
               </div>
             </div>
-          </div>
+          </div> -->
 
 
           <!-- <div class="col-lg-5 col-md-6 mb-4">

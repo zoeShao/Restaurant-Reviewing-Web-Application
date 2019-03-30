@@ -1,8 +1,8 @@
-const loginButton = document.querySelector('#loginButton');
-const loginForm = document.querySelector('#loginForm');
-console.log(loginButton);
-loginForm.addEventListener('submit', checkIdentity);
-console.log(loginForm);
+// const loginButton = document.querySelector('#loginButton');
+// const loginForm = document.querySelector('#loginForm');
+// console.log(loginButton);
+// loginForm.addEventListener('submit', checkIdentity);
+// console.log(loginForm);
 
 //server part
 // const express = require('express');
