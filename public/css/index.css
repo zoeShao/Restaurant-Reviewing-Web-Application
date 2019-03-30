@@ -71,3 +71,8 @@
 #dropDownButton{
   background-color: red;
 }
+
+.submitLink{
+  background: transparent;
+  border: 0px;
+}
