@@ -56,16 +56,7 @@ const sessionChecker = (req, res, next) => {
 
 //root route
 app.get('/', (req, res) => {
-	// check if we have active session cookie
-	//if (req.session.user) {
-		res.sendFile(__dirname + '/public/index.html')
-		// res.render('index.hbs', {
-		// 	name: req.session.name
-		// })
-	//} 
-	// else {
-	// 	res.redirect('/login')
-	// }
+	res.sendFile(__dirname + '/public/index.html')
 })
 
 //routes for log in and sign up
@@ -157,6 +148,17 @@ app.get('/users/logout', (req, res) => {
 			res.redirect('/')
 		}
 	})
+})
+
+app.post('/popularRestaurants', (req, res) =>{
+	const location = req.body.location;
+
+	Restaurant.find({location: location}).then((result) =>
+		{
+			sortByRate(result)
+			res.send(result);
+		}).catch((error) => res.status(400).send(error))
+
 })
 
 const authenticate = (req, res, next) =>{
@@ -289,6 +291,15 @@ app.get('/getRestaurants', (req, res) => {
 		res.send({res: req.session.searchingRes});
 	}
 })
+
+//helper function
+function sortByRate(restaurants) {
+	restaurants.sort(function(a, b){
+    if(a.rate < b.rate) { return 1; }
+    if(a.rate > b.rate) { return -1; }
+    return 0;
+	})
+}
 
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
