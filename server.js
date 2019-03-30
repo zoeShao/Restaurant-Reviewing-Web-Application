@@ -3,12 +3,20 @@ const express = require('express')
 const port = process.env.PORT || 3000
 const bodyParser = require('body-parser')
 const { ObjectID } = require('mongodb')
+const Grid = require('gridfs-stream')
 const session = require('express-session')
 const hbs = require('hbs')
 const multer = require('multer')
-const {mongoose, storage, gfs} = require('./back-end/db/mongoose')
+const {mongoose, storage} = require('./back-end/db/mongoose')
 
 const {User, Restaurant, Review} = require('./back-end/model')
+
+const conn = mongoose.connection;
+let gfs;
+conn.once('open', () =>{
+    gfs = Grid(conn.db, mongoose.mongo)
+    gfs.collection('images');
+})
 
 // express
 const app = express();
@@ -54,14 +62,19 @@ app.get('/', (req, res) => {
 //routes for log in and sign up
 app.route('/signUp')
 	.get((req, res) => {
-		res.sendfile(__dirname + '/public/sign_up.html')
+		res.sendFile(__dirname + '/public/sign_up.html')
 	})
 
 
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
 		console.log("going login.html")
-		res.sendfile(__dirname + '/public/login.html')
+		res.sendFile(__dirname + '/public/login.html')
+	})
+
+app.route('/myRes')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/restaurant_myRes.html')
 	})
 
 // get log in info by Nav Bar
@@ -139,11 +152,9 @@ app.get('/users/logout', (req, res) => {
 app.post('/popularRestaurants', (req, res) =>{
 	const location = req.body.location;
 
-	Restaurant.find({location: location}).then((result) =>
-		{
-			sortByRate(result)
-			res.send(result);
-		}).catch((error) => res.status(400).send(error))
+	Restaurant.find({location: location}).sort({rate: 1}).then((result) =>{
+		res.send(result);
+	}).catch((error) => res.status(400).send(error))
 
 })
 
@@ -164,7 +175,7 @@ const authenticate = (req, res, next) =>{
 }
 
 //post for create new restaurant
-app.post('/restaurants', [authenticate, upload.single('resImg')], (req, res) =>{
+app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) =>{
 	const restaurant = new Restaurant({
 		owner: req.user._id,
 		picture: req.file.filename,
@@ -182,8 +193,9 @@ app.post('/restaurants', [authenticate, upload.single('resImg')], (req, res) =>{
 })
 
 //get all restaurants
-app.get('/restaurants', authenticate, (req, res) =>{
-	Restaurant.find().then((restaurants) => {
+
+app.get('/getMyRestaurants', authenticate, (req, res) =>{
+	Restaurant.find({owner: req.user._id}).sort({_id: -1}).then((restaurants) => {
 		res.send({restaurants})
 	}, (error) =>{
 		res.status(450).send(error)
@@ -191,13 +203,36 @@ app.get('/restaurants', authenticate, (req, res) =>{
 })
 
 //read one image by name
-app.get('readImg/:filename', (req, res) =>{
+app.get('/readImg/:filename', (req, res) =>{
 	gfs.files.findOne({filename: req.params.filename}, (err, file) =>{
-		if(file.length === 0 || !file){
-			res.status(404).send(err)
+		if( !file || file.length === 0 ){
+			res.status(404).send()
 		}
 		const readstream = gfs.createReadStream(file.filename)
-		readstream.pip(res)
+		readstream.pipe(res)
+	})
+})
+
+app.delete('/removeRes/:id', (req, res) =>{
+	const id = req.params.id
+
+	if(!ObjectID.isValid(id)){
+		return res.status(404).send()
+	}
+
+	Restaurant.findByIdAndRemove(id).then((restaurant) =>{
+			if(!restaurant){
+				res.status(404).send()
+			}
+			else{
+				gfs.remove({filename: restaurant.picture, root: 'images'}, (err, GridFSBucket) =>{
+					if(err){
+						res.status(404).send()
+					}else{
+						res.send()
+					}
+				})
+			}
 	})
 })
 
@@ -260,15 +295,6 @@ app.get('/getRestaurants', (req, res) => {
 		res.send({res: req.session.searchingRes});
 	}
 })
-
-//helper function
-function sortByRate(restaurants) {
-	restaurants.sort(function(a, b){
-    if(a.rate < b.rate) { return 1; }
-    if(a.rate > b.rate) { return -1; }
-    return 0;
-	})
-}
 
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)

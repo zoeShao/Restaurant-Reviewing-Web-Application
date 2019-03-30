@@ -1,52 +1,18 @@
 /* Class */
-class User {
-	constructor(image, name, email, password, type){
-        this.image = image;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.type = type;
-        this.res = [];
-    }
-}
 
-class Restaurant{
-    constructor(image, name, phone, address, rate, price, location, category){
-        this.image = image;
-        this.name = name;
-        this.phone = phone;
-        this.address = address;
-        this.rate = rate;
-        this.price = price;
-        this.location = location;
-        this.category = category;
-    }
-}
-
+let resLst = [];
 /* Global variables */
 let maxReviews = 3; // max Contents one page can show
 let currentPage = 1; // current page number
 let editing = false; // flag for check whether we are in editing page or not
 
 /* Examples(hardcode part) */
-const storeImg1 = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
-const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1,'DownTown', 'Fast Food')
+// These examples are just for test purpose (sort)
 
-// These examples are just for test purpose (sort)
-const storeImgSort = 'http://4designer.t7yb.net/files/2017110610/Cartoon-Pizza-Restaurant-26180.jpg'
-const store3 = new Restaurant(storeImgSort, "ATest1", "1234567890", "1 (name) St, City1", 5, 3, 'Markham', 'Chinese')
-const store4 = new Restaurant(storeImgSort, "BTest2", "0987654321", "2 (name) St, City2", 1, 3, 'Markham', 'Chinese')
-const store5 = new Restaurant(storeImgSort, "CTest3", "1234567890", "3 (name) St, City3", 2, 1,'DownTown', 'Japanese')
 // create a user
-// get user information and list of restaurant from server for phase2
-const userImg = "avatar.jpg"
-const user = new User(userImg, "user2", "user2@mail.com", "user2", "i");
+
 // Add these restaurants to the user's favourite array (does not change the DOM)
-user.res.push(store1)
 // These examples are just for test purpose (sort)
-user.res.push(store3)
-user.res.push(store4)
-user.res.push(store5)
 /* Select all DOM form elements you'll need. */ 
 const dropDown = document.querySelector('#dropDown')
 const contentBody = document.querySelector('#mainBody');
@@ -54,10 +20,10 @@ const pager = document.querySelector('#pager')
 /* Event listeners for button submit and button click */
 dropDown.addEventListener('click', changeMain);
 pager.addEventListener('click', changePage);
-contentBody.addEventListener('click', editRes);
-/* Load the initial page. */ 
-showPage(currentPage);
 
+/* Load the initial page. */ 
+contentBody.addEventListener('click', editRes);
+getRestaurant();
 /*-----------------------------------------------------------*/
 /*** 
 Functions that hold the event of review page from DOM
@@ -77,7 +43,7 @@ function changeMain(e){
     // part for sort event
     else if(e.target.classList.contains('dropdown-name')){
         contentBody.innerText = ""
-        sortByName(user)
+        sortByName()
 		showPage(currentPage)
     }
 }
@@ -87,13 +53,13 @@ function changePage(e) {
     e.preventDefault();
 	if (e.target.classList.contains('previous')) {
 		if (currentPage > 1) {
-			currentPage = currentPage - 1
+            currentPage = currentPage - 1
 			showPage(currentPage)
 		}
 
 	} else if (e.target.classList.contains('next')) {
-		if ((currentPage * 3) < user.res.length) {
-			currentPage = currentPage + 1
+		if ((currentPage * 3) < resLst.length) {
+            currentPage = currentPage + 1
 		}
 		showPage(currentPage)		
 	}
@@ -105,8 +71,8 @@ function editRes(e){
     if(e.target.classList.contains('btn') && !(editing)){
         let index = null;
         const address = e.target.parentElement.firstElementChild.childNodes[1].lastElementChild.lastElementChild.innerText;
-        for(let i = 0; i < user.res.length; i++){
-            if(user.res[i].address === address){
+        for(let i = 0; i < resLst.length; i++){
+            if(resLst[i].address === address){
                 index = i;
                 break;
             }
@@ -121,9 +87,17 @@ function editRes(e){
         }
         // delete restaurant event
         else if(e.target.innerText === 'Delete'){
-            user.res.splice(index, 1);
-            // sent the delete information to server
-            showPage(currentPage);
+            const id = resLst[index]._id;
+            const url = '/removeRes/';
+            $.ajax({
+                url: url + id,
+                method:'delete'
+            }).done((res) =>{
+                console.log('delete success');
+                getRestaurant();
+            }).fail((error) => {
+                alert('fail to delete')
+            })
         }
     }
 }
@@ -135,7 +109,7 @@ Functions that hold the event of editing page from DOM
 // create a new restaurant and back to review page
 function addNewRes(e){
     e.preventDefault();
-    const url = 'http://localhost:3000/restaurants'
+    const url = '/addRestaurants'
     const form = new FormData()
     form.append("resImg", document.querySelector('#newRestaurantImg').files[0]);
     form.append("name", document.querySelector('#newRestaurantName').value);
@@ -152,6 +126,11 @@ function addNewRes(e){
     fetch(request).then(function(res){
         if(res.status === 200){
             console.log('add restaurant')
+             // sent the new restaurant to server
+            dropDown.style.visibility = 'visible';
+            pager.style.visibility = 'visible';
+            editing = false;
+            getRestaurant();
         }else(
             console.log('cannot add restaurant')
         )
@@ -159,11 +138,7 @@ function addNewRes(e){
     }).catch((error) =>{
         console.log(error)
     })
-    // sent the new restaurant to server
-    dropDown.style.visibility = 'visible';
-    pager.style.visibility = 'visible';
-    editing = false;
-    showPage(currentPage);
+   
 }
 
 // event holder function that hold the submit event for editing restaurant
@@ -171,8 +146,8 @@ function addNewRes(e){
 function addEditRes(index){
     return function(e){
         e.preventDefault();
-        const editRes = buildNewRes(user.res[index].rate, user.res[index].price);
-        user.res[index] = editRes;
+        const editRes = buildNewRes(resLst[index].rate, resLst[index].price);
+        resLst[index] = editRes;
         dropDown.style.visibility = 'visible';
         pager.style.visibility = 'visible';
         editing = false;
@@ -309,11 +284,13 @@ function addNewResToDom(newRes){
     newA.style = "display:block";
     newA.href = "#";
     // part for image div
+    const url = '/readImg/';
+    //change to server image request
     const newImgDiv = document.createElement('div');
     newImgDiv.className = 'storeImgContainer';
     const newImg = document.createElement('img');
     newImg.className = 'storeImg';
-    newImg.src = newRes.image;
+    newImg.src = url + newRes.picture;
     newImg.alt = "Store Picture";
     newImgDiv.appendChild(newImg);
     // part for info div
@@ -369,21 +346,19 @@ function addNewResToDom(newRes){
 
 //function to show the content of current page
 function showPage(currentPage) {
-	let restPage = user.res.length - currentPage * 3
+	let restPage = resLst.length - currentPage * 3
 	if (restPage >= 0) {
 		contentBody.innerText = ""
 		for (let i = 0; i < maxReviews; i++) {
 			let j = ((currentPage-1)*3) + i
-			// console.log(j)
-			addNewResToDom(user.res[j])
+			addNewResToDom(resLst[j])
 		}
 	} else {
 		restPage = maxReviews+restPage
 		contentBody.innerText = ""
 		for (let i = 0; i < restPage; i++) {
 			let j = ((currentPage-1)*3) + i
-			// console.log(j)
-			addNewResToDom(user.res[j])
+			addNewResToDom(resLst[j])
 		}
     }
 }
@@ -412,8 +387,8 @@ function editingSetting(){
 }
 
 // sort function by name
-function sortByName(user) {
-	user.res.sort(function(a, b){
+function sortByName() {
+	resLst.sort(function(a, b){
     if(a.name < b.name) { return -1; }
     if(a.name > b.name) { return 1; }
     return 0;
@@ -453,3 +428,15 @@ function buildNewRes(rate, price){
     return newRes;
 }
 
+function getRestaurant(){
+    const url = '/getMyRestaurants';
+    $.ajax({
+        url: url,
+        method:'get'
+    }).done((res) =>{
+        resLst = res.restaurants;
+        showPage(currentPage);
+    }).fail((error) =>{
+        alert("cannot get restaurants");
+    })
+}
