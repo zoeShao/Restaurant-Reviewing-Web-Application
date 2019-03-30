@@ -81,6 +81,12 @@ app.route('/login')
 		res.sendfile(__dirname + '/public/login.html')
 	})
 
+app.route('/myRes')
+	.get(sessionChecker, (req, res) => {
+		console.log("going login.html")
+		res.sendfile(__dirname + '/public/restaurant_myRes.html')
+	})
+
 // get log in info by Nav Bar
 app.get('/getLogInInfo', (req, res) => {
 	if (req.session.user){
@@ -170,7 +176,7 @@ const authenticate = (req, res, next) =>{
 }
 
 //post for create new restaurant
-app.post('/restaurants', [authenticate, upload.single('resImg')], (req, res) =>{
+app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) =>{
 	const restaurant = new Restaurant({
 		owner: req.user._id,
 		picture: req.file.filename,
@@ -188,7 +194,8 @@ app.post('/restaurants', [authenticate, upload.single('resImg')], (req, res) =>{
 })
 
 //get all restaurants
-app.get('/restaurants', (req, res) =>{
+//add authenticate later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+app.get('/getMyRestaurants', (req, res) =>{
 	Restaurant.find().then((restaurants) => {
 		res.send({restaurants})
 	}, (error) =>{
@@ -200,13 +207,29 @@ app.get('/restaurants', (req, res) =>{
 app.get('/readImg/:filename', (req, res) =>{
 	gfs.files.findOne({filename: req.params.filename}, (err, file) =>{
 		if( !file || file.length === 0 ){
-			res.status(404).send(err)
+			res.status(404).send()
 		}
 		const readstream = gfs.createReadStream(file.filename)
 		readstream.pipe(res)
 	})
 })
 
+app.delete('/removeRes/:id', (req, res) =>{
+	const id = req.params.id
+
+	if(!ObjectID.isValid(id)){
+		return res.status(404).send()
+	}
+
+	Restaurant.findByIdAndRemove(id).then((restaurant) =>{
+			if(!restaurant){
+				res.status(404).send()
+			}
+			else{
+				
+			}
+	})
+})
 //Codes for search result
 //search type can only be: "resName", "location", "category"
 app.post('/searchRestaurants', (req, res) => { 

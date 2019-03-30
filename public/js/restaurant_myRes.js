@@ -10,7 +10,6 @@ let editing = false; // flag for check whether we are in editing page or not
 // These examples are just for test purpose (sort)
 
 // create a user
-getRestaurant();
 // Add these restaurants to the user's favourite array (does not change the DOM)
 // These examples are just for test purpose (sort)
 /* Select all DOM form elements you'll need. */ 
@@ -23,6 +22,7 @@ pager.addEventListener('click', changePage);
 
 /* Load the initial page. */ 
 contentBody.addEventListener('click', editRes);
+showPage(currentPage);
 /*-----------------------------------------------------------*/
 /*** 
 Functions that hold the event of review page from DOM
@@ -105,7 +105,7 @@ Functions that hold the event of editing page from DOM
 // create a new restaurant and back to review page
 function addNewRes(e){
     e.preventDefault();
-    const url = 'http://localhost:3000/restaurants'
+    const url = '/addRestaurants'
     const form = new FormData()
     form.append("resImg", document.querySelector('#newRestaurantImg').files[0]);
     form.append("name", document.querySelector('#newRestaurantName').value);
@@ -279,7 +279,7 @@ function addNewResToDom(newRes){
     newA.style = "display:block";
     newA.href = "#";
     // part for image div
-    const url = 'http://localhost:3000/readImg/';
+    const url = '/readImg/';
     //change to server image request
     const newImgDiv = document.createElement('div');
     newImgDiv.className = 'storeImgContainer';
@@ -341,21 +341,42 @@ function addNewResToDom(newRes){
 
 //function to show the content of current page
 function showPage(currentPage) {
-	let restPage = resLst.length - currentPage * 3
-	if (restPage >= 0) {
-		contentBody.innerText = ""
-		for (let i = 0; i < maxReviews; i++) {
-			let j = ((currentPage-1)*3) + i
-			addNewResToDom(resLst[j])
-		}
-	} else {
-		restPage = maxReviews+restPage
-		contentBody.innerText = ""
-		for (let i = 0; i < restPage; i++) {
-			let j = ((currentPage-1)*3) + i
-			addNewResToDom(resLst[j])
-		}
-    }
+    const url = '/getMyRestaurants';
+    const request = new Request(url, {
+        method: 'get',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
+    });
+    fetch(request).then((res) =>{
+        if(res.status === 200){
+            return res.json();
+        }else{
+            alert('cannot load restaurants')
+        }
+    })
+    .then((json) =>{
+        resLst = json.restaurants;
+        let restPage = resLst.length - currentPage * 3
+	    if (restPage >= 0) {
+		    contentBody.innerText = ""
+		    for (let i = 0; i < maxReviews; i++) {
+			    let j = ((currentPage-1)*3) + i
+			    addNewResToDom(resLst[j])
+		    }
+        } 
+        else {
+		    restPage = maxReviews+restPage
+		    contentBody.innerText = ""
+		    for (let i = 0; i < restPage; i++) {
+			    let j = ((currentPage-1)*3) + i
+			    addNewResToDom(resLst[j])
+		    }
+        }
+    }).catch((error) =>{
+        console.log(error);
+    })
 }
 /*-----------------------------------------------------------*/
 /*** helper functions ***/
@@ -421,28 +442,4 @@ function buildNewRes(rate, price){
 
     const newRes = new Restaurant(newResImg, newResName, newResPhone, newResAddr, rate, price, newResLocal, newResCate);
     return newRes;
-}
-
-function getRestaurant(){
-    const url = 'http://localhost:3000/restaurants';
-    const request = new Request(url, {
-        method: 'get',
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        }
-    });
-    fetch(request).then((res) =>{
-        if(res.status === 200){
-            return res.json();
-        }else{
-            alert('cannot load restaurants')
-        }
-    })
-    .then((json) =>{
-        resLst = json.restaurants;
-        showPage(currentPage);
-    }).catch((error) =>{
-        console.log(error);
-    })
 }
