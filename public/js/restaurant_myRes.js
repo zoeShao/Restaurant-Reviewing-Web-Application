@@ -10,6 +10,7 @@ let editing = false; // flag for check whether we are in editing page or not
 // These examples are just for test purpose (sort)
 
 // create a user
+
 // Add these restaurants to the user's favourite array (does not change the DOM)
 // These examples are just for test purpose (sort)
 /* Select all DOM form elements you'll need. */ 
@@ -22,7 +23,7 @@ pager.addEventListener('click', changePage);
 
 /* Load the initial page. */ 
 contentBody.addEventListener('click', editRes);
-showPage(currentPage);
+getRestaurant();
 /*-----------------------------------------------------------*/
 /*** 
 Functions that hold the event of review page from DOM
@@ -49,9 +50,6 @@ function changeMain(e){
 
 // eventholder function for change page event
 function changePage(e) {
-    console.log(e.target.classList);
-    console.log(resLst.length);
-    console.log(resLst);
     e.preventDefault();
 	if (e.target.classList.contains('previous')) {
 		if (currentPage > 1) {
@@ -61,9 +59,7 @@ function changePage(e) {
 
 	} else if (e.target.classList.contains('next')) {
 		if ((currentPage * 3) < resLst.length) {
-            console.log(currentPage);
             currentPage = currentPage + 1
-            console.log(currentPage);
 		}
 		showPage(currentPage)		
 	}
@@ -91,9 +87,17 @@ function editRes(e){
         }
         // delete restaurant event
         else if(e.target.innerText === 'Delete'){
-            resLst.splice(index, 1);
-            // sent the delete information to server
-            showPage(currentPage);
+            const id = resLst[index]._id;
+            const url = '/removeRes/';
+            $.ajax({
+                url: url + id,
+                method:'delete'
+            }).done((res) =>{
+                console.log('delete success');
+                getRestaurant();
+            }).fail((error) => {
+                alert('fail to delete')
+            })
         }
     }
 }
@@ -122,6 +126,11 @@ function addNewRes(e){
     fetch(request).then(function(res){
         if(res.status === 200){
             console.log('add restaurant')
+             // sent the new restaurant to server
+            dropDown.style.visibility = 'visible';
+            pager.style.visibility = 'visible';
+            editing = false;
+            getRestaurant();
         }else(
             console.log('cannot add restaurant')
         )
@@ -129,11 +138,7 @@ function addNewRes(e){
     }).catch((error) =>{
         console.log(error)
     })
-    // sent the new restaurant to server
-    dropDown.style.visibility = 'visible';
-    pager.style.visibility = 'visible';
-    editing = false;
-    showPage(currentPage);
+   
 }
 
 // event holder function that hold the submit event for editing restaurant
@@ -341,42 +346,21 @@ function addNewResToDom(newRes){
 
 //function to show the content of current page
 function showPage(currentPage) {
-    const url = '/getMyRestaurants';
-    const request = new Request(url, {
-        method: 'get',
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        }
-    });
-    fetch(request).then((res) =>{
-        if(res.status === 200){
-            return res.json();
-        }else{
-            alert('cannot load restaurants')
-        }
-    })
-    .then((json) =>{
-        resLst = json.restaurants;
-        let restPage = resLst.length - currentPage * 3
-	    if (restPage >= 0) {
-		    contentBody.innerText = ""
-		    for (let i = 0; i < maxReviews; i++) {
-			    let j = ((currentPage-1)*3) + i
-			    addNewResToDom(resLst[j])
-		    }
-        } 
-        else {
-		    restPage = maxReviews+restPage
-		    contentBody.innerText = ""
-		    for (let i = 0; i < restPage; i++) {
-			    let j = ((currentPage-1)*3) + i
-			    addNewResToDom(resLst[j])
-		    }
-        }
-    }).catch((error) =>{
-        console.log(error);
-    })
+	let restPage = resLst.length - currentPage * 3
+	if (restPage >= 0) {
+		contentBody.innerText = ""
+		for (let i = 0; i < maxReviews; i++) {
+			let j = ((currentPage-1)*3) + i
+			addNewResToDom(resLst[j])
+		}
+	} else {
+		restPage = maxReviews+restPage
+		contentBody.innerText = ""
+		for (let i = 0; i < restPage; i++) {
+			let j = ((currentPage-1)*3) + i
+			addNewResToDom(resLst[j])
+		}
+    }
 }
 /*-----------------------------------------------------------*/
 /*** helper functions ***/
@@ -442,4 +426,17 @@ function buildNewRes(rate, price){
 
     const newRes = new Restaurant(newResImg, newResName, newResPhone, newResAddr, rate, price, newResLocal, newResCate);
     return newRes;
+}
+
+function getRestaurant(){
+    const url = '/getMyRestaurants';
+    $.ajax({
+        url: url,
+        method:'get'
+    }).done((res) =>{
+        resLst = res.restaurants;
+        showPage(currentPage);
+    }).fail((error) =>{
+        alert("cannot get restaurants");
+    })
 }

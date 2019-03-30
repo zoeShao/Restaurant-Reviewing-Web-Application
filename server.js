@@ -71,20 +71,19 @@ app.get('/', (req, res) => {
 //routes for log in and sign up
 app.route('/signUp')
 	.get((req, res) => {
-		res.sendfile(__dirname + '/public/sign_up.html')
+		res.sendFile(__dirname + '/public/sign_up.html')
 	})
 
 
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
 		console.log("going login.html")
-		res.sendfile(__dirname + '/public/login.html')
+		res.sendFile(__dirname + '/public/login.html')
 	})
 
 app.route('/myRes')
-	.get(sessionChecker, (req, res) => {
-		console.log("going login.html")
-		res.sendfile(__dirname + '/public/restaurant_myRes.html')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/restaurant_myRes.html')
 	})
 
 // get log in info by Nav Bar
@@ -194,9 +193,9 @@ app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) 
 })
 
 //get all restaurants
-//add authenticate later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-app.get('/getMyRestaurants', (req, res) =>{
-	Restaurant.find().then((restaurants) => {
+
+app.get('/getMyRestaurants', authenticate, (req, res) =>{
+	Restaurant.find({owner: req.user._id}).sort({_id: -1}).then((restaurants) => {
 		res.send({restaurants})
 	}, (error) =>{
 		res.status(450).send(error)
@@ -226,10 +225,17 @@ app.delete('/removeRes/:id', (req, res) =>{
 				res.status(404).send()
 			}
 			else{
-				
+				gfs.remove({filename: restaurant.picture, root: 'images'}, (err, GridFSBucket) =>{
+					if(err){
+						res.status(404).send()
+					}else{
+						res.send()
+					}
+				})
 			}
 	})
 })
+
 //Codes for search result
 //search type can only be: "resName", "location", "category"
 app.post('/searchRestaurants', (req, res) => { 

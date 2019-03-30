@@ -5,7 +5,8 @@ const crypto = require('crypto')
 
 const mongoURI = 'mongodb://localhost:27017/RestaurantRevAPI'
 // connect to our database
-mongoose.connect(mongoURI, { useNewUrlParser: true })
+mongoose.set('useNewUrlParser', true)
+mongoose.connect(mongoURI)
 
 const storage = new GridFsStorage({
     url: mongoURI,
