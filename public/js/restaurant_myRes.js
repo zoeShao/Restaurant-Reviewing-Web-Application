@@ -34,7 +34,7 @@ function changeMain(e){
     // part for add new restaurant event
     if(e.target.innerText === 'add new'){
         contentBody.innerText = "";
-        addNewResBox();
+        addNewResBox(-1);
         // add listener for editing page
         const newResForm = document.querySelector('#newResForm');
         newResForm.addEventListener('submit', addNewRes);
@@ -80,7 +80,7 @@ function editRes(e){
         // editing restaurant event
         if(e.target.innerText === 'Edit'){ 
             contentBody.innerText = "";
-            addNewResBox();
+            addNewResBox(index);
             const newResForm = document.querySelector('#newResForm');
             newResForm.addEventListener('submit', addEditRes(index));
             editingSetting()
@@ -110,33 +110,24 @@ Functions that hold the event of editing page from DOM
 function addNewRes(e){
     e.preventDefault();
     const url = '/addRestaurants'
-    const form = new FormData()
-    form.append("resImg", document.querySelector('#newRestaurantImg').files[0]);
-    form.append("name", document.querySelector('#newRestaurantName').value);
-    form.append("phone", document.querySelector('#newRestaurantPhone').value);
-    form.append("address", document.querySelector('#newRestaurantAddr').value);
-    form.append("location", document.querySelector('#newResLocBtn').innerText);
-    form.append("category", document.querySelector('#newResCateBtn').innerText);
+    const form = formData();
   
-    const request = new Request(url, {
+    $.ajax({
+        url: url,
         method: 'post',
-        mode: 'cors',
-        body: form
-    })
-    fetch(request).then(function(res){
-        if(res.status === 200){
-            console.log('add restaurant')
-             // sent the new restaurant to server
-            dropDown.style.visibility = 'visible';
-            pager.style.visibility = 'visible';
-            editing = false;
-            getRestaurant();
-        }else(
-            console.log('cannot add restaurant')
-        )
-        console.log(res)
-    }).catch((error) =>{
-        console.log(error)
+        processData: false,
+        contentType: false,
+        mimeType: "multipart/form-data",
+        data: form
+    }).done((res) =>{
+        console.log('add restaurant');
+        dropDown.style.visibility = 'visible';
+        pager.style.visibility = 'visible';
+        editing = false;
+        getRestaurant();
+    }).fail((error) =>{
+        alert('fail to add restaurant');
+        console.log(error);
     })
    
 }
@@ -146,14 +137,40 @@ function addNewRes(e){
 function addEditRes(index){
     return function(e){
         e.preventDefault();
-        const editRes = buildNewRes(resLst[index].rate, resLst[index].price);
-        resLst[index] = editRes;
-        dropDown.style.visibility = 'visible';
-        pager.style.visibility = 'visible';
-        editing = false;
-        showPage(currentPage);
-        // sent the changed restaurant to server
+        const id = resLst[index]._id;
+        const url = '/editRes/' + id;
+        form = formData();
+        console.log("4444444444444444444")
+        $.ajax({
+            url: url,
+            method: 'put',
+            processData: false,
+            contentType: false,
+            mimeType: "multipart/form-data",
+            data: form
+        }).done((res) =>{
+            console.log('edit restaurant');
+            dropDown.style.visibility = 'visible';
+            pager.style.visibility = 'visible';
+            editing = false;
+            getRestaurant();
+        }).fail((error) =>{
+            alert('fail to add restaurant');
+            console.log(error);
+        })
     }
+}
+
+//helper function to form a form data by user's input
+function formData(){
+    const form = new FormData();
+    form.append("resImg", document.querySelector('#newRestaurantImg').files[0]);
+    form.append("name", document.querySelector('#newRestaurantName').value);
+    form.append("phone", document.querySelector('#newRestaurantPhone').value);
+    form.append("address", document.querySelector('#newRestaurantAddr').value);
+    form.append("location", document.querySelector('#newResLocBtn').innerText);
+    form.append("category", document.querySelector('#newResCateBtn').innerText);
+    return form;
 }
 
 // event holder function that hold the reset event
@@ -175,7 +192,24 @@ function changeDrop(e){
 /*-----------------------------------------------------------*/
 /*** DOM functions below - use these to create and edit DOM objects ***/
 //function for building the huge div for adding or editing restaurant and than add to main body
-function addNewResBox(){
+function addNewResBox(index){
+    let url, name, phone, address, location, category;
+    if(index == -1){
+        url = '#';
+        name = 'Restaurant name';
+        phone = 'Restaurant phone number';
+        address = 'Restaurant address';
+        location = 'Downtown-Toronto';
+        category = 'Fast Food';
+    }else{
+        const curRes = resLst[index];
+        url = '/readImg/' + curRes.picture;
+        name = curRes.name;
+        phone = curRes.phone;
+        address = curRes.address;
+        location = curRes.location;
+        category = curRes.category;
+    }
     //build main div
     const newBoxDiv = document.createElement('div');
     newBoxDiv.id = 'newResBox';
@@ -205,20 +239,20 @@ function addNewResBox(){
     newImgDiv.className = 'storeImgContainer';
     const newImg = document.createElement('img');
     newImg.id = 'newPreview';
-    newImg.src = "#";
+    newImg.src = url;
     newImg.alt = "Store Picture";
     newImgDiv.appendChild(newImg);
     // part for input of name, phone and address div
-    const newNameDiv = createInputForm('newRestaurantName', 'Restaurant name:', "Restaurant name", 'name');
-    const newPhoneDiv = createInputForm('newRestaurantPhone', 'Telephone:', 'Restaurant phone number', 'phone');
-    const newAddrDiv = createInputForm('newRestaurantAddr', 'Restaurant address:', 'Restaurant address', 'address');
+    const newNameDiv = createInputForm('newRestaurantName', 'Restaurant name:', name);
+    const newPhoneDiv = createInputForm('newRestaurantPhone', 'Telephone:', phone);
+    const newAddrDiv = createInputForm('newRestaurantAddr', 'Restaurant address:', address);
     // part for dropdown div of restaurant location
     const newLocaDiv = document.createElement('div');
     newLocaDiv.className = 'form-group';
     const locaLabel = document.createElement('label');
     locaLabel.appendChild(document.createTextNode('Choose Location:'));
     newLocaDiv.appendChild(locaLabel);
-    newLocaDiv.innerHTML += '<button id="newResLocBtn" name="location" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Downtown-Toronto</button>'
+    newLocaDiv.innerHTML += '<button id="newResLocBtn" name="location" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+location+ '</button>'
     const newDropDiv = document.createElement('div');
     newDropDiv.id = "newRestaurantLoca";
     newDropDiv.className = 'dropdown-menu';
@@ -231,7 +265,7 @@ function addNewResBox(){
     const cateLabel = document.createElement('label');
     cateLabel.appendChild(document.createTextNode('Choose Category:'));
     newCateDiv.appendChild(cateLabel);
-    newCateDiv.innerHTML += '<button id="newResCateBtn" name="category" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Fast Food</button>'
+    newCateDiv.innerHTML += '<button id="newResCateBtn" name="category" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+category+'</button>'
     const newDropDiv2 = document.createElement('div');
     newDropDiv2.id = "newRestaurantCate";
     newDropDiv2.className = 'dropdown-menu';
@@ -396,7 +430,7 @@ function sortByName() {
 }
 
 // create a new input div by given information
-function createInputForm(id, labelText, holderText, name){
+function createInputForm(id, labelText, holderText){
     const newDiv = document.createElement('div');
     newDiv.className = 'form-group';
     const newLabel = document.createElement('label');
@@ -405,27 +439,12 @@ function createInputForm(id, labelText, holderText, name){
     const newInput = document.createElement('input');
     newInput.type = 'text';
     newInput.className = 'form-control';
-    newInput.name = name;
     newInput.id = id;
-    newInput.placeholder = holderText;
+    newInput.value = holderText;
 
     newDiv.appendChild(newLabel);
     newDiv.appendChild(newInput);
     return newDiv;
-}
-
-// build a new restaurant class by given rate and price
-function buildNewRes(rate, price){
-    const files = document.querySelector('#newRestaurantImg').files[0];
-    const newResImg = URL.createObjectURL(files);
-    const newResName = document.querySelector('#newRestaurantName').value;
-    const newResPhone = document.querySelector('#newRestaurantPhone').value;
-    const newResAddr = document.querySelector('#newRestaurantAddr').value;
-    const newResLocal = document.querySelector('#newResLocBtn').innerText;
-    const newResCate = document.querySelector('#newResCateBtn').innerText;
-
-    const newRes = new Restaurant(newResImg, newResName, newResPhone, newResAddr, rate, price, newResLocal, newResCate);
-    return newRes;
 }
 
 function getRestaurant(){
@@ -434,8 +453,13 @@ function getRestaurant(){
         url: url,
         method:'get'
     }).done((res) =>{
-        resLst = res.restaurants;
-        showPage(currentPage);
+        if(res.restaurants){
+            resLst = res.restaurants;
+            showPage(currentPage);
+        }
+        else{
+            alert("cannot get restaurants");
+        }
     }).fail((error) =>{
         alert("cannot get restaurants");
     })
