@@ -336,7 +336,7 @@ app.get('/openSearchResult', (req, res) => {
 })
 
 app.get('/getRestaurants', (req, res) => {
-	log(req.session.searchingRes)
+	log("Searching res session: "+ req.session.searchingRes)
 	if(req.session.searchingRes){
 		res.send({res: req.session.searchingRes});
 	}
