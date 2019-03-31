@@ -41,7 +41,7 @@ app.use(session({
 	resave: false,
 	saveUninitialized: false,
 	cookie: {
-		expires: 600000,
+		expires: 600000000000,
 		httpOnly: true
 	}
 }))
@@ -171,7 +171,7 @@ const authenticate = (req, res, next) =>{
 		})
 	}
 	else{
-		res.redirect('/login')
+		res.status(400).redirect('/login')
 	}
 }
 
@@ -193,8 +193,7 @@ app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) 
 	})
 })
 
-//get all restaurants
-
+//get all restaurants for this user's id
 app.get('/getMyRestaurants', authenticate, (req, res) =>{
 	Restaurant.find({owner: req.user._id}).sort({_id: -1}).then((restaurants) => {
 		res.send({restaurants})
@@ -214,14 +213,13 @@ app.get('/readImg/:filename', (req, res) =>{
 	})
 })
 
-app.delete('/removeRes/:id', (req, res) =>{
+//delete one restaurant by id and also delete it's picture
+app.delete('/removeRes/:id', authenticate, (req, res) =>{
 	const id = req.params.id
-
 	if(!ObjectID.isValid(id)){
 		return res.status(404).send()
 	}
-
-	Restaurant.findByIdAndRemove(id).then((restaurant) =>{
+	Restaurant.findOneAndDelete({_id: id}).then((restaurant) =>{
 			if(!restaurant){
 				res.status(404).send()
 			}
@@ -235,6 +233,53 @@ app.delete('/removeRes/:id', (req, res) =>{
 				})
 			}
 	})
+})
+
+app.put('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
+	const id = req.params.id
+	if(!ObjectID.isValid(id)){
+		return res.status(404).send()
+	}
+	if(req.file){
+		Restaurant.findOneAndUpdate({_id: id}, {$set: {
+			picture: req.file.filename,
+			name: req.body.name,
+			phone: req.body.phone,
+			address: req.body.address,
+			location: req.body.location,
+			category: req.body.category
+		}}).then((restaurant) =>{
+			if(!restaurant){
+				res.status(404).send()
+			}
+			else{
+				gfs.remove({filename: restaurant.picture, root: 'images'}, (err, GridFSBucket) =>{
+					if(err){
+						res.status(404).send()
+					}else{
+						res.send()
+					}
+				})
+			}
+		})
+	}
+	else{
+		Restaurant.findOneAndUpdate({_id: id}, {$set: {
+			name: req.body.name,
+			phone: req.body.phone,
+			address: req.body.address,
+			location: req.body.location,
+			category: req.body.category
+		}}).then((restaurant) =>{
+			if(!restaurant){
+				res.status(404).send();
+			}
+			else{
+				res.send();
+			}
+		})
+	}
+	
 })
 
 //Codes for search result
