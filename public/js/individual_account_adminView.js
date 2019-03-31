@@ -1,58 +1,57 @@
 const log = console.log;
 
-class User {
-	constructor(image, name, email, password, type){
-        this.image = image;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.type = type;
-        this.reviews = [];
-    }
-}
+// class User {
+// 	constructor(image, name, email, password, type){
+//         this.image = image;
+//         this.name = name;
+//         this.email = email;
+//         this.password = password;
+//         this.type = type;
+//         this.reviews = [];
+//     }
+// }
 
-class Review {
-	constructor(rName, uName, rate, price, content){
-        this.rName = rName;
-        this.uName = uName;
-        this.rate = rate;
-        this.price = price;
-        this.content = content;
-    }
-}
+// class Review {
+// 	constructor(rName, uName, rate, price, content){
+//         this.rName = rName;
+//         this.uName = uName;
+//         this.rate = rate;
+//         this.price = price;
+//         this.content = content;
+//     }
+// }
 
 //Server part TODO: get data from the server and load them to the page
 
 let maxReviews = 3
 let currentPage = 1
-const userImg = document.createElement('img')
-userImg.src = "avatar.jpg"
-userImg.alt = "avatar Picture";
-const user = new User(userImg, "user", "user@mail.com", "user", "i")
-const review1 = new Review("McDonald's", "user", 3, 1, "here is the review.here is the review.here is the review.here is the review.")
-const review2 = new Review("Osaka Sushi", "user", 4, 2, "here is the review.here is the review.")
-const review3 = new Review("Asaka Sushi", "user", 5, 3, "here is the review.")
-const review4 = new Review("Bsaka Sushi", "user", 5, 3, "here is the review.")
-user.reviews.push(review2)
-user.reviews.push(review1)
-user.reviews.push(review3)
-user.reviews.push(review4)
+let restaurantsList = []
+let usersList = []
 
-const accountBody = document.getElementById("accountBody");
-if(accountBody){
-    accountBody.style.overflow = "auto";
+// const userImg = document.createElement('img')
+// userImg.src = "avatar.jpg"
+// userImg.alt = "avatar Picture";
+// const user = new User(userImg, "user", "user@mail.com", "user", "i")
+// const review1 = new Review("McDonald's", "user", 3, 1, "here is the review.here is the review.here is the review.here is the review.")
+// const review2 = new Review("Osaka Sushi", "user", 4, 2, "here is the review.here is the review.")
+// const review3 = new Review("Asaka Sushi", "user", 5, 3, "here is the review.")
+// const review4 = new Review("Bsaka Sushi", "user", 5, 3, "here is the review.")
+// user.reviews.push(review2)
+// user.reviews.push(review1)
+// user.reviews.push(review3)
+// user.reviews.push(review4)
+
+const restaurantsBody = document.getElementById("restaurantsBody");
+if(restaurantsBody){
+    restaurantsBody.style.overflow = "auto";
 }
 
 const popularRestaurants = document.getElementById("popularRestaurants");
 if(popularRestaurants){
 	popularRestaurants.addEventListener("click", removeRestaurants);
-	addRestaurant();
-	changeRestaurant(popularRestaurants.children[0], "review_page.html", "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg",
-				"McDonald's", "address here");
-	popularRestaurants.addEventListener("click", removeRestaurants);
-	addRestaurant();
-	changeRestaurant(popularRestaurants.children[1], "review_page.html", "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg",
-				"McDonald's", "address here");
+	InitializeAdminRestaurants();
+
+    
 }
 
 const commentsMainbody = document.getElementById("commentsMainbody");
@@ -61,10 +60,15 @@ if(commentsMainbody){
 }
 
 const banMainbody = document.getElementById("banMainbody");
+const banBody = document.getElementById("banBody");
+if(banBody){
+	banBody.style.overflow = "auto";
+}
 if(banMainbody){
 	banMainbody.addEventListener("click", banUser);
-	loadUsers("user2", "lawrence_zhou@hotmail.com", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png");
-	loadUsers("user3", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png");
+	InitializeAdminBanUsers();
+	// loadUsers("user2", "lawrence_zhou@hotmail.com", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png");
+	// loadUsers("user3", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png");
 }
 
 const pager = document.querySelector('#pager');
@@ -72,12 +76,116 @@ if(pager){
     pager.addEventListener('click', changePage);
 }
 
+/*  get data from server */
+
+//restaurant part
+function getListOfRestaurants(){
+	const url = '/admin/getAllRestaurants';
+    // The data we are going to send in our request
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'get', 
+    });
+    return fetch(request)
+}
+
+function InitializeAdminRestaurants(){
+	getListOfRestaurants().then((res) => {
+	  return res.json();
+	}).then((resList) => {
+	  for (let i = 0; i < resList.length; i++){
+		addRestaurant()
+		changeRestaurant(popularRestaurants.children[i], resList[i]);
+	  }
+	  restaurantsList = resList;
+	  log(restaurantsList)
+	}).catch(error => {log(error);});
+}
+
+function removeRestaurantFromServer(resObj){
+	const data = {
+		'restaurantToDelete': resObj
+	}
+	$.ajax({
+		type: 'POST',
+		url: '/admin/removeRes',
+		data: JSON.stringify(data),
+		"headers": {
+			"Content-Type": "application/json",
+		},
+		processData: false,
+		success: function(data, textStatus){
+			alert('Remove the restaurant successfully!')
+		},
+		fail: function(xhr, textStatus, errorThrown){
+			alert('Failed to remove the restaurant!');
+		 } 
+	})
+}
+
+//User part
+function getListOfUsers(){
+	const url = '/admin/getAllUsers';
+    // The data we are going to send in our request
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'get', 
+    });
+    return fetch(request)
+}
+
+function InitializeAdminBanUsers(){
+	getListOfUsers().then((res) => {
+	  return res.json();
+	}).then((returnUserList) => {
+	  for (let i = 0; i < returnUserList.length; i++){
+		loadUsers(returnUserList[i]);
+	  }
+	  userList = returnUserList;
+	  log(userList)
+	}).catch(error => {log(error);});
+}
+
+function banOrRecoverUser(userObj){
+	const data = {
+		'userToModify': userObj
+	}
+	log(userObj);
+	$.ajax({
+		"type": 'POST',
+		"url": '/admin/banOrRecoverUser',
+		"headers": {
+			"Content-Type": "application/json",
+		  },
+		"processData": false,
+		"data": JSON.stringify(data),
+		success: function(data, textStatus){
+			alert('Operation successful!')
+		},
+		fail: function(xhr, textStatus, errorThrown){
+			alert('Fail to execute this operation!');
+		 } 
+	})
+}
+
+/*                        */
+
 function banUser(e){
     if (e.target.classList.contains("btn")){
 		//server part TODO: should label the user "banned" in database
 		const userBanButton = e.target;
+		const userName = userBanButton.parentElement.children[0].children[1].
+		children[0].children[1].innerText;
+		for(let i = 0; i < userList.length; i++){
+			if (userList[i].name == userName){
+				log(userList[i])
+				banOrRecoverUser(userList[i]);
+				break;
+			}
+		}
         if(userBanButton.innerText == "Ban"){
-            userBanButton.innerText = "Recover";
+			userBanButton.innerText = "Recover";
+			
         } else if(userBanButton.innerText == "Recover"){
             userBanButton.innerText = "Ban";
         }
@@ -88,8 +196,25 @@ function banUser(e){
 function removeRestaurants(e){
     //server part TODO: should remove restaurants in database
     if (e.target.classList.contains("remove")){
-        const restaurantToRemove = e.target.parentElement.parentElement.parentElement;
-		popularRestaurants.removeChild(restaurantToRemove);
+		const restaurantToRemove = e.target.parentElement.parentElement.parentElement;
+		const resAddress = e.target.parentElement.children[1].innerText;
+		log(resAddress)
+		let i = 0;
+		let originalLength = restaurantsList.length;
+		for(i = 0; i < restaurantsList.length; i++){
+			if (restaurantsList[i].address == resAddress){
+				log(restaurantsList[i])
+				removeRestaurantFromServer(restaurantsList[i]);
+				popularRestaurants.removeChild(restaurantToRemove);
+				restaurantsList.splice(i, 1);
+				log(restaurantsList)
+				break;
+			}
+		}
+		//cannot find the restaurant
+		if(i == originalLength){
+			alert("fail to find the restaurant!");
+		}
         
     }
 }
@@ -205,50 +330,27 @@ function addPriceToDom(rate) {
 	return paraElement;
 }
 
-function loadUsers(name, userEmail, imgSrc){
-	// const row = banMainbody.children[0];
-	// const col = document.createElement("div");
-	// col.className = "col-lg-4 mt-4 mb-4";
-	// const dFlexOuter = document.createElement("div");
-	// dFlexOuter.className = "d-flex flex-column bg-light";
-	// const dFlexInner = document.createElement("div");
-	// dFlexInner.className = "d-flex justify-content-center";
-	// // const profilePicture = document.createElement("img");
-	// // profilePicture.src = imgSrc;
-	// const username = document.createElement("h4");
-	// username.className = "mb-1";
-	// username.innerText = name;
-	// const email = document.createElement("span");
-	// email.className = "mb-1";
-	// email.innerText = userEmail;
-	// const banButton = document.createElement("button");
-	// banButton.type = "button";
-	// banButton.className =  "btn btn-dark";
-	// banButton.innerText = "Ban";
-	// // dFlexInner.appendChild(profilePicture);
-	// dFlexInner.appendChild(username);
-	// dFlexOuter.appendChild(dFlexInner);
-	// dFlexOuter.appendChild(email);
-	// dFlexOuter.append(banButton);
-	// col.appendChild(dFlexOuter)
-	// row.appendChild(col);
-
+function loadUsers(userObj){
 	const contentBoxElement = document.createElement('div')
 	contentBoxElement.className = "contentBox"
+	//make link
 	const aElement = document.createElement('a')
 	aElement.className = "reviewLink"
 	aElement.href = "#"
+	//make username and email
 	const reviewElement = document.createElement('div')
 	reviewElement.className = "storeContainer"
 	const nameElement = document.createElement('p')
-	nameElement.innerHTML = "<strong>Username: </strong>" + `${name}`
+	nameElement.innerHTML = "<strong>Username: </strong>" + `<span>${userObj.name}</span>`
 	const contentElement = document.createElement('p')
-	contentElement.innerHTML = "<strong>User email: </strong>" + `${userEmail}`
+	contentElement.innerHTML = "<strong>User email: </strong>" + `${userObj.email}`
+	//make img
 	const profilePicDiv = document.createElement('div');
 	const profilePic = document.createElement('img');
-	profilePic.src = imgSrc;
+	profilePic.src = "https://img.icons8.com/ios/50/000000/gender-neutral-user.png", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png"//userObj.profilePic;
 	profilePic.className = "rounded-circle";
 	profilePicDiv.className = "float-left mr-3 portraitContainer";
+
 	profilePicDiv.appendChild(profilePic); 
 	aElement.appendChild(profilePicDiv);
 	reviewElement.appendChild(nameElement);
@@ -260,71 +362,74 @@ function loadUsers(name, userEmail, imgSrc){
     button.type = "button";
 	button.className = "btn btn-dark remove";
 	button.style.float = "right";
-    button.innerText = "Ban";
+	if(userObj.banned){
+		button.innerText = "Recover";
+	} else{
+		button.innerText = "Ban";
+	}
     contentBoxElement.appendChild(button);
     contentBoxElement.style.minHeight = "150px";
     log(contentBoxElement);
 	banMainbody.appendChild(contentBoxElement)
 }
 
-//helper function
-function changeRestaurant(restaurant, link, imgSrc, resName, address){
-	//change link
-	const aElement = restaurant.children[0].children[0];
-	aElement.href = link;
+/* helper functions for restaurant page */
+function changeRestaurant(restaurant, resObj){
 	//change image source
-	const img = restaurant.children[0].children[0].children[0];
-	img.src = imgSrc
+	const img = restaurant.children[0].children[0];
+	img.style.objectFit = "fill";
+	img.src = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg";//resObj.picture;
   
 	//change restaurant name
 	const cardBody = restaurant.children[0].children[1];
 	log(cardBody)
 	const h4 = cardBody.children[0]
-	const name = document.createElement("a")
-	name.href = link;
-	name.appendChild(document.createTextNode(resName));
+	const name = document.createElement("p")
+	name.className = "text-primary"
+	name.appendChild(document.createTextNode(resObj.name));
 	h4.appendChild(name);
 
 	//change address
 	const addressSpan = cardBody.children[1];
-	addressSpan.appendChild(document.createTextNode(address));
-
-	log(cardBody);
+	addressSpan.appendChild(document.createTextNode(resObj.address));
   }
   
   function addRestaurant(){
 	const colDiv = document.createElement('div');
-	colDiv.className = "col-lg-5 col-md-6 mb-4 mr-5";
+	colDiv.className = "col-3 mb-4 mr-5";
 	const card = document.createElement('div');
 	card.className = "card h-100";
-	const link = document.createElement('a');
 	const img = document.createElement('img');
 	img.className = "card-img-top";
-	link.appendChild(img);
 	const cardBody = document.createElement('div');
 	cardBody.className = "card-body";
 	const h4Title = document.createElement('h4');
 	h4Title.className = "card-title";
 	// address
 	const addressSpan = document.createElement("span");
+
 	//remove button
 	const removeButton = document.createElement('button');
 	removeButton.type = "button";
 	removeButton.className = "btn btn-dark remove";
 	removeButton.appendChild(document.createTextNode("Remove"));
+
 	//show comments
 	const showCommentBtn = document.createElement('button');
 	showCommentBtn.type = "button";
 	showCommentBtn.className = "btn btn-dark ml-3 remove";
 	showCommentBtn.appendChild(document.createTextNode("show comment"));
 	h4Title.appendChild(document.createElement('a'));
+
 	cardBody.appendChild(h4Title);
 	cardBody.appendChild(addressSpan);
 	cardBody.appendChild(document.createElement("br"));
 	cardBody.appendChild(removeButton);
 	cardBody.appendChild(showCommentBtn);
-	card.appendChild(link)
+	card.appendChild(img)
 	card.appendChild(cardBody);
 	colDiv.appendChild(card);
 	popularRestaurants.appendChild(colDiv);
   }
+
+  /*                      */
