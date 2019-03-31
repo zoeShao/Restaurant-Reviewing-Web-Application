@@ -25,6 +25,7 @@ app.use(bodyParser.json());
 // parse incoming parameters to req.body
 app.use(bodyParser.urlencoded({ extended:true }))
 
+
 // set the view library
 // app.set('view engine', 'hbs')
 
@@ -68,7 +69,6 @@ app.route('/signUp')
 
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
-		console.log("going login.html")
 		res.sendFile(__dirname + '/public/login.html')
 	})
 
@@ -114,6 +114,7 @@ app.post('/users/login', function(req, res){
 					console.log("password correct")
 					req.session.user = user._id;
 					req.session.name = user.name
+					req.session.accountType = user.accountType;
 					res.redirect('/')
 					// res.send(user)
 				}
@@ -341,6 +342,60 @@ app.get('/getRestaurants', (req, res) => {
 	}
 })
 
+/*       codes for admin page   */
+app.route('/adminBanUsers')
+	.get((req, res) => {
+		// if(req.session.accountType == 'a'){
+			res.sendFile(__dirname + '/public/individual_account_adminView_banUser.html')
+		// } else{
+		// 	res.status(400).send("Normal users are not authorized to go to admin page")
+		// }
+		
+	})
+
+app.route('/adminRestaurants')
+	.get((req, res) => {
+		// if(req.session.accountType == 'a'){
+			res.sendFile(__dirname + '/public/individual_account_adminView_restaurants.html')
+		// } else{
+		// 	res.status(400).send("Normal users are not authorized to go to admin page")
+		// }
+		
+	})
+
+app.post('/admin/removeRes', (req, res) => {
+	const rest = req.body.restaurantToDelete;
+
+	Restaurant.findOneAndDelete({_id: rest._id}).then((result) => {
+		res.send();
+	}).catch(error => {
+		res.status(400).send(error);
+	})
+})
+
+app.get('/admin/getAllUsers', (req, res) => {
+	User.find({accountType: {$not: {$eq: 'a'}}}).then((result) => {
+		res.send(result);
+	}).catch(error => res.status(400).send(error));
+})
+
+app.get('/admin/getAllRestaurants', (req, res) => {
+	Restaurant.find().then((result) => {
+		res.send(result);
+	}).catch(error => res.status(400).send(error));
+})
+
+app.post('/admin/banOrRecoverUser', (req, res) => {
+	const user = req.body.userToModify;
+	
+	User.findByIdAndUpdate(user._id, 
+		{ $set: {
+		banned: !user.banned
+	}}, {new: true}
+		).then((result) => {
+		res.send()
+	}).catch(error => {log(error)});
+})
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
 }) 

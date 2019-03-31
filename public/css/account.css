@@ -391,3 +391,19 @@ margin-left:100px;
 	border: 0px;
 	width: auto;
 }
+
+/* admin page styles */
+.adminContentBody {
+	height: 100vh;
+	background-color: #e6eaef;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: lightgrey;
+	border-radius: 25px;
+}
+
+/* #mainBody {
+	height: 100%;
+} */
