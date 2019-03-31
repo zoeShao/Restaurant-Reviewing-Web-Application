@@ -115,10 +115,20 @@ app.post('/users/login', function(req, res){
 					req.session.user = user._id;
 					req.session.name = user.name
 					req.session.accountType = user.accountType;
-					res.redirect('/')
-					// res.send(user)
+					log(req.session.accountType)
+					if(req.session.accountType === 'o'){
+						res.redirect('/myRes');
+					} else if (req.session.accountType === 'a'){
+						res.redirect('/adminBanUsers');
+					} else if (req.session.accountType === 'u'){
+						res.redirect('/');
+					}else{
+						res.status(400).send();
+					}
+					
 				}
 			}).catch((error) => {
+				log(error)
 				res.status(400).redirect('/login')
 			})
 		}
@@ -300,6 +310,7 @@ app.get('/getRestaurants', (req, res) => {
 /*       codes for admin page   */
 app.route('/adminBanUsers')
 	.get((req, res) => {
+		//TODO
 		// if(req.session.accountType == 'a'){
 			res.sendFile(__dirname + '/public/individual_account_adminView_banUser.html')
 		// } else{
@@ -310,6 +321,7 @@ app.route('/adminBanUsers')
 
 app.route('/adminRestaurants')
 	.get((req, res) => {
+		//TODO
 		// if(req.session.accountType == 'a'){
 			res.sendFile(__dirname + '/public/individual_account_adminView_restaurants.html')
 		// } else{
