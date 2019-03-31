@@ -13,7 +13,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
   
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
@@ -30,42 +30,30 @@
     <div id="header" class="row p-3 bg-danger text-white">
         <!-- logo part -->
         <div class="col-md-5">
-          <form action = "/" method = "get">
-            <button class="restaurantLogo" type="submit">
-                <div class="logoContainer">
-                    <img src="./img/logo.png" class="float-left img-thumbnail" alt="logo Picture"/>
-                    <span class="logo text-dark">Restaurant Rev.</span>
-                </div>
-            </button>
-          </form>
+          <div class="logoContainer">
+              <a href="/">
+                <img src="./img/logo.png" class="float-left img-thumbnail" alt="logo Picture"/>
+                <span class="logo text-dark">Restaurant Rev.</span>
+              </a>
+          </div>
         </div>
         <!-- search part -->
         <div class="col-md-4">
         </div>
+
         <!-- portrait part -->
-        
         <div class="col-md-1">
               <div id="portraitContainer">
-                <!-- <img src="https://img.icons8.com/ios/50/000000/gender-neutral-user.png" class="float-right img-thumbnail rounded-circle" alt="avatar Picture"/> -->
-                <!-- <form id = "profilePicForm">
-                    <input id = "picSubmitInput" type = "hidden"></input>
-                    <input id = "picHideInput" type = "hidden"></input>
-                </form> -->
               </div>
         </div>
 
         <!-- user name part -->
         <div class="col-md-1">
-          <form id = "loginOrUsername">
-            <input id = "louSubmitInput" type = "submit"></input>
-            <input id = "louHideInput" type = "hidden"></input>
-          </form>
+          <a id = "loginOrUsername"></a>
         </div>
         <!-- sign out part -->
         <div id = "signInOut" class=" col-md-1">
-          <form id = "signInOutForm">
-              <input id = "sioSubmitInput" type = "submit"></input>
-          </form>
+          <a id = "signInOutLink"></a>
         </div>
     </div>
 </div>
@@ -171,98 +159,8 @@
           </div>
           
         </div>
+        
         <div id = "popularRestaurants" class="row mt-3">
-          
-          <!-- <div class="col-lg-5 col-md-6 mb-4 mr-5">
-            <div class="card h-100">
-              <a href=""><img class="card-img-top" src=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#"></a>
-                </h4>
-              </div>
-            </div>
-          </div> -->
-
-
-          <!-- <div class="col-lg-5 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Item Two</a>
-                </h4>
-                <h5>$24.99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur! Lorem ipsum dolor sit amet.</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-              </div>
-            </div>
-          </div> -->
-
-          <!-- <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Item Three</a>
-                </h4>
-                <h5>$24.99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-              </div>
-            </div>
-          </div> -->
-
-          <!-- <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Item Four</a>
-                </h4>
-                <h5>$24.99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Item Five</a>
-                </h4>
-                <h5>$24.99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur! Lorem ipsum dolor sit amet.</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Item Six</a>
-                </h4>
-                <h5>$24.99</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-              </div>
-            </div>
-          </div>  -->
-
         </div>
    
 
@@ -280,5 +178,6 @@
 </body>
 
 <script type="text/javascript" src="./js/index.js"></script>
+<script src="https://code.jquery.com/jquery-latest.js"></script>
 
 </html>

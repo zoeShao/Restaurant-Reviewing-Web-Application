@@ -41,8 +41,6 @@ function getLogInInfo(){
 
 //sign out user
 function signOutUser(){
-    log($('#sioSubmitInput').attr("value"))
-    if($('#sioSubmitInput').attr("value") == "Sign Out"){
       const url = '/users/logout';
       const request = new Request(url, {
         method: 'get', 
@@ -61,7 +59,7 @@ function signOutUser(){
     }).catch((error) => {
         console.log(error)
     })
-    }
+    
 }
 
 //Get list of popular restaurant
@@ -89,67 +87,54 @@ function changeToSignOutStatus(){
   const header = document.getElementById("header");
   
   //remove profile pic
-    $('#portraitContainer').empty();
+  $('#portraitContainer').empty();
   
   //remove username
   //set form
   $('#loginOrUsername').attr({
-    'action': '/login',
-    'method': 'get'
-  })
-  //set submit input
-  $('#louSubmitInput').attr({
-    'value': "Log in",
+    'href': '/login',
     'class': "nav-link submitLink"
-  });
-  //set hidden input
-  $('#louHideInput').attr({
-    'value': '',
-    'name': ''
   })
 
+  $('#loginOrUsername').text("Log In")
+
   //change sign out to sign up
-  $('#signInOutForm').attr({
-    'action': '/signUp',
-    'method': 'get'
-  })
-  $('#sioSubmitInput').attr({
-    'value': 'Sign Up',
+  $('#signInOutLink').attr({
+    'href': '/signUp',
     'class': 'nav-link submitLink'
   })
+  $('#signInOutLink').text("Sign Up");
+  
 }
 
 function changeToLoggedInStatus(userName, imgSrc){
   const header = document.getElementById("header");
   
   //add profile pic
+  const profileLink = document.createElement('a');
+  //TODO: add profile picture link
+  profileLink.href = '';
   const img = document.createElement('img');
+  //TODO: change image source link
   img.src = "https://img.icons8.com/ios/50/000000/gender-neutral-user.png"//imgSrc;
   img.className = "float-right img-thumbnail rounded-circle";
-  $("#portraitContainer").append(img);
+  profileLink.appendChild(img);
+  $("#portraitContainer").append(profileLink);
 
   //add username
   $("#loginOrUsername").attr({
-    'action': '',
-    'method': ''
-  })
-  $("#louSubmitInput").attr({
-    'value': userName,
+    'href': '',
     'class': "nav-link userName submitLink"
   })
-  $("#louHideInput").attr({
-    'name': 'name',
-    'value': userName
-  })
+  $("#loginOrUsername").text(userName)
+
   //change sign up to sign out
-  $('#signInOutForm').attr({
-    'action': 'javascript:signOutUser()',
-    'method': ''
-  })
-  $('#sioSubmitInput').attr({
-    'value': 'Sign Out',
+  $('#signInOutLink').attr({
+    'href': '#',
+    'onClick': 'javascript:signOutUser()',
     'class': 'nav-link signOut submitLink'
   })
+  $('#signInOutLink').text("Sign Out")
 
 }
 
@@ -165,7 +150,6 @@ function showMarkhamRestaurants(e) {
 
 function showDowntownRestaurants(e) {
   if (e.target.classList.contains("dropdown-item")){
-    const restaurants = document.getElementById("popularRestaurants");
     const dropDownButton = document.getElementById("dropDownButton");
     dropDownButton.innerText = "Downtown-Toronto";
     
@@ -191,16 +175,17 @@ function InitializePopularRestaurants(location, maxShowingRestaurant){
 function changeRestaurant(restaurant, resObj){
   //change link
   const form = restaurant.children[0].children[0]
+  //TODO: fill up get link to restaurant
   form.action = "";
-  const hiddenInput = form.children[0]
-  hiddenInput.value = resObj._id;
+
 
   //change image source
-  const img = form.children[1].children[0];
+  const img = form.children[0].children[0];
+  //TODO: change image source
   img.src = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg";//resObj.picture;
 
   //change name
-  const cardBody = form.children[2];
+  const cardBody = form.children[1];
   const h4 = cardBody.children[0]
   const btnLink = h4.children[0];
   btnLink.innerText = resObj.name;
@@ -213,11 +198,7 @@ function addPopularRestaurant(){
   card.className = "card h-100";
 
   const form = document.createElement('form');
-  form.method = "post";
-
-  const hiddenInput = document.createElement("input");
-  hiddenInput.type = "hidden"
-  form.appendChild(hiddenInput);
+  form.method = "get";
 
   const link = document.createElement('button');
   link.className = "resTitleLink";

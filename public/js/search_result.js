@@ -151,60 +151,34 @@ function showChineseRes(e){
 
 function showFastFoodRes(e){
     if(e.target.classList.contains("foodCatLink")){
-        const fastFoodRes = []
-        //server part TODO: make server call to get all the fast food restaurants in the array
         sendOutSearchRequest("Fast Food", "category");
     }
 }
 
 function showJapaneseRes(e){
     if(e.target.classList.contains("foodCatLink")){
-        const japaneseRes = []
-        //server part TODO: make server call to get all the Japanese food restaurants in the array
-        // const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
-        // japaneseRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
-		// showRestaurants(japaneseRes);
 		sendOutSearchRequest("Japanese", "category");
     }
 }
 function showKoreanRes(e){
     if(e.target.classList.contains("foodCatLink")){
-        const japaneseRes = []
-        //server part TODO: make server call to get all the Japanese food restaurants in the array
-        // const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
-        // japaneseRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
-		// showRestaurants(japaneseRes);
 		sendOutSearchRequest("Korean", "category");
     }
 }
 function showAmericanRes(e){
     if(e.target.classList.contains("foodCatLink")){
-        const japaneseRes = []
-        //server part TODO: make server call to get all the Japanese food restaurants in the array
-        // const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
-        // japaneseRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
-		// showRestaurants(japaneseRes);
 		sendOutSearchRequest("American", "category");
     }
 }
 
 function showMarkhamRes(e){
     if(e.target.classList.contains("foodCatLink")){
-        const markhamRes = []
-        //server part TODO: make server call to get all the Markham restaurants in the array
-        // const storeImg2 = "http://markhamosakasushi.ca/wp-content/uploads/osaka-front.jpg"
-        // markhamRes.push(new Restaurant(storeImg2, "Osaka Sushi", "0987654321", "5762 Hwy 7, Markham", "#", 4, 2))
-		// showRestaurants(markhamRes);
 		sendOutSearchRequest("Markham", "location");
     }
 }
 
 function showDowntownRes(e){
     if(e.target.classList.contains("foodCatLink")){
-        const downtownRes = []
-        //server part TODO: make server call to get all the downtown Toronto restaurants in the array
-        // downtownRes.push(new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1))
-		// showRestaurants(downtownRes);
 		sendOutSearchRequest("Downtown", "location");
     }
 }
@@ -261,11 +235,13 @@ function addFavouriteToDom(restaurant) {
 	contentBoxElement.className = "contentBox"
 	const aElement = document.createElement('a')
 	aElement.className = "reviewLink"
+	//TODO: change restaurant.link
 	aElement.href = restaurant.page;
 	const storeImgElement = document.createElement('div')
 	storeImgElement.classNmae = "storeImgContainer"
 	const storeImg = document.createElement('img')
 	storeImg.className = "storeImg"
+	//TODO: change restaurant image
 	storeImg.src = restaurant.image
 	storeImg.alt = "Store Picture";
 	storeImgElement.appendChild(storeImg)
