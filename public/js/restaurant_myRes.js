@@ -140,7 +140,6 @@ function addEditRes(index){
         const id = resLst[index]._id;
         const url = '/editRes/' + id;
         form = formData();
-        console.log("4444444444444444444")
         $.ajax({
             url: url,
             method: 'put',
@@ -447,6 +446,7 @@ function createInputForm(id, labelText, holderText){
     return newDiv;
 }
 
+//get all restaurants for this user and then display 
 function getRestaurant(){
     const url = '/getMyRestaurants';
     $.ajax({
