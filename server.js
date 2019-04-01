@@ -25,8 +25,9 @@ app.use(bodyParser.json());
 // parse incoming parameters to req.body
 app.use(bodyParser.urlencoded({ extended:true }))
 
+
 // set the view library
-// app.set('view engine', 'hbs')
+app.set('view engine', 'hbs')
 
 const upload = multer({storage})
 
@@ -62,14 +63,35 @@ app.get('/', (req, res) => {
 //routes for log in and sign up
 app.route('/signUp')
 	.get((req, res) => {
-		res.sendFile(__dirname + '/public/sign_up.html')
+		if(req.session.failToSignUp){
+			if(req.session.failToSignUp === "duplicatedKeys"){
+				req.session.failToSignUp = "";
+				res.render('sign_up.hbs', {error: 'Sorry, this username/email is taken.'})
+			} else if(req.session.failToSignUp === "notValidInfo"){
+				req.session.failToSignUp = "";
+				res.render('sign_up.hbs', {error: 'Invalid email/username/password, please check again'})
+			} else if(req.session.failToSignUp === "unknownReasons"){
+				req.session.failToSignUp = "";
+				res.render('sign_up.hbs', {error: 'Sorry, fail to sign up for unknown reasons, please change your info and try again.'})
+			}
+		} else{
+			req.session.failToSignUp = "";
+			res.sendFile(__dirname + '/public/sign_up.html')
+		}
+		
 	})
 
 
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
-		console.log("going login.html")
-		res.sendFile(__dirname + '/public/login.html')
+		if(req.session.failToLogin){
+			req.session.failToLogin = false;
+			res.render('login.hbs', {error: 'Username/Password incorrect'})
+		}else{
+			req.session.failToLogin = false;
+			res.sendFile(__dirname + '/public/login.html')
+		}
+		
 	})
 
 app.route('/myRes')
@@ -106,7 +128,8 @@ app.post('/users/login', function(req, res){
 				if(!user) {
 					console.log("password not correct")
 					console.log(name);
-					console.log(password)
+					console.log(password);
+					req.session.failToLogin = true;
 					res.redirect('/login')
 				} else {
 					// Add the user to the session cookie that we will
@@ -114,10 +137,21 @@ app.post('/users/login', function(req, res){
 					console.log("password correct")
 					req.session.user = user._id;
 					req.session.name = user.name
-					res.redirect('/')
-					// res.send(user)
+					req.session.accountType = user.accountType;
+					log(req.session.accountType)
+					if(req.session.accountType === 'o'){
+						res.redirect('/myRes');
+					} else if (req.session.accountType === 'a'){
+						res.redirect('/adminBanUsers');
+					} else if (req.session.accountType === 'u'){
+						res.redirect('/');
+					}else{
+						res.status(400).send();
+					}
+					
 				}
 			}).catch((error) => {
+				log(error)
 				res.status(400).redirect('/login')
 			})
 		}
@@ -136,8 +170,21 @@ app.post('/users/signUp', (req, res) => {
 		req.session.name = user.name;
 		res.redirect('/');
 	}
-), (error) => {res.status(400).send(error)}
+).catch((error) => {
+	//duplicate key error
+	if(error.code == 11000 && error.name == "MongoError"){
+		req.session.failToSignUp = "duplicatedKeys";
+	} else if(error.errors.password || error.errors.email){
+		req.session.failToSignUp = "notValidInfo";
+	} else{
+		//should not happen
+		req.session.failToSignUp = "unknownReasons";
+	}
+	log(req.session.failToSignUp)
+	res.redirect('/signUp');
 })
+})
+
 
 app.get('/users/logout', (req, res) => {
 	req.session.destroy((error) => {
@@ -335,12 +382,68 @@ app.get('/openSearchResult', (req, res) => {
 })
 
 app.get('/getRestaurants', (req, res) => {
-	log(req.session.searchingRes)
+	log("Searching res session: "+ req.session.searchingRes)
 	if(req.session.searchingRes){
 		res.send({res: req.session.searchingRes});
 	}
 })
 
+/*       codes for admin page   */
+app.route('/adminBanUsers')
+	.get((req, res) => {
+		//TODO
+		// if(req.session.accountType == 'a'){
+			res.sendFile(__dirname + '/public/individual_account_adminView_banUser.html')
+		// } else{
+		// 	res.status(400).send("Normal users are not authorized to go to admin page")
+		// }
+		
+	})
+
+app.route('/adminRestaurants')
+	.get((req, res) => {
+		//TODO
+		// if(req.session.accountType == 'a'){
+			res.sendFile(__dirname + '/public/individual_account_adminView_restaurants.html')
+		// } else{
+		// 	res.status(400).send("Normal users are not authorized to go to admin page")
+		// }
+		
+	})
+
+app.post('/admin/removeRes', (req, res) => {
+	const rest = req.body.restaurantToDelete;
+
+	Restaurant.findOneAndDelete({_id: rest._id}).then((result) => {
+		res.send();
+	}).catch(error => {
+		res.status(400).send(error);
+	})
+})
+
+app.get('/admin/getAllUsers', (req, res) => {
+	User.find({accountType: {$not: {$eq: 'a'}}}).then((result) => {
+		res.send(result);
+	}).catch(error => res.status(400).send(error));
+})
+
+app.get('/admin/getAllRestaurants', (req, res) => {
+	Restaurant.find().then((result) => {
+		res.send(result);
+	}).catch(error => res.status(400).send(error));
+})
+
+app.post('/admin/banOrRecoverUser', (req, res) => {
+	const user = req.body.userToModify;
+	
+	User.findByIdAndUpdate(user._id, 
+		{ $set: {
+		banned: !user.banned
+	}}, {new: true}
+		).then((result) => {
+		res.send()
+	}).catch(error => {log(error)});
+})
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
 }) 

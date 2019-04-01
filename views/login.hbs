@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+	<title>Log in</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="./css/login-style.css">
+	<link rel="stylesheet" type="text/css" href="./css/account.css">
+	<link rel="stylesheet" type="text/css" href="./css/index.css">
+</head>
+<body>
+
+	<!-- Navigation -->
+	<div class="container-fluid">
+			<div id="header" class="row p-3 bg-danger text-white">
+				<!-- logo part -->
+				<div class="col-md-5">
+				  <div class="logoContainer">
+					  <a href="/">
+						<img src="./img/logo.png" class="float-left img-thumbnail" alt="logo Picture"/>
+						<span class="logo text-dark">Restaurant Rev.</span>
+					  </a>
+				  </div>
+				</div>
+				<!-- search part -->
+				<div class="col-md-4">
+				</div>
+				<!-- portrait part -->
+				<div class="col-md-1">
+					<div id="portraitContainer">
+					</div>
+				</div>
+				<!-- user name part -->
+				<div class="col-md-1">
+				  <a id = "loginOrUsername" class="nav-link submitLink" href="/login">Log In</a>
+				</div>
+				<!-- sign out part -->
+				<div id = "signInOut" class="col-md-1">
+				  <a id = "signInOutLink" class="nav-link submitLink" href="/signUp">Sign Up</a>
+				</div>
+			</div>
+	</div>
+
+	<div class="container">
+		<div class="d-inline-flex justify-content-center flex-*-grow-1 flex-*-shrink-1 h-100 w-100">
+			
+            <div class="card">
+				<div class="card-header">
+					<h2>Log In</h2>
+				</div>
+				<div class="card-body">
+                    {{#if error}}
+                    <div class="alert alert-danger">{{error}}</div>
+                    {{/if}}
+					<form id = 'loginForm' action = "http://localhost:3000/users/login" method="post">
+						<div class="form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							<input id = 'usernameInput' type="text" class="form-control" placeholder = "Username" name="name">
+							
+						</div>
+						<div class="form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-lock"></i></i></span>
+							</div>
+							<input id = 'pwInput' type="password" class="form-control" placeholder = "Password" name="password">
+						</div>
+						<div class="form-group">
+							<input id = 'loginButton' type="submit" value="Log in" class="btn float-right login_btn">
+						</div>
+					</form>
+				</div>
+				<div class="card-footer">
+					<div class="d-flex justify-content-end links">
+						New user?<a id = "signUpHere" href="/signUp">Sign up here</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="/js/login.js"></script>
+	</body>
+</html>
