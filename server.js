@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended:true }))
 
 
 // set the view library
-// app.set('view engine', 'hbs')
+app.set('view engine', 'hbs')
 
 const upload = multer({storage})
 
@@ -63,13 +63,35 @@ app.get('/', (req, res) => {
 //routes for log in and sign up
 app.route('/signUp')
 	.get((req, res) => {
-		res.sendFile(__dirname + '/public/sign_up.html')
+		if(req.session.failToSignUp){
+			if(req.session.failToSignUp === "duplicatedKeys"){
+				req.session.failToSignUp = "";
+				res.render('sign_up.hbs', {error: 'Sorry, this username/email is taken.'})
+			} else if(req.session.failToSignUp === "notValidInfo"){
+				req.session.failToSignUp = "";
+				res.render('sign_up.hbs', {error: 'Invalid email/username/password, please check again'})
+			} else if(req.session.failToSignUp === "unknownReasons"){
+				req.session.failToSignUp = "";
+				res.render('sign_up.hbs', {error: 'Sorry, fail to sign up for unknown reasons, please change your info and try again.'})
+			}
+		} else{
+			req.session.failToSignUp = "";
+			res.sendFile(__dirname + '/public/sign_up.html')
+		}
+		
 	})
 
 
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
-		res.sendFile(__dirname + '/public/login.html')
+		if(req.session.failToLogin){
+			req.session.failToLogin = false;
+			res.render('login.hbs', {error: 'Username/Password incorrect'})
+		}else{
+			req.session.failToLogin = false;
+			res.sendFile(__dirname + '/public/login.html')
+		}
+		
 	})
 
 app.route('/myRes')
@@ -106,7 +128,8 @@ app.post('/users/login', function(req, res){
 				if(!user) {
 					console.log("password not correct")
 					console.log(name);
-					console.log(password)
+					console.log(password);
+					req.session.failToLogin = true;
 					res.redirect('/login')
 				} else {
 					// Add the user to the session cookie that we will
@@ -147,8 +170,21 @@ app.post('/users/signUp', (req, res) => {
 		req.session.name = user.name;
 		res.redirect('/');
 	}
-), (error) => {res.status(400).send(error)}
+).catch((error) => {
+	//duplicate key error
+	if(error.code == 11000 && error.name == "MongoError"){
+		req.session.failToSignUp = "duplicatedKeys";
+	} else if(error.errors.password || error.errors.email){
+		req.session.failToSignUp = "notValidInfo";
+	} else{
+		//should not happen
+		req.session.failToSignUp = "unknownReasons";
+	}
+	log(req.session.failToSignUp)
+	res.redirect('/signUp');
 })
+})
+
 
 app.get('/users/logout', (req, res) => {
 	req.session.destroy((error) => {
