@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 8
+        minlength: 4
     },
     email: {
         type: String,
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
             message:'Not a valid email address'
         }
     },
-    accountType: {
+    accountType: { // can only be 'u' - user, 'o' - Restaurant owner, 'a' - 'admin'
         type: String,
         required: true
     },
@@ -140,7 +140,7 @@ userSchema.statics.findByNamePassword = function(name, password) {
 
 	return User.findOne({name: name}).then((user) => {
 		if (!user) {
-			return Promise.reject()
+			return Promise.resolve(null);
 		}
 
 		return new Promise((resolve, reject) => {
@@ -148,7 +148,7 @@ userSchema.statics.findByNamePassword = function(name, password) {
 				if (result) {
 					resolve(user);
 				} else {
-					reject();
+					resolve(null);
 				}
 			})
 		})
