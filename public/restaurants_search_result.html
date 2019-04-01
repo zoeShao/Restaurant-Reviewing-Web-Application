@@ -27,12 +27,12 @@
         <div id="header" class="row p-3 bg-danger text-white">
             <!-- logo part -->
             <div class="col-md-5">
-                <a class="reviewLink" href="index_user.html">
-                    <div class="logoContainer">
-                        <img src="logo.png" class="img-thumbnail" alt="logo Picture"/>
-                        <span class="logo text-dark">Restaurant Rev.</span>
-                    </div>
-                </a>
+                <div class="logoContainer">
+                    <a href="/">
+                    <img src="./img/logo.png" class="float-left img-thumbnail" alt="logo Picture"/>
+                    <span class="logo text-dark">Restaurant Rev.</span>
+                    </a>
+                </div>
             </div>
             <!-- search part -->
             <div class="col-md-4">
@@ -44,23 +44,17 @@
                 </div>
             </div>
             <!-- portrait part -->
-            
             <div class="col-md-1">
-                <a class="reviewLink" href="individual_account.html">
-                <div class="portraitContainer">
-                <img src="https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg" class="float-right img-thumbnail rounded-circle" alt="avatar Picture"/>
+                <div id="portraitContainer">
                 </div>
-                </a>
             </div>
             <!-- user name part -->
-            <div class="userName col-md-1">
-                <p>user</p>
+            <div class="col-md-1">
+                <a id = "loginOrUsername"></a>
             </div>
             <!-- sign out part -->
-            <div class="col-md-1">
-                <p class="signOut float-left">
-                    <a href="index.html" target="_self">Sign out</a>
-                </p>
+            <div id = "signInOut" class=" col-md-1">
+                <a id = "signInOutLink"></a>
             </div>
         </div>
     </div>
@@ -135,6 +129,6 @@
 
 </body>
 
-<script type="text/javascript" src="./js/search_result.js"></script>
+<script type="module" src="./js/search_result.js"></script>
 
 </html>
