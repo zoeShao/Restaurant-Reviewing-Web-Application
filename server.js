@@ -243,7 +243,7 @@ app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) 
 app.get('/getMyRestaurants', authenticate, (req, res) =>{
 	Restaurant.find({owner: req.user._id}).sort({_id: -1}).then((restaurants) => {
 		res.send({restaurants})
-	}, (error) =>{
+	},(error) =>{
 		res.status(450).send(error)
 	})
 })
