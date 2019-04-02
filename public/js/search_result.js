@@ -1,46 +1,14 @@
-/* Class */
-
-// class User {
-// 	constructor(image, name, email, password, type){
-//         this.image = image;
-//         this.name = name;
-//         this.email = email;
-//         this.password = password;
-//         this.type = type;
-//         this.reviews = [];
-//         this.favourite = [];
-//     }
-
-// class Restaurant{
-//     constructor(image, name, phone, address, page, rate, price){
-//         this.image = image;
-//         this.name = name;
-//         this.phone = phone;
-//         this.address = address;
-//         this.page = page;
-//         this.rate = rate;
-//         this.price = price;
-        
-//     }
-// }
-
+import {getLogInInfo, signOutUser} from './navBar.js';
 /* Global variables */
 const log = console.log;
 let maxReviews = 3 // max Contents one page can show
 let currentPage = 1 // current page number
 let allRestaurantsData = [];
 
-//Server part TODO: get data from the server and load them to the page
-
-/* Examples(hardcode part) */
-// const storeImg1 = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
-// const store1 = new Restaurant(storeImg1, "McDonald's", "1234567890", "552 Yonge St, Toronto", "review_page.html", 3, 1)
-
-
-// create a allRestaurantsData
-const userImg = "avatar.jpg"
-// Add these restaurants to the user's favourite array (does not change the DOM)
-// allRestaurantsData.push(store1)
+/* call functions from navBar.js*/
+getLogInInfo();
+window.signOutUser = signOutUser;
+/* 														*/
 
 // call get data function 
 getRestaurantDataFromServer();
@@ -266,6 +234,14 @@ function addFavouriteToDom(restaurant) {
 /*-----------------------------------------------------------*/
 /*** helper functions ***/
 
+function showEmptyResult(){
+	const div = document.createElement('div');
+	div.className = "alert alert-danger";
+	div.appendChild(document.createTextNode("Sorry, we can't find any results"));
+	const mainBody = document.getElementById("mainBody");
+	mainBody.appendChild(div);
+}
+
 function showRestaurants(restaurants){
     clearPage();
     for(let i = 0; i < restaurants.length; i++){
@@ -273,7 +249,9 @@ function showRestaurants(restaurants){
     }
     if(allRestaurantsData.length > 0){
         showPage(currentPage);
-    }
+    } else{
+			showEmptyResult();
+		}
     
 }
 

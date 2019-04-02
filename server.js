@@ -85,10 +85,10 @@ app.route('/signUp')
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
 		if(req.session.failToLogin){
-			req.session.failToLogin = false;
+			req.session.failToLogin = null;
 			res.render('login.hbs', {error: 'Username/Password incorrect'})
 		}else{
-			req.session.failToLogin = false;
+			req.session.failToLogin = null;
 			res.sendFile(__dirname + '/public/login.html')
 		}
 		
@@ -379,6 +379,9 @@ app.post('/searchRestaurants', (req, res) => {
 			//promise has delay, so we can only put this comment code here
 			if(from == "search_page"){
 				res.send({res: req.session.searchingRes});
+				//delete session after using it
+				req.session.searchingRes = null;
+				req.session.from = null;
 			} else{
 				res.redirect('/openSearchResult');
 			}
@@ -389,6 +392,8 @@ app.post('/searchRestaurants', (req, res) => {
 			req.session.searchingRes = result;
 			if(from == "search_page"){
 				res.send({res: req.session.searchingRes});
+				req.session.searchingRes = null;
+				req.session.from = null;
 			} else{
 				res.redirect('/openSearchResult');
 			}
@@ -400,6 +405,8 @@ app.post('/searchRestaurants', (req, res) => {
 			req.session.searchingRes = result;
 			if(from == "search_page"){
 				res.send({res: req.session.searchingRes});
+				req.session.searchingRes = null;
+				req.session.from = null;
 			} else{
 				res.redirect('/openSearchResult');
 			}
@@ -420,6 +427,7 @@ app.get('/getRestaurants', (req, res) => {
 	log("Searching res session: "+ req.session.searchingRes)
 	if(req.session.searchingRes){
 		res.send({res: req.session.searchingRes});
+		req.session.searchingRes = null;
 	}
 })
 
