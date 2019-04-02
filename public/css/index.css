@@ -45,7 +45,9 @@
 }
 
 .nav-link{
-  color: white;
+  padding-top: 12px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 #pageContent{
