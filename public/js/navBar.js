@@ -76,28 +76,29 @@ export function signOutUser(){
     const header = document.getElementById("header");
     const userName = userObj.name;
     const imgSrc = userObj.profilePicture;
+    const type = userObj.accountType;
     //add profile pic
     const profileLink = document.createElement('a');
     //TODO: add profile picture link
-    if(userObj.type === 'u'){
-        profileLink.href = '';
+    if(type === 'u'){
+        profileLink.href = '/individual_account';
     }
     const img = document.createElement('img');
     //TODO: change image source link
-    img.src = "https://img.icons8.com/ios/50/000000/gender-neutral-user.png"//imgSrc;
-    img.className = "float-right img-thumbnail rounded-circle";
+    img.src = "https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg"//imgSrc;
+    img.className = "float-right img-thumbnail rounded-circle peopleIcon";
     profileLink.appendChild(img);
     $("#portraitContainer").append(profileLink);
   
     //add username
     $("#loginOrUsername").attr({
-      'class': "nav-link userName submitLink"
+      'class': "nav-link userName"
     })
 
-    if(userObj.type === 'u'){
+    if(type === 'u'){
         $("#loginOrUsername").attr({
             //TODO: add profile link
-            'href': ""
+            'href': "/individual_account"
         }) 
     }
     $("#loginOrUsername").text(userName)

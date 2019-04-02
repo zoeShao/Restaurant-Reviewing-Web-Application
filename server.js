@@ -145,7 +145,7 @@ app.get('/resReviews/:id', (req, res) =>{
 app.get('/getLogInInfo', (req, res) => {
 	if (req.session.user){
 		User.findById(req.session.user).then((user) => {
-			res.send({"name": user.name, "profileImg": user.profilePicture});
+			res.send({"name": user.name, "profileImg": user.profilePicture, "accountType":user.accountType});
 		}).catch((error) => {
 			log(error)
 			res.redirect('/login')
