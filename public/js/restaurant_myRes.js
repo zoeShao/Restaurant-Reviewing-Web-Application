@@ -94,18 +94,16 @@ function editRes(e){
         // delete restaurant event
         else if(e.target.innerText === 'Delete'){
             const url = '/removeRes/';
-            $.get(url + id)
-        }
-        else if(e.target.innerText === 'Reviews'){
-            const url = '/resReviews/'
-            // $.ajax({
-            //     url: url + id,
-            //     method:'get'
-            // }).done((res) =>{
-            //     window.location.href = res;
-            // })
-            // window.location = url + id;
-            window.open(url + id, '_self');
+            $.ajax({
+                url: url + id,
+                method:'delete'
+            }).done((res) =>{
+                console.log('delete success');
+                getRestaurant();
+            }).fail((error) => {
+                alert('fail to delete');
+                console.log(error);
+            })
         }
     }
 }
@@ -263,8 +261,8 @@ function addNewResBox(index){
     const newDropDiv = document.createElement('div');
     newDropDiv.id = "newRestaurantLoca";
     newDropDiv.className = 'dropdown-menu';
-    newDropDiv.innerHTML += '<a class="dropdown-item" href="#">Downtown-Toronto</a>';
-    newDropDiv.innerHTML += '<a class="dropdown-item" href="#">Markham</a>';
+    newDropDiv.innerHTML += '<a class="dropdown-item">Downtown-Toronto</a>';
+    newDropDiv.innerHTML += '<a class="dropdown-item">Markham</a>';
     newLocaDiv.appendChild(newDropDiv);
     // part for dropdown div of restaurant category
     const newCateDiv = document.createElement('div');
@@ -276,9 +274,11 @@ function addNewResBox(index){
     const newDropDiv2 = document.createElement('div');
     newDropDiv2.id = "newRestaurantCate";
     newDropDiv2.className = 'dropdown-menu';
-    newDropDiv2.innerHTML += '<a class="dropdown-item" href="#">Fast Food</a>';
-    newDropDiv2.innerHTML += '<a class="dropdown-item" href="#">Chinese</a>';
-    newDropDiv2.innerHTML += '<a class="dropdown-item" href="#">Japanese</a>';
+    newDropDiv2.innerHTML += '<a class="dropdown-item">Fast Food</a>';
+    newDropDiv2.innerHTML += '<a class="dropdown-item">Chinese</a>';
+    newDropDiv2.innerHTML += '<a class="dropdown-item">Japanese</a>';
+    newDropDiv2.innerHTML += '<a class="dropdown-item">Korean</a>';
+    newDropDiv2.innerHTML += '<a class="dropdown-item">American</a>';
     newCateDiv.appendChild(newDropDiv2);
     // part for sumbit button div
     const newBtnDiv = document.createElement('div');
@@ -324,7 +324,7 @@ function addNewResToDom(newRes){
     const newA = document.createElement('a');
     newA.className = "reviewLink";
     newA.style = "display:block";
-    newA.href = "#";
+    newA.href = "/resReviews/" + newRes._id;
     // part for image div
     const url = '/readImg/';
     //change to server image request
@@ -378,17 +378,10 @@ function addNewResToDom(newRes){
     newBtn2.className = 'btn btn-danger float-right';
     newBtn2.type = 'button';
     newBtn2.appendChild(document.createTextNode('Delete'));
-    // part for review button
-    const newBtn3 = document.createElement('button');
-    newBtn3.className = 'btn btn-info reviewBtn';
-    newBtn3.type = 'button';
-    newBtn3
-    newBtn3.appendChild(document.createTextNode('Reviews'));
     // add to the main div
     newDiv.appendChild(newA);
     newDiv.appendChild(newBtn2);
     newDiv.appendChild(newBtn);
-    newDiv.appendChild(newBtn3);
     // add to DOM
     contentBody.appendChild(newDiv);
 }
