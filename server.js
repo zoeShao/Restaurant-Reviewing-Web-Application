@@ -94,6 +94,16 @@ app.route('/login')
 		
 	})
 
+// GET all restaurants
+app.get('/restaurants', (req, res) => {
+	// Add code here
+	Restaurant.find().then((result) => {
+		res.send(result)
+	}, (error) => {
+		res.status(500).send(error) // 400 for bad request
+	})
+})
+
 // rpute for jump to main account page of restaurant owner
 app.route('/myRes')
 	.get((req, res) => {
@@ -250,6 +260,41 @@ app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) 
 		res.status(400).send(error)
 	})
 })
+
+//add the restaurant to the user's favourites
+app.post('/addMyfavourites/:id', authenticate, (req, res) =>{
+	const id = req.params.id
+
+	if (!ObjectID.isValid(id)) {
+		res.status(404).send()
+	}
+	
+	// $new: true gives back the new document
+	User.findByIdAndUpdate(req.user._id, {$push: {favourites: id}}, {new: true}).then((user) => {
+		if (!user) {
+			res.status(404).send()
+		} else {
+			res.send({restaurant: id, user: user})
+		}
+	}).catch((error) => {
+		res.status(400).send(error)
+	})
+})
+
+//get all favourite restaurants for this user's id
+app.get('/getMyfavourites', authenticate, (req, res) =>{
+	User.findById(req.user._id).then((user) => {
+		if (!user) {
+			res.status(404).send()
+		} else {
+			/// sometimes wrap returned object in another object   
+			res.send(user.favourites)
+		}
+	}).catch((error) => {
+		res.status(400).send()
+	})
+})
+
 
 //get all restaurants for this user's id
 app.get('/getMyRestaurants', authenticate, (req, res) =>{
