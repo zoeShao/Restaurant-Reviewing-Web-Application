@@ -1,5 +1,5 @@
 /* Class */
-
+import {getLogInInfo, signOutUser} from './navBar.js';
 let resLst = [];
 /* Global variables */
 let maxReviews = 3; // max Contents one page can show
@@ -23,6 +23,11 @@ pager.addEventListener('click', changePage);
 
 /* Load the initial page. */ 
 contentBody.addEventListener('click', editRes);
+
+/* call functions from navBar.js*/
+getLogInInfo();
+window.signOutUser = signOutUser;
+
 getRestaurant();
 /*-----------------------------------------------------------*/
 /*** 
@@ -89,26 +94,18 @@ function editRes(e){
         // delete restaurant event
         else if(e.target.innerText === 'Delete'){
             const url = '/removeRes/';
-            $.ajax({
-                url: url + id,
-                method:'delete'
-            }).done((res) =>{
-                console.log('delete success');
-                getRestaurant();
-            }).fail((error) => {
-                alert('fail to delete');
-                console.log(error);
-            })
+            $.get(url + id)
         }
         else if(e.target.innerText === 'Reviews'){
             const url = '/resReviews/'
-            $.ajax({
-                url: url + id,
-                method:'get'
-            }).fail((error) =>{
-                alert('fail to go to review page');
-                console.log(error);
-            })
+            // $.ajax({
+            //     url: url + id,
+            //     method:'get'
+            // }).done((res) =>{
+            //     window.location.href = res;
+            // })
+            // window.location = url + id;
+            window.open(url + id, '_self');
         }
     }
 }

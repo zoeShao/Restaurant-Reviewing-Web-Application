@@ -20,13 +20,12 @@
 //     }
 // }
 /* Global variables */
+import {getLogInInfo, signOutUser} from './navBar.js';
 let reviewLst = [];
 let maxReviews = 3 // max Contents one page can show
 let currentPage = 1 // current page number
 
 /* Examples(hardcode part) */
-// create a user
-// get user information from server 
 
 
 
@@ -34,8 +33,11 @@ let currentPage = 1 // current page number
 const dropDown = document.querySelector('#dropDown')
 const contentBody = document.querySelector('#mainBody')
 const pager = document.querySelector('#pager')
+/* call functions from navBar.js*/
+getLogInInfo();
+window.signOutUser = signOutUser;
 
-showPage(currentPage)
+getReviews()
 
 /* Event listeners for button submit and button click */
 dropDown.addEventListener('click', sortTheItem);
@@ -50,11 +52,11 @@ function sortTheItem(e) {
 	e.preventDefault();
 	if (e.target.classList.contains('dropdown-name')) {
 		contentBody.innerText = ""
-		sortByName(user)
+		sortByName()
 		showPage(currentPage)
 	} else if (e.target.classList.contains('dropdown-rate')) {
 		contentBody.innerText = ""
-		sortByRate(user)
+		sortByRate()
 		showPage(currentPage)
 	} 
 }
@@ -69,7 +71,7 @@ function changePage(e) {
 		}
 
 	} else if (e.target.classList.contains('next')) {
-		if ((currentPage * 3) < user.reviews.length) {
+		if ((currentPage * 3) < reviewLst.length) {
 			currentPage = currentPage + 1
 		}
 		showPage(currentPage)		
@@ -80,13 +82,13 @@ function changePage(e) {
 /*** DOM functions below - use these to create and edit DOM objects ***/
 // show the content box for current page
 function showPage(currentPage) {
-	let restPage = user.reviews.length - currentPage * 3
+	let restPage = reviewLst.length - currentPage * 3
 	if (restPage >= 0) {
 		contentBody.innerText = ""
 		for (let i = 0; i < maxReviews; i++) {
 			let j = ((currentPage-1)*3) + i
 			// console.log(j)
-			addReviewToDom(user.reviews[j])
+			addReviewToDom(reviewLst[j])
 		}
 	} else {
 		restPage = maxReviews+restPage
@@ -94,7 +96,7 @@ function showPage(currentPage) {
 		for (let i = 0; i < restPage; i++) {
 			let j = ((currentPage-1)*3) + i
 			// console.log(j)
-			addReviewToDom(user.reviews[j])
+			addReviewToDom(reviewLst[j])
 		}
 	}
 }
@@ -108,13 +110,10 @@ function addReviewToDom(review) {
 	aElement.href = "#"
 	const reviewElement = document.createElement('div')
 	reviewElement.className = "storeContainer"
-	const nameElement = document.createElement('p')
-	nameElement.innerHTML = "<strong>Restaurant name: </strong>" + `${review.rName}`
 	const rateElement = addRateToDom(review.rate)
-	const uNameElement = addUNameToDom(review.uName)
+	const uNameElement = addUNameToDom(review.userName)
 	const contentElement = document.createElement('p')
 	contentElement.innerHTML = "<strong>Review: </strong>" + `${review.content}`
-	reviewElement.appendChild(nameElement)
 	reviewElement.appendChild(rateElement)
 	reviewElement.appendChild(uNameElement)
 	reviewElement.appendChild(contentElement)
@@ -156,19 +155,35 @@ function addUNameToDom(name) {
 /*-----------------------------------------------------------*/
 /*** helper functions ***/
 // sort function by name
-function sortByName(user) {
-	user.reviews.sort(function(a, b){
+function sortByName() {
+	reviewLst.sort(function(a, b){
     if(a.rName < b.rName) { return -1; }
     if(a.rName > b.rName) { return 1; }
     return 0;
 	})
 }
 // sort function by rate
-function sortByRate(user) {
-	user.reviews.sort(function(a, b){
+function sortByRate() {
+	reviewLst.sort(function(a, b){
     if(a.rate < b.rate) { return 1; }
     if(a.rate > b.rate) { return -1; }
     return 0;
 	})
 }
 
+// get reviews fro mserver
+function getReviews(){
+	const url = '/getResReview';
+	$.ajax({
+		url: url,
+		method: 'get'
+	}).done((res) =>{
+		if(res.reviews){
+			reviewLst = res.reviews;
+			showPage(currentPage)
+		}
+	}).fail((error) =>{
+		alert("cannot get reviews");
+        console.log(error);
+	})
+}

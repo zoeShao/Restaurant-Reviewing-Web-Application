@@ -348,10 +348,12 @@ app.get('/getResReview', (req, res) =>{
 	})
 })
 
+// add a new review to a retaurant
 app.post('/addReview/:resId', authenticate, (req, res) =>{
 	const review = new Review({
 		resID: req.params.resId,
 		userID: req.user._id,
+		userName: req.user.name,
 		rate: req.body.rate,
 		price: req.body.price,
 		content: req.body.content
