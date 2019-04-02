@@ -117,6 +117,24 @@ app.route('/resReviews/:id')
 		res.sendFile(__dirname + '/public/restaurant_reviews.html')
 	})
 
+// rpute for jump to main account page of restaurant owner
+app.route('/individual_account')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/individual_account.html')
+	})
+
+// rpute for jump to main account page of restaurant owner
+app.route('/individual_favourite')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/individual_favourite.html')
+	})
+
+// rpute for jump to main account page of restaurant owner
+app.route('/individual_setting')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/individual_setting.html')
+	})
+
 // get log in info by Nav Bar
 app.get('/getLogInInfo', (req, res) => {
 	if (req.session.user){
