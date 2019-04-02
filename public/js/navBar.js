@@ -107,7 +107,8 @@ export function signOutUser(){
     $('#signInOutLink').attr({
       'href': '#',
       'onClick': 'javascript:signOutUser()',
-      'class': 'nav-link signOut submitLink'
+      'class': 'nav-link submitLink'
+      // 'class': 'nav-link signOut submitLink'
     })
     $('#signInOutLink').text("Sign Out")
   

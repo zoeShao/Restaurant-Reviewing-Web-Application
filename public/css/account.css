@@ -55,17 +55,22 @@ img {
 	float: right;
 }
 
-.userName {
+a.userName {
 	font-size: 18px;
 	position: relative;
-	top: 20%;
+	padding-top: 10%;
 	left: 0%;
+	color: rgba(255,255,255,.5);
 }
 
-.signOut {
-	position: relative;
-	top: 30px;
+a.userName:hover {
+	color: white;
 }
+
+/*.signOut {
+	position: relative;*/
+	/*top: 30px;*/
+/*}*/
 
 #topNavBar {
 	height: 40px;
