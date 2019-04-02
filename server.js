@@ -17,7 +17,7 @@ conn.once('open', () =>{
     gfs = Grid(conn.db, mongoose.mongo)
     gfs.collection('images');
 })
-
+mongoose.set('useFindAndModify', false);
 // express
 const app = express();
 // body-parser middleware setup.  Will parse the JSON and convert to object
@@ -100,12 +100,16 @@ app.route('/myRes')
 		res.sendFile(__dirname + '/public/restaurant_myRes.html')
 	})
 
-app.route('/resReviews/:id')
+app.route('/resReviews')
 	.get((req, res) => {
-		const id = req.params.id
-		req.session.resReviewId = id
 		res.sendFile(__dirname + '/public/restaurant_reviews.html')
 	})
+
+app.get('/resReviews/:id', (req, res) =>{
+	const id = req.params.id
+	req.session.resReviewId = id
+	res.redirect('/resReviews')
+})
 
 // get log in info by Nav Bar
 app.get('/getLogInInfo', (req, res) => {
@@ -267,14 +271,16 @@ app.get('/readImg/:filename', (req, res) =>{
 	})
 })
 
-//delete one restaurant by id and also delete it's picture
+//delete one restaurant by id and also delete it's picture and reviews
 app.delete('/removeRes/:id', authenticate, (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
+		log('object id')
 		return res.status(404).send()
 	}
 	Restaurant.findOneAndDelete({_id: id}).then((restaurant) =>{
 			if(!restaurant){
+				log('null restaurant')
 				res.status(404).send()
 			}
 			else{
@@ -282,10 +288,16 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 					if(err){
 						res.status(404).send()
 					}else{
-						res.send()
+						Review.remove({resID: id}).then((result) =>{
+							res.send(result)
+						}, (error) =>{
+							res.status(400).send(error)
+						})
 					}
 				})
 			}
+	}, (error) =>{
+		res.status(400).send(error)
 	})
 })
 
@@ -309,7 +321,7 @@ app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>
 			else{
 				gfs.remove({filename: restaurant.picture, root: 'images'}, (err, GridFSBucket) =>{
 					if(err){
-						res.status(404).send()
+						res.status(404).send(err)
 					}else{
 						res.send()
 					}
@@ -341,7 +353,7 @@ app.get('/getResReview', (req, res) =>{
 	if(!ObjectID.isValid(id)){
 		return res.status(404).send()
 	}
-	reviewSchema.find({resID: id}).sort({_id: -1}).then((reviews) =>{
+	Review.find({resID: id}).sort({_id: -1}).then((reviews) =>{
 		res.send({reviews})
 	}, (error) =>{
 		res.status(450).send(error)
@@ -359,9 +371,25 @@ app.post('/addReview/:resId', authenticate, (req, res) =>{
 		content: req.body.content
 	})
 	review.save().then((result) =>{
-		res.send(result)
-	},(error) =>{
-		res.status(400).send(error)
+		const ObjectId = mongoose.Types.ObjectId
+		Review.aggregate([
+			{ $match: {"resID": ObjectId(req.params.resId)}},
+			{$group: {
+				_id: null, 
+				rate: {$avg: "$rate"}, 
+				price: {$avg: "$price"}}}]).then((average) =>{
+					const aveRate = average[0].rate
+					const avePrice = average[0].price
+					Restaurant.findOneAndUpdate({id: req.params.resId},
+						{$set: {
+							rate: aveRate,
+							price: avePrice
+						}}).then((update) =>{
+							res.send(result)
+						})
+				}, (error) =>{
+					res.status(400).send(error);
+				})
 	})
 })
 

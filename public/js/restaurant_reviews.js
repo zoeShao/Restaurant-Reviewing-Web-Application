@@ -1,24 +1,3 @@
-// class User {
-// 	constructor(image, name, email, password, type){
-//         this.image = image;
-//         this.name = name;
-//         this.email = email;
-//         this.password = password;
-//         this.type = type;
-//         this.reviews = [];
-//         this.favourite = [];
-//     }
-// }
-
-// class Review {
-// 	constructor(rName, uName, rate, price, content){
-//         this.rName = rName;
-//         this.uName = uName;
-//         this.rate = rate;
-//         this.price = price;
-//         this.content = content;
-//     }
-// }
 /* Global variables */
 import {getLogInInfo, signOutUser} from './navBar.js';
 let reviewLst = [];
@@ -26,7 +5,6 @@ let maxReviews = 3 // max Contents one page can show
 let currentPage = 1 // current page number
 
 /* Examples(hardcode part) */
-
 
 
 /* Full patrons entries element */
