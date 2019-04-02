@@ -1,45 +1,17 @@
 const log = console.log;
 
-// class User {
-// 	constructor(image, name, email, password, type){
-//         this.image = image;
-//         this.name = name;
-//         this.email = email;
-//         this.password = password;
-//         this.type = type;
-//         this.reviews = [];
-//     }
-// }
+import {getLogInInfo, signOutUser} from './navBar.js';
 
-// class Review {
-// 	constructor(rName, uName, rate, price, content){
-//         this.rName = rName;
-//         this.uName = uName;
-//         this.rate = rate;
-//         this.price = price;
-//         this.content = content;
-//     }
-// }
-
-//Server part TODO: get data from the server and load them to the page
+/* call functions from navBar.js*/
+getLogInInfo();
+window.signOutUser = signOutUser;
+/*                               */
 
 let maxReviews = 3
 let currentPage = 1
 let restaurantsList = []
 let usersList = []
 
-// const userImg = document.createElement('img')
-// userImg.src = "avatar.jpg"
-// userImg.alt = "avatar Picture";
-// const user = new User(userImg, "user", "user@mail.com", "user", "i")
-// const review1 = new Review("McDonald's", "user", 3, 1, "here is the review.here is the review.here is the review.here is the review.")
-// const review2 = new Review("Osaka Sushi", "user", 4, 2, "here is the review.here is the review.")
-// const review3 = new Review("Asaka Sushi", "user", 5, 3, "here is the review.")
-// const review4 = new Review("Bsaka Sushi", "user", 5, 3, "here is the review.")
-// user.reviews.push(review2)
-// user.reviews.push(review1)
-// user.reviews.push(review3)
-// user.reviews.push(review4)
 
 const restaurantsBody = document.getElementById("restaurantsBody");
 if(restaurantsBody){
@@ -141,8 +113,7 @@ function InitializeAdminBanUsers(){
 	  for (let i = 0; i < returnUserList.length; i++){
 		loadUsers(returnUserList[i]);
 	  }
-	  userList = returnUserList;
-	  log(userList)
+	  usersList = returnUserList;
 	}).catch(error => {log(error);});
 }
 
@@ -176,10 +147,10 @@ function banUser(e){
 		const userBanButton = e.target;
 		const userName = userBanButton.parentElement.children[0].children[1].
 		children[0].children[1].innerText;
-		for(let i = 0; i < userList.length; i++){
-			if (userList[i].name == userName){
-				log(userList[i])
-				banOrRecoverUser(userList[i]);
+		for(let i = 0; i < usersList.length; i++){
+			if (usersList[i].name == userName){
+				log(usersList[i])
+				banOrRecoverUser(usersList[i]);
 				break;
 			}
 		}
