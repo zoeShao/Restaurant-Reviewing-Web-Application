@@ -94,9 +94,17 @@ app.route('/login')
 		
 	})
 
+// rpute for jump to main account page of restaurant owner
 app.route('/myRes')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/restaurant_myRes.html')
+	})
+
+app.route('/resReviews/:id')
+	.get((req, res) => {
+		const id = req.params.id
+		req.session.resReviewId = id
+		res.sendFile(__dirname + '/public/restaurant_reviews.html')
 	})
 
 // get log in info by Nav Bar
@@ -281,7 +289,7 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 	})
 })
 
-app.put('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
+app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
 		return res.status(404).send()
@@ -325,7 +333,34 @@ app.put('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
 			}
 		})
 	}
-	
+})
+
+app.get('/getResReview', (req, res) =>{
+	const id = req.session.resReviewId
+	req.session.resReviewId = null
+	if(!ObjectID.isValid(id)){
+		return res.status(404).send()
+	}
+	reviewSchema.find({resID: id}).sort({_id: -1}).then((reviews) =>{
+		res.send({reviews})
+	}, (error) =>{
+		res.status(450).send(error)
+	})
+})
+
+app.post('/addReview/:resId', authenticate, (req, res) =>{
+	const review = new Review({
+		resID: req.params.resId,
+		userID: req.user._id,
+		rate: req.body.rate,
+		price: req.body.price,
+		content: req.body.content
+	})
+	review.save().then((result) =>{
+		res.send(result)
+	},(error) =>{
+		res.status(400).send(error)
+	})
 })
 
 //Codes for search result

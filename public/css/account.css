@@ -404,6 +404,12 @@ margin-left:100px;
 	border-radius: 25px;
 }
 
+.reviewBtn{
+	position: absolute;
+	right: 1.8%;	
+	margin-top: 5%;
+}
+
 /* #mainBody {
 	height: 100%;
 } */

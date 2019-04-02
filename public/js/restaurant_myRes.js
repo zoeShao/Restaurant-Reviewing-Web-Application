@@ -77,6 +77,7 @@ function editRes(e){
                 break;
             }
         }
+        const id = resLst[index]._id; 
         // editing restaurant event
         if(e.target.innerText === 'Edit'){ 
             contentBody.innerText = "";
@@ -87,7 +88,6 @@ function editRes(e){
         }
         // delete restaurant event
         else if(e.target.innerText === 'Delete'){
-            const id = resLst[index]._id;
             const url = '/removeRes/';
             $.ajax({
                 url: url + id,
@@ -96,7 +96,18 @@ function editRes(e){
                 console.log('delete success');
                 getRestaurant();
             }).fail((error) => {
-                alert('fail to delete')
+                alert('fail to delete');
+                console.log(error);
+            })
+        }
+        else if(e.target.innerText === 'Reviews'){
+            const url = '/resReviews/'
+            $.ajax({
+                url: url + id,
+                method:'get'
+            }).fail((error) =>{
+                alert('fail to go to review page');
+                console.log(error);
             })
         }
     }
@@ -142,7 +153,7 @@ function addEditRes(index){
         form = formData();
         $.ajax({
             url: url,
-            method: 'put',
+            method: 'patch',
             processData: false,
             contentType: false,
             mimeType: "multipart/form-data",
@@ -311,7 +322,8 @@ function addNewResBox(index){
 function addNewResToDom(newRes){
     //build main div
     const newDiv = document.createElement('div');
-    newDiv.className = "contentBox p-3"
+    newDiv.className = "contentBox p-3";
+    newDiv.position = 'absolute';
     const newA = document.createElement('a');
     newA.className = "reviewLink";
     newA.style = "display:block";
@@ -369,10 +381,17 @@ function addNewResToDom(newRes){
     newBtn2.className = 'btn btn-danger float-right';
     newBtn2.type = 'button';
     newBtn2.appendChild(document.createTextNode('Delete'));
+    // part for review button
+    const newBtn3 = document.createElement('button');
+    newBtn3.className = 'btn btn-info reviewBtn';
+    newBtn3.type = 'button';
+    newBtn3
+    newBtn3.appendChild(document.createTextNode('Reviews'));
     // add to the main div
     newDiv.appendChild(newA);
     newDiv.appendChild(newBtn2);
     newDiv.appendChild(newBtn);
+    newDiv.appendChild(newBtn3);
     // add to DOM
     contentBody.appendChild(newDiv);
 }
@@ -462,5 +481,6 @@ function getRestaurant(){
         }
     }).fail((error) =>{
         alert("cannot get restaurants");
+        console.log(error);
     })
 }
