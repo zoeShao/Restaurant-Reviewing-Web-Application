@@ -85,10 +85,10 @@ app.route('/signUp')
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
 		if(req.session.failToLogin){
-			req.session.failToLogin = false;
+			req.session.failToLogin = null;
 			res.render('login.hbs', {error: 'Username/Password incorrect'})
 		}else{
-			req.session.failToLogin = false;
+			req.session.failToLogin = null;
 			res.sendFile(__dirname + '/public/login.html')
 		}
 		
