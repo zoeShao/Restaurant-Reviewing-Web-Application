@@ -180,7 +180,6 @@ app.post('/users/login', function(req, res){
 					req.session.user = user._id;
 					req.session.name = user.name
 					req.session.accountType = user.accountType;
-					log(req.session.accountType)
 					if(req.session.accountType === 'o'){
 						res.redirect('/myRes');
 					} else if (req.session.accountType === 'a'){
@@ -210,7 +209,16 @@ app.post('/users/signUp', (req, res) => {
 	saveUser.save().then((user) => {
 		req.session.user = user._id;
 		req.session.name = user.name;
-		res.redirect('/');
+		req.session.accountType = user.accountType;
+		if(req.session.accountType === 'o'){
+			res.redirect('/myRes');
+		} else if (req.session.accountType === 'a'){
+			res.redirect('/adminBanUsers');
+		} else if (req.session.accountType === 'u'){
+			res.redirect('/');
+		}else{
+			res.status(400).send();
+		}
 	}
 ).catch((error) => {
 	//duplicate key error
