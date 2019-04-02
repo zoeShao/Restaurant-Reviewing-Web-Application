@@ -13,41 +13,42 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
 		<!-- Custom styles for this template -->
-		<link rel="stylesheet" type="text/css" href="account.css">
+		<link href="./css/index.css" rel="stylesheet">
+  		<link href="./css/account.css" rel="stylesheet">
 	</head>
 
 	<body>
 
 		<!-- header -->
-		<div class="container-fluid">
-			<div id="header" class="row p-3 bg-danger text-white">
-				<!-- logo part -->
-				<div class="col-md-9">
-					<a class="reviewLink" href="index_user.html">
-						<div class="logoContainer">
-							<img src="logo.png" class="img-thumbnail" alt="logo Picture"/>
-							<span class="logo text-dark">Restaurant Rev.</span>
-						</div>
-					</a>
-				</div>
-				<!-- portrait part -->
-				<div class="col-md-1">
-					<div class="portraitContainer">
-					<img src="https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg" class="float-right img-thumbnail rounded-circle" alt="avatar Picture"/>
-					</div>
-				</div>
-				<!-- user name part -->
-				<div class="userName col-md-1">
-					<p>user</p>
-				</div>
-				<!-- sign out part -->
-				<div class="col-md-1">
-					<p class="signOut float-left">
-						<a href="index.html" target="_self">Sign out</a>
-					</p>
-				</div>
-			</div>
-		</div>
+	    <div class="container-fluid">
+	        <div id="header" class="row p-3 bg-danger text-white">
+	            <!-- logo part -->
+	            <div class="col-md-5">
+	              <div class="logoContainer">
+	                  <a href="/">
+	                    <img src="./img/logo.png" class="float-left img-thumbnail" alt="logo Picture"/>
+	                    <span class="logo text-dark">Restaurant Rev.</span>
+	                  </a>
+	              </div>
+	            </div>
+	            <!-- search part -->
+	            <div class="col-md-4">
+	            </div>
+	            <!-- portrait part -->
+	            <div class="col-md-1">
+	                  <div id="portraitContainer">
+	                  </div>
+	            </div>
+	            <!-- user name part -->
+	            <div class="col-md-1">
+	              <a id = "loginOrUsername"></a>
+	            </div>
+	            <!-- sign out part -->
+	            <div id = "signInOut" class=" col-md-1">
+	              <a id = "signInOutLink"></a>
+	            </div>
+	        </div>
+	    </div>
 
 		<!-- top navigation -->
 		<div class="container-fluid">
@@ -63,7 +64,7 @@
 				<!-- favourites part -->
 				<div class="navContainer col-md-4">
 					<p class="navButton">
-						<a class="navChoice" href="individual_favourite.html" target="_self">
+						<a class="navChoice" href="/individual_favourite" target="_self">
 							<strong>My favourites</strong>
 						</a>
 					</p>
@@ -71,7 +72,7 @@
 				<!-- settings part -->
 				<div class="navContainer col-md-4">
 					<p class="navButton">
-						<a class="navChoice" href="individual_setting.html" target="_self">
+						<a class="navChoice" href="/individual_setting" target="_self">
 						<strong>Settings</strong>
 						</a>
 					</p>
@@ -121,6 +122,6 @@
 			</div>
 		</div>
 
-	<script type="text/javascript" src="individual_account.js"></script>
+	<script type="module" src="./js/individual_account.js"></script>
 	</body>
 </html>

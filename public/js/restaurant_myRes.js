@@ -1,5 +1,5 @@
 /* Class */
-
+import {getLogInInfo, signOutUser} from './navBar.js';
 let resLst = [];
 /* Global variables */
 let maxReviews = 3; // max Contents one page can show
@@ -23,6 +23,11 @@ pager.addEventListener('click', changePage);
 
 /* Load the initial page. */ 
 contentBody.addEventListener('click', editRes);
+
+/* call functions from navBar.js*/
+getLogInInfo();
+window.signOutUser = signOutUser;
+
 getRestaurant();
 /*-----------------------------------------------------------*/
 /*** 
@@ -77,6 +82,7 @@ function editRes(e){
                 break;
             }
         }
+        const id = resLst[index]._id; 
         // editing restaurant event
         if(e.target.innerText === 'Edit'){ 
             contentBody.innerText = "";
@@ -87,7 +93,6 @@ function editRes(e){
         }
         // delete restaurant event
         else if(e.target.innerText === 'Delete'){
-            const id = resLst[index]._id;
             const url = '/removeRes/';
             $.ajax({
                 url: url + id,
@@ -96,7 +101,8 @@ function editRes(e){
                 console.log('delete success');
                 getRestaurant();
             }).fail((error) => {
-                alert('fail to delete')
+                alert('fail to delete');
+                console.log(error);
             })
         }
     }
@@ -142,7 +148,7 @@ function addEditRes(index){
         form = formData();
         $.ajax({
             url: url,
-            method: 'put',
+            method: 'patch',
             processData: false,
             contentType: false,
             mimeType: "multipart/form-data",
@@ -255,8 +261,8 @@ function addNewResBox(index){
     const newDropDiv = document.createElement('div');
     newDropDiv.id = "newRestaurantLoca";
     newDropDiv.className = 'dropdown-menu';
-    newDropDiv.innerHTML += '<a class="dropdown-item" href="#">Downtown-Toronto</a>';
-    newDropDiv.innerHTML += '<a class="dropdown-item" href="#">Markham</a>';
+    newDropDiv.innerHTML += '<a class="dropdown-item">Downtown-Toronto</a>';
+    newDropDiv.innerHTML += '<a class="dropdown-item">Markham</a>';
     newLocaDiv.appendChild(newDropDiv);
     // part for dropdown div of restaurant category
     const newCateDiv = document.createElement('div');
@@ -268,9 +274,11 @@ function addNewResBox(index){
     const newDropDiv2 = document.createElement('div');
     newDropDiv2.id = "newRestaurantCate";
     newDropDiv2.className = 'dropdown-menu';
-    newDropDiv2.innerHTML += '<a class="dropdown-item" href="#">Fast Food</a>';
-    newDropDiv2.innerHTML += '<a class="dropdown-item" href="#">Chinese</a>';
-    newDropDiv2.innerHTML += '<a class="dropdown-item" href="#">Japanese</a>';
+    newDropDiv2.innerHTML += '<a class="dropdown-item">Fast Food</a>';
+    newDropDiv2.innerHTML += '<a class="dropdown-item">Chinese</a>';
+    newDropDiv2.innerHTML += '<a class="dropdown-item">Japanese</a>';
+    newDropDiv2.innerHTML += '<a class="dropdown-item">Korean</a>';
+    newDropDiv2.innerHTML += '<a class="dropdown-item">American</a>';
     newCateDiv.appendChild(newDropDiv2);
     // part for sumbit button div
     const newBtnDiv = document.createElement('div');
@@ -311,11 +319,12 @@ function addNewResBox(index){
 function addNewResToDom(newRes){
     //build main div
     const newDiv = document.createElement('div');
-    newDiv.className = "contentBox p-3"
+    newDiv.className = "contentBox p-3";
+    newDiv.position = 'absolute';
     const newA = document.createElement('a');
     newA.className = "reviewLink";
     newA.style = "display:block";
-    newA.href = "#";
+    newA.href = "/resReviews/" + newRes._id;
     // part for image div
     const url = '/readImg/';
     //change to server image request
@@ -462,5 +471,6 @@ function getRestaurant(){
         }
     }).fail((error) =>{
         alert("cannot get restaurants");
+        console.log(error);
     })
 }

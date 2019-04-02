@@ -101,6 +101,10 @@ const resSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }, 
+    userName: {
+      type: String,
+      required: true
+    },
     rate: {
         type: Number,
         required: false,

@@ -1,3 +1,4 @@
+import {getLogInInfo, signOutUser} from './navBar.js';
 /* Class */
 class User {
 	constructor(image, name, email, password, type, reviews){
@@ -12,6 +13,10 @@ class User {
 
 // global arrays
 // const Users = []
+
+/* call functions from navBar.js*/
+getLogInInfo();
+window.signOutUser = signOutUser;
 
 /* Select all DOM form elements you'll need. */ 
 const infoForm = document.querySelector('#infoForm')

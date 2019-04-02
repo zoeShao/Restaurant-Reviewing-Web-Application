@@ -17,7 +17,7 @@ conn.once('open', () =>{
     gfs = Grid(conn.db, mongoose.mongo)
     gfs.collection('images');
 })
-
+mongoose.set('useFindAndModify', false);
 // express
 const app = express();
 // body-parser middleware setup.  Will parse the JSON and convert to object
@@ -94,16 +94,58 @@ app.route('/login')
 		
 	})
 
+// GET all restaurants
+app.get('/restaurants', (req, res) => {
+	// Add code here
+	Restaurant.find().then((result) => {
+		res.send(result)
+	}, (error) => {
+		res.status(500).send(error) // 400 for bad request
+	})
+})
+
+// rpute for jump to main account page of restaurant owner
 app.route('/myRes')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/restaurant_myRes.html')
 	})
 
+app.route('/resReviews')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/restaurant_reviews.html')
+	})
+
+
+// rpute for jump to main account page of restaurant owner
+app.route('/individual_account')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/individual_account.html')
+	})
+
+// rpute for jump to main account page of restaurant owner
+app.route('/individual_favourite')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/individual_favourite.html')
+	})
+
+// rpute for jump to main account page of restaurant owner
+app.route('/individual_setting')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/individual_setting.html')
+	})
+
+app.get('/resReviews/:id', (req, res) =>{
+	const id = req.params.id
+	req.session.resReviewId = id
+	res.redirect('/resReviews')
+})
+
+
 // get log in info by Nav Bar
 app.get('/getLogInInfo', (req, res) => {
 	if (req.session.user){
 		User.findById(req.session.user).then((user) => {
-			res.send({"name": user.name, "profileImg": user.profilePicture});
+			res.send({"name": user.name, "profileImg": user.profilePicture, "accountType":user.accountType});
 		}).catch((error) => {
 			log(error)
 			res.redirect('/login')
@@ -239,6 +281,41 @@ app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) 
 	})
 })
 
+//add the restaurant to the user's favourites
+app.post('/addMyfavourites/:id', authenticate, (req, res) =>{
+	const id = req.params.id
+
+	if (!ObjectID.isValid(id)) {
+		res.status(404).send()
+	}
+	
+	// $new: true gives back the new document
+	User.findByIdAndUpdate(req.user._id, {$push: {favourites: id}}, {new: true}).then((user) => {
+		if (!user) {
+			res.status(404).send()
+		} else {
+			res.send({restaurant: id, user: user})
+		}
+	}).catch((error) => {
+		res.status(400).send(error)
+	})
+})
+
+//get all favourite restaurants for this user's id
+app.get('/getMyfavourites', authenticate, (req, res) =>{
+	User.findById(req.user._id).then((user) => {
+		if (!user) {
+			res.status(404).send()
+		} else {
+			/// sometimes wrap returned object in another object   
+			res.send(user.favourites)
+		}
+	}).catch((error) => {
+		res.status(400).send()
+	})
+})
+
+
 //get all restaurants for this user's id
 app.get('/getMyRestaurants', authenticate, (req, res) =>{
 	Restaurant.find({owner: req.user._id}).sort({_id: -1}).then((restaurants) => {
@@ -259,14 +336,16 @@ app.get('/readImg/:filename', (req, res) =>{
 	})
 })
 
-//delete one restaurant by id and also delete it's picture
+//delete one restaurant by id and also delete it's picture and reviews
 app.delete('/removeRes/:id', authenticate, (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
+		log('object id')
 		return res.status(404).send()
 	}
 	Restaurant.findOneAndDelete({_id: id}).then((restaurant) =>{
 			if(!restaurant){
+				log('null restaurant')
 				res.status(404).send()
 			}
 			else{
@@ -274,14 +353,20 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 					if(err){
 						res.status(404).send()
 					}else{
-						res.send()
+						Review.remove({resID: id}).then((result) =>{
+							res.send(result)
+						}, (error) =>{
+							res.status(400).send(error)
+						})
 					}
 				})
 			}
+	}, (error) =>{
+		res.status(400).send(error)
 	})
 })
 
-app.put('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
+app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
 		return res.status(404).send()
@@ -301,7 +386,7 @@ app.put('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
 			else{
 				gfs.remove({filename: restaurant.picture, root: 'images'}, (err, GridFSBucket) =>{
 					if(err){
-						res.status(404).send()
+						res.status(404).send(err)
 					}else{
 						res.send()
 					}
@@ -325,7 +410,52 @@ app.put('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
 			}
 		})
 	}
-	
+})
+
+app.get('/getResReview', (req, res) =>{
+	const id = req.session.resReviewId
+	req.session.resReviewId = null
+	if(!ObjectID.isValid(id)){
+		return res.status(404).send()
+	}
+	Review.find({resID: id}).sort({_id: -1}).then((reviews) =>{
+		res.send({reviews})
+	}, (error) =>{
+		res.status(450).send(error)
+	})
+})
+
+// add a new review to a retaurant
+app.post('/addReview/:resId', authenticate, (req, res) =>{
+	const review = new Review({
+		resID: req.params.resId,
+		userID: req.user._id,
+		userName: req.user.name,
+		rate: req.body.rate,
+		price: req.body.price,
+		content: req.body.content
+	})
+	review.save().then((result) =>{
+		const ObjectId = mongoose.Types.ObjectId
+		Review.aggregate([
+			{ $match: {"resID": ObjectId(req.params.resId)}},
+			{$group: {
+				_id: null, 
+				rate: {$avg: "$rate"}, 
+				price: {$avg: "$price"}}}]).then((average) =>{
+					const aveRate = average[0].rate
+					const avePrice = average[0].price
+					Restaurant.findOneAndUpdate({id: req.params.resId},
+						{$set: {
+							rate: aveRate,
+							price: avePrice
+						}}).then((update) =>{
+							res.send(result)
+						})
+				}, (error) =>{
+					res.status(400).send(error);
+				})
+	})
 })
 
 //Codes for search result

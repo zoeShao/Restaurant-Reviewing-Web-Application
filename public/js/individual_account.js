@@ -1,3 +1,4 @@
+import {getLogInInfo, signOutUser} from './navBar.js';
 /* Class */
 class User {
 	constructor(image, name, email, password, type){
@@ -55,6 +56,10 @@ const pager = document.querySelector('#pager')
 
 /* Load the initial page. */ 
 showPage(currentPage)
+
+/* call functions from navBar.js*/
+getLogInInfo();
+window.signOutUser = signOutUser;
 
 /* Event listeners for button submit and button click */
 dropDown.addEventListener('click', sortTheItem);
