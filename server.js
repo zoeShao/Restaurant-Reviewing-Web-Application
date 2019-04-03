@@ -146,12 +146,11 @@ app.get('/resReviews/:id', (req, res) =>{
 	res.redirect('/resReviews')
 })
 
-
 // get log in info by Nav Bar
 app.get('/getLogInInfo', (req, res) => {
 	if (req.session.user){
 		User.findById(req.session.user).then((user) => {
-			res.send({"name": user.name, "profileImg": user.profilePicture, "accountType":user.accountType});
+			res.send({"name": user.name, 'email': user.email, "profileImg": user.profilePicture, "accountType":user.accountType});
 		}).catch((error) => {
 			log(error)
 			res.redirect('/login')
@@ -238,7 +237,7 @@ app.post('/users/signUp', (req, res) => {
 	}
 	log(req.session.failToSignUp)
 	res.redirect('/signUp');
-})
+	})
 })
 
 
@@ -345,6 +344,9 @@ app.get('/getMyRestaurants', authenticate, (req, res) =>{
 
 //read one image by name
 app.get('/readImg/:filename', (req, res) =>{
+	if(req.params.filename === undefined){
+		res.status(400).send()
+	}
 	gfs.files.findOne({filename: req.params.filename}, (err, file) =>{
 		if( !file || file.length === 0 ){
 			res.status(404).send()
@@ -382,6 +384,42 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 	}, (error) =>{
 		res.status(400).send(error)
 	})
+})
+
+app.patch('/editUserInfo', [authenticate, upload.single('userImg')], (req, res) =>{
+	const id = req.user._id;
+	if(req.file){
+		User.findOneAndUpdate({_id: id}, {$set: {
+			profilePicture: req.file.filename,
+			name: req.body.name,
+			email: req.body.email,
+			password: req.body.password
+		}}).then((user) =>{
+			if(user.profilePicture !== ""){
+				gfs.remove({filename: user.profilePicture, root: 'images'}, (err, GridFSBucket) =>{
+					if(err){
+						res.status(404).send(err)
+					}else{
+						res.send()
+					}
+				})
+			}
+			res.send()
+		}, (error) =>{
+			res.status(400).send(error)
+		})
+	}
+	else{
+		User.findOneAndUpdate({_id: id}, {$set: {
+			name: req.body.name,
+			email: req.body.email,
+			password: req.body.password
+		}}).then((user) =>{
+			res.send()
+		}, (error) =>{
+			res.status(400).send(error)
+		})
+	}
 })
 
 app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
