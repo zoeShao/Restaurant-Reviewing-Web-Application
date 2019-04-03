@@ -11,6 +11,7 @@ let maxReviews = 3
 let currentPage = 1
 let restaurantsList = []
 let usersList = []
+let reviewsList = []
 
 
 const restaurantsBody = document.getElementById("restaurantsBody");
@@ -28,7 +29,8 @@ if(popularRestaurants){
 
 const commentsMainbody = document.getElementById("commentsMainbody");
 if(commentsMainbody){
-    commentsMainbody.addEventListener("click", removeComments);
+		commentsMainbody.addEventListener("click", removeComments);
+		InitializeAdminReviews();
 }
 
 const banMainbody = document.getElementById("banMainbody");
@@ -39,8 +41,6 @@ if(banBody){
 if(banMainbody){
 	banMainbody.addEventListener("click", banUser);
 	InitializeAdminBanUsers();
-	// loadUsers("user2", "lawrence_zhou@hotmail.com", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png");
-	// loadUsers("user3", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png");
 }
 
 const pager = document.querySelector('#pager');
@@ -79,13 +79,8 @@ function removeRestaurantFromServer(resObj){
 		'restaurantToDelete': resObj
 	}
 	$.ajax({
-		type: 'POST',
-		url: '/admin/removeRes',
-		data: JSON.stringify(data),
-		"headers": {
-			"Content-Type": "application/json",
-		},
-		processData: false,
+		type: 'DELETE',
+		url: 'removeRes/' + resObj._id,
 		success: function(data, textStatus){
 			alert('Remove the restaurant successfully!')
 		},
@@ -93,6 +88,31 @@ function removeRestaurantFromServer(resObj){
 			alert('Failed to remove the restaurant!');
 		 } 
 	})
+}
+
+function removeRestaurants(e){
+	//server part TODO: should remove restaurants in database
+	if (e.target.classList.contains("remove")){
+		const restaurantToRemove = e.target.parentElement.parentElement.parentElement;
+		const resAddress = e.target.parentElement.children[1].innerText;
+		log(resAddress)
+		let i = 0;
+		let originalLength = restaurantsList.length;
+		for(i = 0; i < restaurantsList.length; i++){
+			if (restaurantsList[i].address == resAddress){
+				log(restaurantsList[i])
+				removeRestaurantFromServer(restaurantsList[i]);
+				popularRestaurants.removeChild(restaurantToRemove);
+				restaurantsList.splice(i, 1);
+				log(restaurantsList)
+				break;
+			}
+		}
+		//cannot find the restaurant
+		if(i == originalLength){
+			alert("fail to find the restaurant!");
+		}
+	} 
 }
 
 //User part
@@ -139,8 +159,6 @@ function banOrRecoverUser(userObj){
 	})
 }
 
-/*                        */
-
 function banUser(e){
     if (e.target.classList.contains("btn")){
 		//server part TODO: should label the user "banned" in database
@@ -164,37 +182,34 @@ function banUser(e){
     }
 }
 
-function removeRestaurants(e){
-    //server part TODO: should remove restaurants in database
-    if (e.target.classList.contains("remove")){
-		const restaurantToRemove = e.target.parentElement.parentElement.parentElement;
-		const resAddress = e.target.parentElement.children[1].innerText;
-		log(resAddress)
-		let i = 0;
-		let originalLength = restaurantsList.length;
-		for(i = 0; i < restaurantsList.length; i++){
-			if (restaurantsList[i].address == resAddress){
-				log(restaurantsList[i])
-				removeRestaurantFromServer(restaurantsList[i]);
-				popularRestaurants.removeChild(restaurantToRemove);
-				restaurantsList.splice(i, 1);
-				log(restaurantsList)
-				break;
-			}
-		}
-		//cannot find the restaurant
-		if(i == originalLength){
-			alert("fail to find the restaurant!");
-		}
-        
-    }
+/*                             */
+
+/*       admin comments part       */
+function getListOfComments(){
+	const url = '/getResReview';
+    // The data we are going to send in our request
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'get', 
+    });
+    return fetch(request)
+}
+
+function InitializeAdminReviews(){
+	getListOfComments().then((reviews) => {
+	  return reviews.json();
+	}).then((revList) => {
+		reviewsList = revList.reviews;
+		showPage(currentPage);
+	  log(reviewsList)
+	}).catch(error => {log(error);});
 }
 
 function removeComments(e){
     //server part TODO: should remove comments in database
     if (e.target.classList.contains("remove")){
         const commentToRemove = e.target.parentElement;
-		commentsMainbody.removeChild(commentToRemove);
+				commentsMainbody.removeChild(commentToRemove);
         
     }
 }
@@ -209,7 +224,7 @@ function changePage(e) {
 		// console.log(currentPage)
 
 	} else if (e.target.classList.contains('next')) {
-		if ((currentPage * 3) < user.reviews.length) {
+		if ((currentPage * 3) < reviewsList.length) {
 			currentPage = currentPage + 1
 		}
 		showPage(currentPage)		
@@ -218,13 +233,13 @@ function changePage(e) {
 }
 
 function showPage(currentPage) {
-    let restPage = user.reviews.length - currentPage * 3
+    let restPage = reviewsList.length - currentPage * 3
 	if (restPage >= 0) {
 		commentsMainbody.innerText = ""
 		for (let i = 0; i < maxReviews; i++) {
 			let j = ((currentPage-1)*3) + i
 			// console.log(j)
-			addReviewToDom(user.reviews[j])
+			addReviewToDom(reviewsList[j])
 		}
 	} else {
 		restPage = maxReviews+restPage
@@ -232,7 +247,7 @@ function showPage(currentPage) {
 		for (let i = 0; i < restPage; i++) {
 			let j = ((currentPage-1)*3) + i
 			// console.log(j)
-			addReviewToDom(user.reviews[j])
+			addReviewToDom(reviewsList[j])
 		}
 	}
 }
@@ -246,13 +261,10 @@ function addReviewToDom(review) {
 	aElement.href = "#"
 	const reviewElement = document.createElement('div')
 	reviewElement.className = "storeContainer"
-	const nameElement = document.createElement('p')
-	nameElement.innerHTML = "<strong>Restaurant name: </strong>" + `${review.rName}`
 	const rateElement = addRateToDom(review.rate)
 	const priceElement = addPriceToDom(review.price)
 	const contentElement = document.createElement('p')
 	contentElement.innerHTML = "<strong>Review: </strong>" + `${review.content}`
-	reviewElement.appendChild(nameElement)
 	reviewElement.appendChild(rateElement)
 	reviewElement.appendChild(priceElement)
 	reviewElement.appendChild(contentElement)
@@ -363,6 +375,11 @@ function changeRestaurant(restaurant, resObj){
 	//change address
 	const addressSpan = cardBody.children[1];
 	addressSpan.appendChild(document.createTextNode(resObj.address));
+
+	//change show comments link
+	const showCommentLink = cardBody.children[4];
+	showCommentLink.href = '/resReviews/' + resObj._id;
+
   }
   
   function addRestaurant(){
@@ -386,17 +403,19 @@ function changeRestaurant(restaurant, resObj){
 	removeButton.appendChild(document.createTextNode("Remove"));
 
 	//show comments
+	const showCommentLink = document.createElement('a');
 	const showCommentBtn = document.createElement('button');
 	showCommentBtn.type = "button";
-	showCommentBtn.className = "btn btn-dark ml-3 remove";
-	showCommentBtn.appendChild(document.createTextNode("show comment"));
+	showCommentBtn.className = "btn btn-dark ml-3 showComments";
+	showCommentBtn.appendChild(document.createTextNode("show comments"));
+	showCommentLink.appendChild(showCommentBtn);
 	h4Title.appendChild(document.createElement('a'));
 
 	cardBody.appendChild(h4Title);
 	cardBody.appendChild(addressSpan);
 	cardBody.appendChild(document.createElement("br"));
 	cardBody.appendChild(removeButton);
-	cardBody.appendChild(showCommentBtn);
+	cardBody.appendChild(showCommentLink);
 	card.appendChild(img)
 	card.appendChild(cardBody);
 	colDiv.appendChild(card);
