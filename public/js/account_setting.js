@@ -62,16 +62,6 @@ function modifyUserInfo(e) {
 				alert('fail to change user info');
 				console.log(error);
 			})
-			// e.target.parentElement.style.position = "relative"
-			// e.target.parentElement.style.top = "10%";
-			// removeProfileSelector(e.target.parentElement.parentElement.parentElement)
-			// removeTaskTextBox(e.target.parentElement.firstElementChild)
-			// removeTaskTextBox(e.target.parentElement.firstElementChild.nextElementSibling)
-			// removePassTaskTextBox(e.target.parentElement.firstElementChild.nextElementSibling.nextElementSibling)
-			// // change the button text to 'edit'
-			// e.target.style.top = "75%";
-			// e.target.style.left = "0%";
-			// e.target.innerText = 'edit'
 		}
 	}
 }
@@ -88,16 +78,6 @@ function addTaskTextBox(task, id) {
 	textBox.id = id;
 	textBox.value = taskText;
 	task.appendChild(textBox)
-}
-
-function removeTaskTextBox(task) {
-	const taskLabel = document.createElement('span')
-	taskLabel.className = "info"
-	const textBox = task.lastElementChild
-	const taskText = document.createTextNode(textBox.value)
-	taskLabel.appendChild(taskText)
-	textBox.before(taskLabel)
-	task.removeChild(textBox)
 }
 
 function addProfileSelector(task) {
@@ -118,12 +98,6 @@ function addProfileSelector(task) {
 	task.firstElementChild.firstElementChild.nextElementSibling.appendChild(divElement)
 }
 
-function removeProfileSelector(task) {
-	const fileLoadingDiv = task.firstElementChild.firstElementChild.nextElementSibling.firstElementChild
-	const profileImg = task.firstElementChild.firstElementChild.firstElementChild;
-	profileImg.alt = "Profile Picture";
-	task.firstElementChild.firstElementChild.nextElementSibling.removeChild(fileLoadingDiv)
-}
 
 function addPassTaskTextBox(task, id) {
 	task.firstElementChild.innerText = "Password: "
@@ -132,12 +106,6 @@ function addPassTaskTextBox(task, id) {
 	textBox.className = "form-control"
 	textBox.id = id;
 	task.appendChild(textBox)
-}
-
-function removePassTaskTextBox(task) {
-	task.firstElementChild.innerText = ""
-	const textBox = task.lastElementChild
-	task.removeChild(textBox)
 }
 
 function addUserInfoToDom(){
