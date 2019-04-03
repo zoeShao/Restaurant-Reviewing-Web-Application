@@ -307,8 +307,12 @@ app.get('/getMyfavourites', authenticate, (req, res) =>{
 		if (!user) {
 			res.status(404).send()
 		} else {
-			/// sometimes wrap returned object in another object   
-			res.send(user.favourites)
+			/// sometimes wrap returned object in another object
+			Restaurant.find({_id: req.user.favourites}).sort({_id: -1}).then((restaurants) => {
+				res.send({restaurants})
+			},(error) =>{
+				res.status(450).send(error)
+			})   
 		}
 	}).catch((error) => {
 		res.status(400).send()
