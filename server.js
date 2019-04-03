@@ -648,7 +648,7 @@ app.delete('/admin/removeReview/:id/:resId', adminPagesAuthenticate, (req, res) 
 		return res.status(404).send()
 	}
 	Review.findOneAndDelete({_id: id}).then((review) =>{
-		//calculate the 
+		//calculate the average of price and rate after update
 		const ObjectId = mongoose.Types.ObjectId
 		Review.aggregate([
 			{ $match: {"resID": ObjectId(req.params.resId)}},
