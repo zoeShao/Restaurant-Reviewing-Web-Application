@@ -12,46 +12,48 @@ class User {
     }
 }
 
-class Restaurant{
-    constructor(image, name, phone, address, rate, price){
-        this.image = image;
-        this.name = name;
-        this.phone = phone;
-        this.address = address;
-        this.rate = rate;
-        this.price = price;
-        this.reviews = [];
-    }
-}
+// class Restaurant{
+//     constructor(image, name, phone, address, rate, price){
+//         this.image = image;
+//         this.name = name;
+//         this.phone = phone;
+//         this.address = address;
+//         this.rate = rate;
+//         this.price = price;
+//         this.reviews = [];
+//     }
+// }
 
-class Review {
-    constructor(rName, uName, rate, price, content){
-        this.rName = rName;
-        this.uName = uName;
-        this.rate = rate;
-        this.price = price;
-        this.content = content;
-    }
-}
+// class Review {
+//     constructor(rName, uName, rate, price, content){
+//         this.rName = rName;
+//         this.uName = uName;
+//         this.rate = rate;
+//         this.price = price;
+//         this.content = content;
+//     }
+// }
 
 /* Global variables */
 let maxReviews = 4 // max Contents one page can show
 let currentPage = 1 // current page number
+let reviewLst = [];
+let store = null
 
 //Server part TODO: get data from the server and load them to the page
 
 /* Examples(hardcode part) */
-const storeImg = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
-const store = new Restaurant(storeImg, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1)
+// const storeImg = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
+// const store = new Restaurant(storeImg, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1)
 // create a review
-const review1 = new Review("McDonald's", "user1", 3, 1, "here is the review.here is the review.here is the review.here is the review.")
-const review2 = new Review("McDonald's", "user2", 2, 1, "here is the review.here is the review.")
-// create a user
-const userImg = "avatar.jpg"
-const user = new User(userImg, "user", "user@mail.com", "user", "i")
-// Add these reviews to the user's review array (does not change the DOM)
-store.reviews.push(review1)
-store.reviews.push(review2)
+// const review1 = new Review("McDonald's", "user1", 3, 1, "here is the review.here is the review.here is the review.here is the review.")
+// const review2 = new Review("McDonald's", "user2", 2, 1, "here is the review.here is the review.")
+// // create a user
+// const userImg = "avatar.jpg"
+// const user = new User(userImg, "user", "user@mail.com", "user", "i")
+// // Add these reviews to the user's review array (does not change the DOM)
+// store.reviews.push(review1)
+// store.reviews.push(review2)
 
 /* Select all DOM form elements you'll need. */ 
 const reviewForm = document.querySelector('#reviewForm')
@@ -60,8 +62,8 @@ const pager = document.querySelector('#pager')
 const bookmark = document.querySelector('#bookmark')
 
 /* Load the initial page. */ 
-showPage(currentPage)
-
+// showPage(currentPage)
+getReviews()
 /* call functions from navBar.js*/
 getLogInInfo();
 window.signOutUser = signOutUser;
@@ -71,44 +73,58 @@ reviewForm.addEventListener('submit', addNewReview);
 pager.addEventListener('click', changePage);
 reviewForm.addEventListener('keydown', modifyButton);
 bookmark.addEventListener('click', changeBookmark);
-
+getRestaurant()
 /*-----------------------------------------------------------*/
 /*** 
 Functions can call DOM functions 
 ***/
+//helper function to form a form data by user's input
+function formData(){
+    const form = new FormData();
+    form.append("resID", store._id);
+    form.append("price", document.querySelector('#FormControlSelect1').value);
+    form.append("rate", document.querySelector('#FormControlSelect2').value);
+    form.append("content", document.querySelector('#FormControlTextarea1').value);
+    return form;
+}
+
 function modifyButton(e) {
     e.target.parentElement.nextElementSibling.className = "float-right btn btn-info"
 }
 
 function addNewReview(e) {
     e.preventDefault();
+    const url = '/addReview/store._id'
+    const form = formData();
+  
     //Server part TODO: add the review to the server
     if (e.target.lastElementChild.innerText === 'Submit') {
-        const userName = "user";
-        const storeName = "McDonald's";
-        const price = document.querySelector('#FormControlSelect1').value;
-        const rate = document.querySelector('#FormControlSelect2').value;
+        // const userName = "user";
+        // const storeName = "McDonald's";
+        // const price = document.querySelector('#FormControlSelect1').value;
+        // const rate = document.querySelector('#FormControlSelect2').value;
         const content = document.querySelector('#FormControlTextarea1').value;
         if (content) {
-            const newReview = new Review(storeName, userName, rate, price, content)
-            store.reviews.unshift(newReview)
+            // const newReview = new Review(storeName, userName, rate, price, content)
+            // reviewLst.unshift(newReview)
+            getReviews()
             showPage(currentPage)
             e.target.lastElementChild.innerText = 'Resubmit'
         } else {
             e.target.lastElementChild.className = "float-right btn btn-info disabled"
         }
     } else {
-        const userName = "user";
-        const storeName = "McDonald's";
-        const price = document.querySelector('#FormControlSelect1').value;
-        const rate = document.querySelector('#FormControlSelect2').value;
+        // const userName = "user";
+        // const storeName = "McDonald's";
+        // const price = document.querySelector('#FormControlSelect1').value;
+        // const rate = document.querySelector('#FormControlSelect2').value;
         const content = document.querySelector('#FormControlTextarea1').value;
         if (content) {
-            for (let i = 0; i < store.reviews.length; i++) {
-                if (store.reviews[i].uName === userName) {
-                    store.reviews[i].rate = rate
-                    store.reviews[i].price = price 
-                    store.reviews[i].content = content
+            for (let i = 0; i < reviewLst.length; i++) {
+                if (reviewLst[i].uName === userName) {
+                    reviewLst[i].rate = rate
+                    reviewLst[i].price = price 
+                    reviewLst[i].content = content
                 }
             }
             showPage(currentPage)
@@ -127,7 +143,7 @@ function changePage(e) {
         }
 
     } else if (e.target.classList.contains('next')) {
-        if ((currentPage * maxReviews) < store.reviews.length) {
+        if ((currentPage * maxReviews) < reviewLst.length) {
             currentPage = currentPage + 1
         }
         showPage(currentPage)       
@@ -152,6 +168,7 @@ function changeBookmark(e) {
 /*-----------------------------------------------------------*/
 /*** DOM functions below - use these to create and edit DOM objects ***/
 function addReviewToDom(review) {
+    console.log("hey!")
     const contentBoxElement = document.createElement('div')
     contentBoxElement.className = "contentBox"
     const userImgElement = document.createElement('div')
@@ -167,7 +184,7 @@ function addReviewToDom(review) {
     const rateElement = addRateToDom(review.rate)
     const priceElement = addPriceToDom(review.price)
     const content = document.createElement('p')
-    content.innerHTML = "<strong>"+`${review.uName}`+":\" </strong>" + `${review.content}` +  "<strong>\"</strong>"
+    content.innerHTML = "<strong>"+`${review.userName}`+":\" </strong>" + `${review.content}` +  "<strong>\"</strong>"
     contentElement.appendChild(rateElement)
     contentElement.appendChild(priceElement)
     contentElement.appendChild(content)
@@ -194,8 +211,9 @@ function addRestaurantToDom(store) {
     const divElement = document.createElement('div')
     divElement.className = "RestaurantImgContainer"
     const storeImg = document.createElement('img')
-    // storeImg.src = url + store.picture;
-    storeImg.src = store.image
+    const url = '/readImg/';
+    storeImg.src = url + store.picture;
+    // storeImg.src = store.image
     storeImg.alt = "Store Picture";
     divElement.appendChild(storeImg)
     restaurantImg.appendChild(divElement)
@@ -219,22 +237,30 @@ function addRestaurantToDom(store) {
 /*-----------------------------------------------------------*/
 /*** helper functions ***/
 function showPage(currentPage) {
-    addRestaurantToDom(store)
-    let restPage = store.reviews.length - currentPage * 4
+    console.log(reviewLst.length)
+    // var queryString = decodeURIComponent(window.location.search);
+    // queryString = queryString.substring(1);
+    // var id = qs.get("myVar1");
+    // console.log(queryString)
+    // addRestaurantToDom(store)
+    let restPage = reviewLst.length - currentPage * 4
+    console.log(restPage)
     if (restPage >= 0) {
+        console.log("???")
         reviewPart.innerText = ""
         for (let i = 0; i < maxReviews; i++) {
             let j = ((currentPage-1)*4) + i
-            // console.log(j)
-            addReviewToDom(store.reviews[j])
+            console.log(j)
+            addReviewToDom(reviewLst[j])
         }
     } else {
-        restPage = maxReviews+restPage
+        console.log("!!!!!")
+        restPage = maxReviews + restPage
         reviewPart.innerText = ""
         for (let i = 0; i < restPage; i++) {
             let j = ((currentPage-1)*4) + i
-            // console.log(j)
-            addReviewToDom(store.reviews[j])
+            console.log(j)
+            addReviewToDom(reviewLst[j])
         }
     }
 }
@@ -269,4 +295,49 @@ function addPriceToDom(rate) {
     }
     paraElement.innerHTML = '<strong>Price: </strong>' + priceRate
     return paraElement
+}
+
+//get the restaurant info and then display 
+function getRestaurant(){
+    const url = '/restaurantInfo';
+    $.ajax({
+        url: url,
+        method:'get'
+    }).done((res) =>{
+        if(res){
+            console.log(res.restaurant)
+            store = res.restaurant;
+            addRestaurantToDom(store)
+            showPage(currentPage);
+        }
+        else{
+            alert("cannot get restaurant");
+        }
+    }).fail((error) =>{
+        alert("cannot get restaurant");
+        console.log(error);
+    })
+}
+
+//get all the reviews of the restaurant
+function getReviews(){
+    const url = '/getResReview';
+    $.ajax({
+        url: url,
+        method:'get'
+    }).done((res) =>{
+        if(res.reviews){
+            console.log(res.reviews)
+            console.log(res.reviews[0])
+            reviewLst = res.reviews
+            console.log(reviewLst.length)
+            console.log(reviewLst[0].userName)
+        }
+        else{
+            alert("cannot get reviews");
+        }
+    }).fail((error) =>{
+        alert("cannot get reviewss");
+        console.log(error);
+    })
 }

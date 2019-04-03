@@ -127,19 +127,19 @@ app.route('/resReviews')
 		res.sendFile(__dirname + '/public/restaurant_reviews.html')
 	})
 
-// rpute for jump to main account page of restaurant owner
+// rpute for jump to main page of individual account 
 app.route('/individual_account')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/individual_account.html')
 	})
 
-// rpute for jump to main account page of restaurant owner
+// rpute for jump to main account page of individual favourite
 app.route('/individual_favourite')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/individual_favourite.html')
 	})
 
-// rpute for jump to main account page of restaurant owner
+// rpute for jump to main account page of individual setting
 app.route('/individual_setting')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/individual_setting.html')
@@ -147,14 +147,41 @@ app.route('/individual_setting')
 
 app.get('/resReviews/:id', (req, res) =>{
 	const id = req.params.id
+	if (req.session.resReviewId) {
+		log(req.session.resReviewId)
+		req.session.resReviewId = null
+		log(req.session.resReviewId)
+	}
 	req.session.resReviewId = id
-	if(req.session.accountType = 'a'){
+	log(req.session.resReviewId)
+	if(req.session.accountType == 'a'){
 		res.redirect('/adminResReviews');
-	} else if (req.session.accountType = 'o'){
+	} else if (req.session.accountType == 'o'){
 		res.redirect('/resReviews')
+	} else if (req.session.accountType == 'u'){
+		res.redirect('/restaurant_review')
 	}
 })
 
+app.get('/restaurantInfo', (req, res) =>{
+	const id = req.session.resReviewId
+
+	if (!ObjectID.isValid(id)) {
+		res.status(404).send()
+	}
+
+	// Otherwise, findById
+	Restaurant.findById(id).then((restaurant) => {
+		if (!restaurant) {
+			res.status(404).send()
+		} else {
+			/// sometimes wrap returned object in another object   
+			res.send({restaurant})
+		}
+	}).catch((error) => {
+		res.status(400).send()
+	})
+})
 
 // get log in info by Nav Bar
 app.get('/getLogInInfo', (req, res) => {
