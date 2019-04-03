@@ -140,9 +140,8 @@ userSchema.pre('save', function(next) {
 
 //run before findOneAndUpdate
 userSchema.pre('findOneAndUpdate', function(next) {
-	const user = this
-    
-    if (user.isModified('password')) {
+	const user = this._update.$set
+    if (user.password) {
 		bcrypt.genSalt(10, (error, salt) => {
 			bcrypt.hash(user.password, salt, (error, hash) => {
 				user.password = hash
