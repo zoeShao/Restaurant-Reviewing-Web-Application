@@ -63,7 +63,7 @@ const bookmark = document.querySelector('#bookmark')
 
 /* Load the initial page. */ 
 // showPage(currentPage)
-getReviews()
+// getReviews()
 /* call functions from navBar.js*/
 getLogInInfo();
 window.signOutUser = signOutUser;
@@ -79,14 +79,6 @@ getRestaurant()
 Functions can call DOM functions 
 ***/
 //helper function to form a form data by user's input
-function formData(){
-    const form = new FormData();
-    form.append("resID", store._id);
-    form.append("price", document.querySelector('#FormControlSelect1').value);
-    form.append("rate", document.querySelector('#FormControlSelect2').value);
-    form.append("content", document.querySelector('#FormControlTextarea1').value);
-    return form;
-}
 
 function modifyButton(e) {
     e.target.parentElement.nextElementSibling.className = "float-right btn btn-info"
@@ -94,8 +86,6 @@ function modifyButton(e) {
 
 function addNewReview(e) {
     e.preventDefault();
-    const url = '/addReview/store._id'
-    const form = formData();
   
     //Server part TODO: add the review to the server
     if (e.target.lastElementChild.innerText === 'Submit') {
@@ -103,13 +93,35 @@ function addNewReview(e) {
         // const storeName = "McDonald's";
         // const price = document.querySelector('#FormControlSelect1').value;
         // const rate = document.querySelector('#FormControlSelect2').value;
+        const url = '/addReview/' + store._id
+        var data = JSON.stringify({
+            "rate": document.querySelector('#FormControlSelect2').value,
+            "price": document.querySelector('#FormControlSelect1').value,
+            "content": document.querySelector('#FormControlTextarea1').value
+        });
         const content = document.querySelector('#FormControlTextarea1').value;
         if (content) {
+            console.log(content)
+            $.ajax({
+                url: url,
+                method: 'post',
+                processData: false,
+                contentType: "application/json",
+                data: data
+            }).done((res) =>{
+                console.log('add review');
+                getReviews()
+                e.target.lastElementChild.innerText = 'Resubmit'
+                // getRestaurant();
+            }).fail((error) =>{
+                alert('fail to add review');
+                console.log(error);
+            })
             // const newReview = new Review(storeName, userName, rate, price, content)
             // reviewLst.unshift(newReview)
-            getReviews()
-            showPage(currentPage)
-            e.target.lastElementChild.innerText = 'Resubmit'
+            // getReviews()
+            // showPage(currentPage)
+            // e.target.lastElementChild.innerText = 'Resubmit'
         } else {
             e.target.lastElementChild.className = "float-right btn btn-info disabled"
         }
@@ -195,6 +207,7 @@ function addReviewToDom(review) {
 function addRestaurantToDom(store) {
     const restaurantInfoHeader = document.querySelector('#restaurantHeader')
     const restaurantInfoBody = document.querySelector('#restaurantInfo')
+    const restaurantBookmark = document.querySelector('#bookmark')
     // restaurant info header
     const restaurantHeader = document.createElement('div')
     restaurantHeader.className = "col-md-10"
@@ -205,6 +218,14 @@ function addRestaurantToDom(store) {
     restaurantPara.appendChild(strongElement)
     restaurantHeader.appendChild(restaurantPara)
     restaurantInfoHeader.insertBefore(restaurantHeader, restaurantInfoHeader.firstChild)
+    // bookmark
+    const aElement = document.createElement('a')
+    aElement.className = "bookmarkIcon"
+    aElement.href = "#"
+    const iconElement = document.createElement('i')
+    iconElement.className = "notbookmarked far fa-bookmark"
+    aElement.appendChild(iconElement)
+    restaurantBookmark.appendChild(aElement)
     // restaurant picture body
     const restaurantImg = document.createElement('div')
     restaurantImg.className = "col-md-3"
@@ -308,7 +329,8 @@ function getRestaurant(){
             console.log(res.restaurant)
             store = res.restaurant;
             addRestaurantToDom(store)
-            showPage(currentPage);
+            getReviews()
+            // showPage(currentPage);
         }
         else{
             alert("cannot get restaurant");
@@ -330,8 +352,9 @@ function getReviews(){
             console.log(res.reviews)
             console.log(res.reviews[0])
             reviewLst = res.reviews
+            showPage(currentPage);
             console.log(reviewLst.length)
-            console.log(reviewLst[0].userName)
+            // console.log(reviewLst[0].userName)
         }
         else{
             alert("cannot get reviews");
