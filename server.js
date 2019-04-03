@@ -459,15 +459,26 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 	})
 })
 
+//edit user information for current user
 app.patch('/editUserInfo', [authenticate, upload.single('userImg')], (req, res) =>{
 	const id = req.user._id;
-	if(req.file){
-		User.findOneAndUpdate({_id: id}, {$set: {
-			profilePicture: req.file.filename,
+	let change;
+	if(req.body.password && req.body.password !== ""){
+		change = {
 			name: req.body.name,
 			email: req.body.email,
 			password: req.body.password
-		}}).then((user) =>{
+		}
+	}
+	else{
+		change = {
+			name: req.body.name,
+			email: req.body.email,
+		}
+	}
+	if(req.file){
+		change.profilePicture = req.file.filename
+		User.findOneAndUpdate({_id: id}, {$set: change}).then((user) =>{
 			if(user.profilePicture !== ""){
 				gfs.remove({filename: user.profilePicture, root: 'images'}, (err, GridFSBucket) =>{
 					if(err){
@@ -479,17 +490,15 @@ app.patch('/editUserInfo', [authenticate, upload.single('userImg')], (req, res) 
 			}
 			res.send()
 		}, (error) =>{
+			log(error);
 			res.status(400).send(error)
 		})
 	}
 	else{
-		User.findOneAndUpdate({_id: id}, {$set: {
-			name: req.body.name,
-			email: req.body.email,
-			password: req.body.password
-		}}).then((user) =>{
+		User.findOneAndUpdate({_id: id}, {$set: change}).then((user) =>{
 			res.send()
 		}, (error) =>{
+			log(error)
 			res.status(400).send(error)
 		})
 	}
