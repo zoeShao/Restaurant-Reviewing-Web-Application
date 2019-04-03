@@ -1,15 +1,6 @@
 import {getLogInInfo, signOutUser} from './navBar.js';
 /* Class */
-class User {
-	constructor(image, name, email, password, type, reviews){
-        this.image = image;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.type = type;
-        this.reviews = [];
-    }
-}
+let userInfo = {} 
 
 // global arrays
 // const Users = []
