@@ -121,11 +121,9 @@ const resSchema = new mongoose.Schema({
         minLength: 1
     }
   });
-//run before save
-userSchema.pre('save', function(next) {
-	const user = this
 
-	if (user.isModified('password')) {
+function hash(user){
+  if (user.isModified('password')) {
 		bcrypt.genSalt(10, (error, salt) => {
 			bcrypt.hash(user.password, salt, (error, hash) => {
 				user.password = hash
@@ -135,7 +133,16 @@ userSchema.pre('save', function(next) {
 	} else {
 		next();
 	}
+}
+//run before save
+userSchema.pre('save', function(next) {
+	const user = this
+  hash(user);
+})
 
+userSchema.pre('findOneAndUpdate', function(next) {
+	const user = this
+  hash(user);
 })
 
 // Our own student finding function 
@@ -159,13 +166,6 @@ userSchema.statics.findByNamePassword = function(name, password) {
 	})
 }
 
-
-// userSchema.methods.comparePassword = function(candidatePassword, cb) {
-//     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-//         if (err) return cb(err);
-//         cb(null, isMatch);
-//     });
-// };
 
 const User = mongoose.model('User', userSchema);
 const Restaurant = mongoose.model('Restaurant', resSchema);

@@ -11,7 +11,7 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
 	  <link href="./css/index.css" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="account.css">
+		<link rel="stylesheet" type="text/css" href="./css/account.css">
 	</head>
 	<body>
 		<div class="container-fluid">
@@ -44,25 +44,18 @@
 			</div>
 	</div>
 
-		<div class="container-fluid">
+	<div class="container-fluid">
 			<div id="topNavBar" class="row bg-light">
-				<div class="navContainer col-md-4">
+				<div class="navContainer col-md-6">
 					<p class="navButton">
-						<a class="navChoice" href="individual_account_adminView_banUser.html" target="_self">
+						<a class="navChoice" href="/adminBanUsers" target="_self">
 							<strong>Ban User</strong>
 						</a>
 					</p>
 				</div>
-				<div class="navContainer col-md-4">
+				<div class="navContainer col-md-6">
 					<p class="navButton">
-						<a class="navChoice" href="" target="_self">
-							<strong>Comments</strong>
-						</a>
-					</p>
-				</div>
-				<div class="navContainer col-md-4">
-					<p class="navButton">
-						<a class="navChoice" href="individual_account_adminView_restaurants.html" target="_self">
+						<a class="navChoice" href="/adminRestaurants" target="_self">
 						<strong>Restaurants</strong>
 						</a>
 					</p>
@@ -75,83 +68,8 @@
 
 				<div id = "commentsMainbody" class="mainBody">
 
-						<div class="contentBox">
-							<a class="reviewLink" href="#">
-								<div class="storeContainer">
-									<p>
-										<strong>Restaurant name: </strong>McDonald's
-									</p>
-									<p>
-										<strong>Rate: </strong>
-										<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-										<span class="fa fa-star checked"></span>
-                                        <span class="fa fa-star checked"></span>
-                                        <span class="fa fa-star checked"></span>
-                                        <span class="fa fa-star"></span>
-                                        <span class="fa fa-star"></span>
-									</p>
-									<p>
-										<strong>Price: </strong>$
-									</p>
-									<p>
-										<strong>Review: </strong>
-										here is the review.here is the review.here is the review.here is the review.here is the review.here is the review.here is the review.
-									</p></div>
-								</a>
-								<button type="button" class="btn btn-light remove">Remove</button>
-						</div>
+						
 
-						<div class="contentBox">
-							<a class="reviewLink" href="#">
-								<div class="storeContainer">
-									<p>
-										<strong>Restaurant name: </strong>Osaka Sushi
-									</p>
-									<p>
-										<strong>Rate: </strong>
-										<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-										<span class="fa fa-star checked"></span>
-										<span class="fa fa-star checked"></span>
-										<span class="fa fa-star checked"></span>
-										<span class="fa fa-star checked"></span>
-										<span class="fa fa-star"></span>
-									</p>
-									<p>
-										<strong>Price: </strong>$$
-									</p>
-									<p>
-										<strong>Review: </strong>
-										here is the review.here is the review.
-									</p></div>
-								</a>
-								<button type="button" class="btn btn-light remove">Remove</button>
-							</div>
-
-							<div class="contentBox">
-								<a class="reviewLink" href="#">
-									<div class="storeContainer">
-										<p>
-											<strong>Restaurant name: </strong>Osaka Sushi
-										</p>
-										<p>
-											<strong>Rate: </strong>
-											<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-											<span class="fa fa-star checked"></span>
-											<span class="fa fa-star checked"></span>
-											<span class="fa fa-star checked"></span>
-											<span class="fa fa-star checked"></span>
-											<span class="fa fa-star checked"></span>
-										</p>
-										<p>
-											<strong>Price: </strong>$$$
-										</p>
-										<p>
-											<strong>Review: </strong>
-											here is the review.
-										</p></div>
-									</a>
-									<button type="button" class="btn btn-light remove">Remove</button>
-							</div>
 
 				</div>				
 
@@ -176,5 +94,6 @@
             </nav>
         </div>
 	</body>
-	<script type="module" src="individual_account_adminView.js"></script>
+	<script type="module" src="./js/individual_account_adminView.js"></script>
+	<script src="https://code.jquery.com/jquery-latest.js"></script>
 </html>

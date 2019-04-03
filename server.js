@@ -55,8 +55,39 @@ const sessionChecker = (req, res, next) => {
 	}
 }
 
+const userPagesAuthenticate = (req, res, next) => {
+	if(req.session.user){
+		User.findById(req.session.user).then((user) =>{
+			if(user.accountType !== "u"){
+				res.status(400).send("Administrator/Restaurant owner cannot do this operation!")
+			}else{
+				req.user = user
+				next()
+			}
+		})
+	} else{
+		next()
+	}
+}
+
+const adminPagesAuthenticate = (req, res, next) => {
+	if(req.session.user){
+		User.findById(req.session.user).then((user) =>{
+			if(user.accountType !== "a"){
+				res.status(400).send("You have to be an administrator to do this operation!")
+			}else{
+				req.user = user
+				next()
+			}
+		})
+	} else{
+		res.status(400).send("You have to be an administrator to do this operation!")
+	}
+}
+
+
 //root route
-app.get('/', (req, res) => {
+app.get('/', userPagesAuthenticate, (req, res) => {
 	res.sendFile(__dirname + '/public/index.html')
 })
 
@@ -105,6 +136,12 @@ app.get('/restaurants', (req, res) => {
 })
 
 // rpute for jump to main account page of restaurant owner
+app.route('/restaurant_review')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/review_page.html')
+	})
+
+// rpute for jump to main account page of restaurant owner
 app.route('/myRes')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/restaurant_myRes.html')
@@ -120,7 +157,6 @@ app.route('/resReviews')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/restaurant_reviews.html')
 	})
-
 
 // rpute for jump to main account page of restaurant owner
 app.route('/individual_account')
@@ -143,7 +179,11 @@ app.route('/individual_setting')
 app.get('/resReviews/:id', (req, res) =>{
 	const id = req.params.id
 	req.session.resReviewId = id
-	res.redirect('/resReviews')
+	if(req.session.accountType = 'a'){
+		res.redirect('/adminResReviews');
+	} else if (req.session.accountType = 'o'){
+		res.redirect('/resReviews')
+	}
 })
 
 // get log in info by Nav Bar
@@ -251,7 +291,7 @@ app.get('/users/logout', (req, res) => {
 	})
 })
 
-app.post('/popularRestaurants', (req, res) =>{
+app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
 	const location = req.body.location;
 
 	Restaurant.find({location: location}).sort({rate: 1}).then((result) =>{
@@ -364,6 +404,9 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 		return res.status(404).send()
 	}
 	Restaurant.findOneAndDelete({_id: id}).then((restaurant) =>{
+			if(req.session.accountType === 'u'){
+				res.status(400).send()
+			}
 			if(!restaurant){
 				log('null restaurant')
 				res.status(404).send()
@@ -470,7 +513,6 @@ app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>
 
 app.get('/getResReview', (req, res) =>{
 	const id = req.session.resReviewId
-	req.session.resReviewId = null
 	if(!ObjectID.isValid(id)){
 		return res.status(404).send()
 	}
@@ -516,7 +558,7 @@ app.post('/addReview/:resId', authenticate, (req, res) =>{
 
 //Codes for search result
 //search type can only be: "resName", "location", "category"
-app.post('/searchRestaurants', (req, res) => { 
+app.post('/searchRestaurants', userPagesAuthenticate, (req, res) => { 
 	const content = req.body.content;
 	const searchType = req.body.searchType;
 	const from = req.body.from;
@@ -524,7 +566,7 @@ app.post('/searchRestaurants', (req, res) => {
 	log("search type: "+ searchType);
 	log("from: "+ from);
 	if(searchType == "resName"){
-		Restaurant.find({name: content.trim()}).then((result) =>
+		Restaurant.find({name: {$regex: new RegExp(content.trim(), "i") }}).then((result) =>
 		{
 			req.session.searchingRes = result;
 			//promise has delay, so we can only put this comment code here
@@ -538,7 +580,7 @@ app.post('/searchRestaurants', (req, res) => {
 			}
 		}).catch((error) => res.status(400).send(error))
 	} else if(searchType == "location"){
-		Restaurant.find({location: content.trim()}).then((result) =>
+		Restaurant.find({location: {$regex: new RegExp(content.trim(), "i")}}).then((result) =>
 		{
 			req.session.searchingRes = result;
 			if(from == "search_page"){
@@ -550,7 +592,7 @@ app.post('/searchRestaurants', (req, res) => {
 			}
 		}).catch((error) => res.status(400).send(error))
 	}else if(searchType == "category"){
-		Restaurant.find({category: content.trim()}).then((result) =>
+		Restaurant.find({category: {$regex: new RegExp(content.trim(), "i")}}).then((result) =>
 		{
 			log("result" + result);
 			req.session.searchingRes = result;
@@ -568,13 +610,13 @@ app.post('/searchRestaurants', (req, res) => {
 	
 })
 
-app.get('/openSearchResult', (req, res) => {
+app.get('/openSearchResult', userPagesAuthenticate, (req, res) => {
 	// check if we have active session cookie
 		log("before redirect");
 		res.sendFile(__dirname + '/public/restaurants_search_result.html')
 })
 
-app.get('/getRestaurants', (req, res) => {
+app.get('/getRestaurants', userPagesAuthenticate, (req, res) => {
 	log("Searching res session: "+ req.session.searchingRes)
 	if(req.session.searchingRes){
 		res.send({res: req.session.searchingRes});
@@ -583,45 +625,42 @@ app.get('/getRestaurants', (req, res) => {
 })
 
 /*       codes for admin page   */
+app.route('/adminResReviews')
+.get(adminPagesAuthenticate, (req, res) => {
+	if(req.session.accountType == 'a'){
+		res.sendFile(__dirname + '/public/individual_account_adminView_comments.html')
+		} else{
+			res.status(400).send("Normal users are not authorized to go to admin page")
+		}
+})
+
 app.route('/adminBanUsers')
-	.get((req, res) => {
-		//TODO
-		// if(req.session.accountType == 'a'){
+	.get(adminPagesAuthenticate, (req, res) => {
+		if(req.session.accountType == 'a'){
 			res.sendFile(__dirname + '/public/individual_account_adminView_banUser.html')
-		// } else{
-		// 	res.status(400).send("Normal users are not authorized to go to admin page")
-		// }
+		} else{
+			res.status(400).send("Normal users are not authorized to go to admin page")
+		}
 		
 	})
 
 app.route('/adminRestaurants')
-	.get((req, res) => {
-		//TODO
-		// if(req.session.accountType == 'a'){
+	.get(adminPagesAuthenticate, (req, res) => {
+		if(req.session.accountType == 'a'){
 			res.sendFile(__dirname + '/public/individual_account_adminView_restaurants.html')
-		// } else{
-		// 	res.status(400).send("Normal users are not authorized to go to admin page")
-		// }
+		} else{
+			res.status(400).send("Normal users are not authorized to go to admin page")
+		}
 		
 	})
 
-app.post('/admin/removeRes', (req, res) => {
-	const rest = req.body.restaurantToDelete;
-
-	Restaurant.findOneAndDelete({_id: rest._id}).then((result) => {
-		res.send();
-	}).catch(error => {
-		res.status(400).send(error);
-	})
-})
-
-app.get('/admin/getAllUsers', (req, res) => {
+app.get('/admin/getAllUsers', adminPagesAuthenticate, (req, res) => {
 	User.find({accountType: {$not: {$eq: 'a'}}}).then((result) => {
 		res.send(result);
 	}).catch(error => res.status(400).send(error));
 })
 
-app.get('/admin/getAllRestaurants', (req, res) => {
+app.get('/admin/getAllRestaurants', adminPagesAuthenticate, (req, res) => {
 	Restaurant.find().then((result) => {
 		res.send(result);
 	}).catch(error => res.status(400).send(error));
@@ -638,6 +677,42 @@ app.post('/admin/banOrRecoverUser', (req, res) => {
 		res.send()
 	}).catch(error => {log(error)});
 })
+
+//delete a restaurant review given its id
+app.delete('/admin/removeReview/:id/:resId', adminPagesAuthenticate, (req, res) =>{
+	const id = req.params.id
+	if(!ObjectID.isValid(id)){
+		log('object id')
+		return res.status(404).send()
+	}
+	Review.findOneAndDelete({_id: id}).then((review) =>{
+		//calculate the average of price and rate after update
+		const ObjectId = mongoose.Types.ObjectId
+		Review.aggregate([
+			{ $match: {"resID": ObjectId(req.params.resId)}},
+			{$group: {
+				_id: null, 
+				rate: {$avg: "$rate"}, 
+				price: {$avg: "$price"}}}]).then((average) =>{
+					const aveRate = average[0].rate
+					const avePrice = average[0].price
+					Restaurant.findOneAndUpdate({_id: req.params.resId},
+						{$set: {
+							rate: aveRate,
+							price: avePrice
+						}}).then((update) =>{
+							res.send(review)
+						})
+				}, (error) =>{
+					res.status(400).send(error);
+				})
+		
+	}, (error) =>{
+		res.status(400).send(error)
+	})
+})
+
+
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
 }) 

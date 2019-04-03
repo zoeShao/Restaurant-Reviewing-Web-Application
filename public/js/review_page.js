@@ -1,3 +1,4 @@
+import {getLogInInfo, signOutUser} from './navBar.js';
 /* Class */
 class User {
 	constructor(image, name, email, password, type){
@@ -60,6 +61,10 @@ const bookmark = document.querySelector('#bookmark')
 
 /* Load the initial page. */ 
 showPage(currentPage)
+
+/* call functions from navBar.js*/
+getLogInInfo();
+window.signOutUser = signOutUser;
 
 /* Event listeners for button submit and button click */
 reviewForm.addEventListener('submit', addNewReview);
@@ -170,9 +175,51 @@ function addReviewToDom(review) {
     reviewPart.appendChild(contentBoxElement)
 }
 
+function addRestaurantToDom(store) {
+    const restaurantInfoHeader = document.querySelector('#restaurantHeader')
+    const restaurantInfoBody = document.querySelector('#restaurantInfo')
+    // restaurant info header
+    const restaurantHeader = document.createElement('div')
+    restaurantHeader.className = "col-md-10"
+    const restaurantPara = document.createElement('p')
+    restaurantPara.className = "storeName text-dark"
+    const strongElement = document.createElement('strong')
+    strongElement.innerText = store.name
+    restaurantPara.appendChild(strongElement)
+    restaurantHeader.appendChild(restaurantPara)
+    restaurantInfoHeader.insertBefore(restaurantHeader, restaurantInfoHeader.firstChild)
+    // restaurant picture body
+    const restaurantImg = document.createElement('div')
+    restaurantImg.className = "col-md-3"
+    const divElement = document.createElement('div')
+    divElement.className = "RestaurantImgContainer"
+    const storeImg = document.createElement('img')
+    // storeImg.src = url + store.picture;
+    storeImg.src = store.image
+    storeImg.alt = "Store Picture";
+    divElement.appendChild(storeImg)
+    restaurantImg.appendChild(divElement)
+    restaurantInfoBody.insertBefore(restaurantImg, restaurantInfoBody.firstChild)
+    // restaurant info body
+    const restaurantInfoPart = document.createElement('div')
+    restaurantInfoPart.className = "col-md-7"
+    const addressElement = document.createElement('p')
+    addressElement.innerHTML = "<strong>Restaurant address: </strong>" + `${store.address}`
+    const telElement = document.createElement('p')
+    telElement.innerHTML = "<strong>Restaurant tel: </strong>" + `${store.phone}`
+    const rateElement = addRateToDom(store.rate)
+    const priceElement = addPriceToDom(store.price)
+    restaurantInfoPart.appendChild(addressElement)
+    restaurantInfoPart.appendChild(telElement)
+    restaurantInfoPart.appendChild(rateElement)
+    restaurantInfoPart.appendChild(priceElement)
+    restaurantInfoBody.appendChild(restaurantInfoPart)
+}
+
 /*-----------------------------------------------------------*/
 /*** helper functions ***/
 function showPage(currentPage) {
+    addRestaurantToDom(store)
     let restPage = store.reviews.length - currentPage * 4
     if (restPage >= 0) {
         reviewPart.innerText = ""
