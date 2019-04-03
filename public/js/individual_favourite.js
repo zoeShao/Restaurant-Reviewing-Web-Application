@@ -116,11 +116,8 @@ function addFavouriteToDom(restaurant) {
 	contentBoxElement.className = "contentBox"
 	const aElement = document.createElement('a')
 	aElement.className = "reviewLink"
-	if (restaurant.name == "McDonald's") {
-		aElement.href = "review_page.html"
-	} else {
-		aElement.href = "#"
-	}
+	aElement.href = "/resReviews/" + restaurant._id
+	// aElement.href = "/restaurant_review?res_id=" + `${restaurant._id}`
 	const url = '/readImg/';
 	const storeImgElement = document.createElement('div')
 	storeImgElement.classNmae = "storeImgContainer"
