@@ -87,7 +87,7 @@ function changeRestaurant(restaurant, resObj){
   //change image source
   const img = form.children[0].children[0];
   //TODO: change image source
-  img.src = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg";//resObj.picture;
+  img.src = "/readImg/" + resObj.picture;
 
   //change name
   const cardBody = form.children[1];
@@ -129,6 +129,7 @@ function addPopularRestaurant(){
   
   form.appendChild(cardBody);
   card.appendChild(form)
+  card.appendChild(hiddenInput);
   colDiv.appendChild(card);
   popularRestaurantsElement.appendChild(colDiv);
 }
