@@ -129,7 +129,6 @@ function addPopularRestaurant(){
   
   form.appendChild(cardBody);
   card.appendChild(form)
-  card.appendChild(hiddenInput);
   colDiv.appendChild(card);
   popularRestaurantsElement.appendChild(colDiv);
 }

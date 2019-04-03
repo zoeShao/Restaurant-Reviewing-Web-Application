@@ -360,7 +360,13 @@ function loadUsers(userObj){
 	//make img
 	const profilePicDiv = document.createElement('div');
 	const profilePic = document.createElement('img');
-	profilePic.src = "/readImg/" + userObj.profilePic;
+	const imgSrc = userObj.profilePicture
+	if(imgSrc === ""){
+		profilePic.src = 'https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg'
+	}
+	else{
+		profilePic.src = "/readImg/" + imgSrc;
+	}
 	profilePic.className = "rounded-circle";
 	profilePicDiv.className = "float-left mr-3 portraitContainer";
 
@@ -369,10 +375,10 @@ function loadUsers(userObj){
 	reviewElement.appendChild(nameElement);
 	reviewElement.appendChild(contentElement);
 	aElement.appendChild(reviewElement)
-    contentBoxElement.appendChild(aElement)
-    //make remove button
-    const button = document.createElement('button')
-    button.type = "button";
+	contentBoxElement.appendChild(aElement)
+	//make remove button
+	const button = document.createElement('button')
+	button.type = "button";
 	button.className = "btn btn-dark remove";
 	button.style.float = "right";
 	if(userObj.banned){
@@ -421,9 +427,9 @@ function changeRestaurant(restaurant, resObj){
 	imgContainer.style.height = "400px";
 	imgContainer.style.width = "auto";
 	const img = document.createElement('img');
-	img.className = "card-img-top";
+	img.className = "card-img-top img-fluid";
 	img.style.height = "350px";
-	img.style.width = "auto";
+	// img.style.width = "auto";
 	imgContainer.appendChild(img);
 	const cardBody = document.createElement('div');
 	cardBody.className = "card-body";
