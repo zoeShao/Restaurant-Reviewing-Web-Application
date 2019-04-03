@@ -6,7 +6,6 @@ let userInfo = {}
 // const Users = []
 
 /* call functions from navBar.js*/
-getLogInInfo();
 window.signOutUser = signOutUser;
 
 /* Select all DOM form elements you'll need. */ 
@@ -57,6 +56,8 @@ function modifyUserInfo(e) {
 				data: form
 			}).done((res) =>{
 				console.log('edit user info');
+				const navImg = document.querySelector('#portraitContainer');
+				navImg.innerText = "";
 				getUserInfo();
 			}).fail((error) =>{
 				alert('fail to change user info');
@@ -176,6 +177,7 @@ function getUserInfo(){
 		method: 'get'
 	}).done((res) =>{
 		userInfo = res;
+		getLogInInfo();
 		addUserInfoToDom();
 	}).fail((error) =>{
 		alert('cannot get user info');
