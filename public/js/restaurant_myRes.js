@@ -145,7 +145,7 @@ function addEditRes(index){
         e.preventDefault();
         const id = resLst[index]._id;
         const url = '/editRes/' + id;
-        form = formData();
+        const form = formData();
         $.ajax({
             url: url,
             method: 'patch',
