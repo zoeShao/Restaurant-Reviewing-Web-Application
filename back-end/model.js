@@ -122,8 +122,11 @@ const resSchema = new mongoose.Schema({
     }
   });
 
-function hash(user){
-  if (user.isModified('password')) {
+//run before save
+userSchema.pre('save', function(next) {
+	const user = this
+    
+    if (user.isModified('password')) {
 		bcrypt.genSalt(10, (error, salt) => {
 			bcrypt.hash(user.password, salt, (error, hash) => {
 				user.password = hash
@@ -133,16 +136,22 @@ function hash(user){
 	} else {
 		next();
 	}
-}
-//run before save
-userSchema.pre('save', function(next) {
-	const user = this
-  hash(user);
 })
 
+//run before findOneAndUpdate
 userSchema.pre('findOneAndUpdate', function(next) {
 	const user = this
-  hash(user);
+    
+    if (user.isModified('password')) {
+		bcrypt.genSalt(10, (error, salt) => {
+			bcrypt.hash(user.password, salt, (error, hash) => {
+				user.password = hash
+				next()
+			})
+		})
+	} else {
+		next();
+	}
 })
 
 // Our own student finding function 
