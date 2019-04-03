@@ -3,7 +3,7 @@ const GridFsStorage = require('multer-gridfs-storage')
 const path = require('path')
 const crypto = require('crypto')
 
-const mongoURI = 'mongodb://localhost:27017/RestaurantRevAPI'
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/StudentAPI'
 // connect to our database
 mongoose.connect(mongoURI, { useNewUrlParser: true, useCreateIndex: true});
 
