@@ -209,8 +209,7 @@ function addFavouriteToDom(restaurant) {
 	storeImgElement.classNmae = "storeImgContainer"
 	const storeImg = document.createElement('img')
 	storeImg.className = "storeImg"
-	//TODO: change restaurant image
-	storeImg.src = restaurant.image
+	storeImg.src = '/readImg/'+ restaurant.picture;
 	storeImg.alt = "Store Picture";
 	storeImgElement.appendChild(storeImg)
 	aElement.appendChild(storeImgElement)

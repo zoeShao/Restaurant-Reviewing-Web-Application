@@ -55,8 +55,39 @@ const sessionChecker = (req, res, next) => {
 	}
 }
 
+const userPagesAuthenticate = (req, res, next) => {
+	if(req.session.user){
+		User.findById(req.session.user).then((user) =>{
+			if(user.accountType !== "u"){
+				res.status(400).send("Administrator/Restaurant owner cannot do this operation!")
+			}else{
+				req.user = user
+				next()
+			}
+		})
+	} else{
+		next()
+	}
+}
+
+const adminPagesAuthenticate = (req, res, next) => {
+	if(req.session.user){
+		User.findById(req.session.user).then((user) =>{
+			if(user.accountType !== "a"){
+				res.status(400).send("You have to be an administrator to do this operation!")
+			}else{
+				req.user = user
+				next()
+			}
+		})
+	} else{
+		res.status(400).send("You have to be an administrator to do this operation!")
+	}
+}
+
+
 //root route
-app.get('/', (req, res) => {
+app.get('/', userPagesAuthenticate, (req, res) => {
 	res.sendFile(__dirname + '/public/index.html')
 })
 
@@ -255,7 +286,7 @@ app.get('/users/logout', (req, res) => {
 	})
 })
 
-app.post('/popularRestaurants', (req, res) =>{
+app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
 	const location = req.body.location;
 
 	Restaurant.find({location: location}).sort({rate: 1}).then((result) =>{
@@ -483,7 +514,7 @@ app.post('/addReview/:resId', authenticate, (req, res) =>{
 
 //Codes for search result
 //search type can only be: "resName", "location", "category"
-app.post('/searchRestaurants', (req, res) => { 
+app.post('/searchRestaurants', userPagesAuthenticate, (req, res) => { 
 	const content = req.body.content;
 	const searchType = req.body.searchType;
 	const from = req.body.from;
@@ -535,13 +566,13 @@ app.post('/searchRestaurants', (req, res) => {
 	
 })
 
-app.get('/openSearchResult', (req, res) => {
+app.get('/openSearchResult', userPagesAuthenticate, (req, res) => {
 	// check if we have active session cookie
 		log("before redirect");
 		res.sendFile(__dirname + '/public/restaurants_search_result.html')
 })
 
-app.get('/getRestaurants', (req, res) => {
+app.get('/getRestaurants', userPagesAuthenticate, (req, res) => {
 	log("Searching res session: "+ req.session.searchingRes)
 	if(req.session.searchingRes){
 		res.send({res: req.session.searchingRes});
@@ -550,9 +581,8 @@ app.get('/getRestaurants', (req, res) => {
 })
 
 /*       codes for admin page   */
-
 app.route('/adminResReviews')
-.get((req, res) => {
+.get(adminPagesAuthenticate, (req, res) => {
 	if(req.session.accountType == 'a'){
 		res.sendFile(__dirname + '/public/individual_account_adminView_comments.html')
 		} else{
@@ -561,7 +591,7 @@ app.route('/adminResReviews')
 })
 
 app.route('/adminBanUsers')
-	.get((req, res) => {
+	.get(adminPagesAuthenticate, (req, res) => {
 		if(req.session.accountType == 'a'){
 			res.sendFile(__dirname + '/public/individual_account_adminView_banUser.html')
 		} else{
@@ -571,7 +601,7 @@ app.route('/adminBanUsers')
 	})
 
 app.route('/adminRestaurants')
-	.get((req, res) => {
+	.get(adminPagesAuthenticate, (req, res) => {
 		if(req.session.accountType == 'a'){
 			res.sendFile(__dirname + '/public/individual_account_adminView_restaurants.html')
 		} else{
@@ -580,13 +610,13 @@ app.route('/adminRestaurants')
 		
 	})
 
-app.get('/admin/getAllUsers', (req, res) => {
+app.get('/admin/getAllUsers', adminPagesAuthenticate, (req, res) => {
 	User.find({accountType: {$not: {$eq: 'a'}}}).then((result) => {
 		res.send(result);
 	}).catch(error => res.status(400).send(error));
 })
 
-app.get('/admin/getAllRestaurants', (req, res) => {
+app.get('/admin/getAllRestaurants', adminPagesAuthenticate, (req, res) => {
 	Restaurant.find().then((result) => {
 		res.send(result);
 	}).catch(error => res.status(400).send(error));
@@ -605,7 +635,7 @@ app.post('/admin/banOrRecoverUser', (req, res) => {
 })
 
 //delete a restaurant review given its id
-app.delete('/removeRes/:id', (req, res) =>{
+app.delete('/admin/removeReview/:id/:resId', adminPagesAuthenticate, (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
 		log('object id')
@@ -622,12 +652,12 @@ app.delete('/removeRes/:id', (req, res) =>{
 				price: {$avg: "$price"}}}]).then((average) =>{
 					const aveRate = average[0].rate
 					const avePrice = average[0].price
-					Restaurant.findOneAndUpdate({id: req.params.resId},
+					Restaurant.findOneAndUpdate({_id: req.params.resId},
 						{$set: {
 							rate: aveRate,
 							price: avePrice
 						}}).then((update) =>{
-							res.send(result)
+							res.send(review)
 						})
 				}, (error) =>{
 					res.status(400).send(error);

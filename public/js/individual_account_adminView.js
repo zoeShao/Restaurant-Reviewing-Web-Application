@@ -91,7 +91,6 @@ function removeRestaurantFromServer(resObj){
 }
 
 function removeRestaurants(e){
-	//server part TODO: should remove restaurants in database
 	if (e.target.classList.contains("remove")){
 		const restaurantToRemove = e.target.parentElement.parentElement.parentElement;
 		const resAddress = e.target.parentElement.children[1].innerText;
@@ -161,7 +160,6 @@ function banOrRecoverUser(userObj){
 
 function banUser(e){
     if (e.target.classList.contains("btn")){
-		//server part TODO: should label the user "banned" in database
 		const userBanButton = e.target;
 		const userName = userBanButton.parentElement.children[0].children[1].
 		children[0].children[1].innerText;
@@ -205,15 +203,44 @@ function InitializeAdminReviews(){
 	}).catch(error => {log(error);});
 }
 
+function removeReviewFromServer(revObj){
+	$.ajax({
+		type: 'DELETE',
+		url: '/admin/removeReview/' + revObj._id + '/' + revObj.resID,
+		success: function(data, textStatus){
+			alert('Remove the review successfully!')
+		},
+		fail: function(xhr, textStatus, errorThrown){
+			alert('Failed to remove the review!');
+		 } 
+	})
+}
+
 function removeComments(e){
-    //server part TODO: should remove comments in database
     if (e.target.classList.contains("remove")){
-        const commentToRemove = e.target.parentElement;
-				commentsMainbody.removeChild(commentToRemove);
+				const commentToRemove = e.target.parentElement;
+				const commentId = commentToRemove.children[2].value;
+				let i = 0;
+				let originalLength = reviewsList.length;
+				for(i = 0; i < reviewsList.length; i++){
+					if (reviewsList[i]._id == commentId){
+						log(reviewsList[i])
+						removeReviewFromServer(reviewsList[i]);
+						commentsMainbody.removeChild(commentToRemove);
+						reviewsList.splice(i, 1);
+						log(reviewsList)
+						break;
+					}
+				}
+				//cannot find the restaurant
+				if(i == originalLength){
+					alert("fail to find the review!");
+				}
         
     }
 }
 
+/*                                */
 function changePage(e) {
     e.preventDefault();
 	if (e.target.classList.contains('previous')) {
@@ -258,7 +285,6 @@ function addReviewToDom(review) {
 	contentBoxElement.className = "contentBox"
 	const aElement = document.createElement('a')
 	aElement.className = "reviewLink"
-	aElement.href = "#"
 	const reviewElement = document.createElement('div')
 	reviewElement.className = "storeContainer"
 	const rateElement = addRateToDom(review.rate)
@@ -269,15 +295,20 @@ function addReviewToDom(review) {
 	reviewElement.appendChild(priceElement)
 	reviewElement.appendChild(contentElement)
 	aElement.appendChild(reviewElement)
-    contentBoxElement.appendChild(aElement)
-    //make remove button
-    const button = document.createElement('button')
-    button.type = "button";
-    button.className = "btn btn-light remove";
-    button.innerText = "Remove";
-    contentBoxElement.appendChild(button);
-    contentBoxElement.style.maxHeight = "250px";
-    log(contentBoxElement);
+	contentBoxElement.appendChild(aElement)
+	//make remove button
+	const button = document.createElement('button')
+	button.type = "button";
+	button.className = "btn btn-light remove";
+	button.innerText = "Remove";
+	contentBoxElement.appendChild(button);
+	contentBoxElement.style.maxHeight = "250px";
+	//make hidden input
+	const input = document.createElement('input');
+	input.type = "hidden";
+	input.value = review._id;
+	contentBoxElement.appendChild(input);
+	log(contentBoxElement);
 	commentsMainbody.appendChild(contentBoxElement)
 }
 
@@ -319,7 +350,6 @@ function loadUsers(userObj){
 	//make link
 	const aElement = document.createElement('a')
 	aElement.className = "reviewLink"
-	aElement.href = "#"
 	//make username and email
 	const reviewElement = document.createElement('div')
 	reviewElement.className = "storeContainer"
@@ -330,7 +360,7 @@ function loadUsers(userObj){
 	//make img
 	const profilePicDiv = document.createElement('div');
 	const profilePic = document.createElement('img');
-	profilePic.src = "https://img.icons8.com/ios/50/000000/gender-neutral-user.png", "https://img.icons8.com/ios/50/000000/gender-neutral-user.png"//userObj.profilePic;
+	profilePic.src = "/readImg/" + userObj.profilePic;
 	profilePic.className = "rounded-circle";
 	profilePicDiv.className = "float-left mr-3 portraitContainer";
 
@@ -361,7 +391,7 @@ function changeRestaurant(restaurant, resObj){
 	//change image source
 	const img = restaurant.children[0].children[0];
 	img.style.objectFit = "fill";
-	img.src = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg";//resObj.picture;
+	img.src = '/readImg/'+ resObj.picture;
   
 	//change restaurant name
 	const cardBody = restaurant.children[0].children[1];
@@ -387,8 +417,14 @@ function changeRestaurant(restaurant, resObj){
 	colDiv.className = "col-3 mb-4 mr-5";
 	const card = document.createElement('div');
 	card.className = "card h-100";
+	const imgContainer = document.createElement('div');
+	imgContainer.style.height = "400px";
+	imgContainer.style.width = "auto";
 	const img = document.createElement('img');
 	img.className = "card-img-top";
+	img.style.height = "350px";
+	img.style.width = "auto";
+	imgContainer.appendChild(img);
 	const cardBody = document.createElement('div');
 	cardBody.className = "card-body";
 	const h4Title = document.createElement('h4');
