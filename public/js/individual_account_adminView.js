@@ -429,7 +429,7 @@ function changeRestaurant(restaurant, resObj){
 	const img = document.createElement('img');
 	img.className = "card-img-top img-fluid";
 	img.style.height = "350px";
-	// img.style.width = "auto";
+	img.style.width = "auto";
 	imgContainer.appendChild(img);
 	const cardBody = document.createElement('div');
 	cardBody.className = "card-body";
