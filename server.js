@@ -105,6 +105,12 @@ app.get('/restaurants', (req, res) => {
 })
 
 // rpute for jump to main account page of restaurant owner
+app.route('/restaurant_review')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/review_page.html')
+	})
+
+// rpute for jump to main account page of restaurant owner
 app.route('/myRes')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/restaurant_myRes.html')
