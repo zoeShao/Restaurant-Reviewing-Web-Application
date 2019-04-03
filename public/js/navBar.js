@@ -79,13 +79,11 @@ export function signOutUser(){
     const type = userObj.accountType;
     //add profile pic
     const profileLink = document.createElement('a');
-    //TODO: add profile picture link
     if(type === 'u'){
         profileLink.href = '/individual_account';
     }
     const img = document.createElement('img');
-    //TODO: change image source link
-    img.src = "https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg"//imgSrc;
+    img.src = "/readImg/" + imgSrc;
     img.className = "float-right img-thumbnail rounded-circle peopleIcon";
     profileLink.appendChild(img);
     $("#portraitContainer").append(profileLink);
@@ -97,7 +95,6 @@ export function signOutUser(){
 
     if(type === 'u'){
         $("#loginOrUsername").attr({
-            //TODO: add profile link
             'href': "/individual_account"
         }) 
     }
