@@ -110,6 +110,12 @@ app.route('/myRes')
 		res.sendFile(__dirname + '/public/restaurant_myRes.html')
 	})
 
+// rpute for jump to main account page of restaurant owner
+app.route('/resAccountSet')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/restaurant_setting.html')
+})
+
 app.route('/resReviews')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/restaurant_reviews.html')
@@ -453,7 +459,7 @@ app.post('/addReview/:resId', authenticate, (req, res) =>{
 				price: {$avg: "$price"}}}]).then((average) =>{
 					const aveRate = average[0].rate
 					const avePrice = average[0].price
-					Restaurant.findOneAndUpdate({id: req.params.resId},
+					Restaurant.findOneAndUpdate({_id: req.params.resId},
 						{$set: {
 							rate: aveRate,
 							price: avePrice
