@@ -116,11 +116,16 @@ app.route('/myRes')
 		res.sendFile(__dirname + '/public/restaurant_myRes.html')
 	})
 
+// rpute for jump to main account page of restaurant owner
+app.route('/resAccountSet')
+	.get((req, res) => {
+		res.sendFile(__dirname + '/public/restaurant_setting.html')
+})
+
 app.route('/resReviews')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/restaurant_reviews.html')
 	})
-
 
 // rpute for jump to main account page of restaurant owner
 app.route('/individual_account')
@@ -143,7 +148,11 @@ app.route('/individual_setting')
 app.get('/resReviews/:id', (req, res) =>{
 	const id = req.params.id
 	req.session.resReviewId = id
-	res.redirect('/resReviews')
+	if(req.session.accountType = 'a'){
+		res.redirect('/adminResReviews');
+	} else if (req.session.accountType = 'o'){
+		res.redirect('/resReviews')
+	}
 })
 
 
@@ -362,6 +371,9 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 		return res.status(404).send()
 	}
 	Restaurant.findOneAndDelete({_id: id}).then((restaurant) =>{
+			if(req.session.accountType === 'u'){
+				res.status(400).send()
+			}
 			if(!restaurant){
 				log('null restaurant')
 				res.status(404).send()
@@ -432,7 +444,6 @@ app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>
 
 app.get('/getResReview', (req, res) =>{
 	const id = req.session.resReviewId
-	req.session.resReviewId = null
 	if(!ObjectID.isValid(id)){
 		return res.status(404).send()
 	}
@@ -463,7 +474,7 @@ app.post('/addReview/:resId', authenticate, (req, res) =>{
 				price: {$avg: "$price"}}}]).then((average) =>{
 					const aveRate = average[0].rate
 					const avePrice = average[0].price
-					Restaurant.findOneAndUpdate({id: req.params.resId},
+					Restaurant.findOneAndUpdate({_id: req.params.resId},
 						{$set: {
 							rate: aveRate,
 							price: avePrice
@@ -486,7 +497,7 @@ app.post('/searchRestaurants', (req, res) => {
 	log("search type: "+ searchType);
 	log("from: "+ from);
 	if(searchType == "resName"){
-		Restaurant.find({name: content.trim()}).then((result) =>
+		Restaurant.find({name: {$regex: new RegExp(content.trim(), "i") }}).then((result) =>
 		{
 			req.session.searchingRes = result;
 			//promise has delay, so we can only put this comment code here
@@ -500,7 +511,7 @@ app.post('/searchRestaurants', (req, res) => {
 			}
 		}).catch((error) => res.status(400).send(error))
 	} else if(searchType == "location"){
-		Restaurant.find({location: content.trim()}).then((result) =>
+		Restaurant.find({location: {$regex: new RegExp(content.trim(), "i")}}).then((result) =>
 		{
 			req.session.searchingRes = result;
 			if(from == "search_page"){
@@ -512,7 +523,7 @@ app.post('/searchRestaurants', (req, res) => {
 			}
 		}).catch((error) => res.status(400).send(error))
 	}else if(searchType == "category"){
-		Restaurant.find({category: content.trim()}).then((result) =>
+		Restaurant.find({category: {$regex: new RegExp(content.trim(), "i")}}).then((result) =>
 		{
 			log("result" + result);
 			req.session.searchingRes = result;
@@ -545,37 +556,35 @@ app.get('/getRestaurants', (req, res) => {
 })
 
 /*       codes for admin page   */
+
+app.route('/adminResReviews')
+.get((req, res) => {
+	if(req.session.accountType == 'a'){
+		res.sendFile(__dirname + '/public/individual_account_adminView_comments.html')
+		} else{
+			res.status(400).send("Normal users are not authorized to go to admin page")
+		}
+})
+
 app.route('/adminBanUsers')
 	.get((req, res) => {
-		//TODO
-		// if(req.session.accountType == 'a'){
+		if(req.session.accountType == 'a'){
 			res.sendFile(__dirname + '/public/individual_account_adminView_banUser.html')
-		// } else{
-		// 	res.status(400).send("Normal users are not authorized to go to admin page")
-		// }
+		} else{
+			res.status(400).send("Normal users are not authorized to go to admin page")
+		}
 		
 	})
 
 app.route('/adminRestaurants')
 	.get((req, res) => {
-		//TODO
-		// if(req.session.accountType == 'a'){
+		if(req.session.accountType == 'a'){
 			res.sendFile(__dirname + '/public/individual_account_adminView_restaurants.html')
-		// } else{
-		// 	res.status(400).send("Normal users are not authorized to go to admin page")
-		// }
+		} else{
+			res.status(400).send("Normal users are not authorized to go to admin page")
+		}
 		
 	})
-
-app.post('/admin/removeRes', (req, res) => {
-	const rest = req.body.restaurantToDelete;
-
-	Restaurant.findOneAndDelete({_id: rest._id}).then((result) => {
-		res.send();
-	}).catch(error => {
-		res.status(400).send(error);
-	})
-})
 
 app.get('/admin/getAllUsers', (req, res) => {
 	User.find({accountType: {$not: {$eq: 'a'}}}).then((result) => {
@@ -600,6 +609,42 @@ app.post('/admin/banOrRecoverUser', (req, res) => {
 		res.send()
 	}).catch(error => {log(error)});
 })
+
+//delete a restaurant review given its id
+app.delete('/removeRes/:id', (req, res) =>{
+	const id = req.params.id
+	if(!ObjectID.isValid(id)){
+		log('object id')
+		return res.status(404).send()
+	}
+	Review.findOneAndDelete({_id: id}).then((review) =>{
+		//calculate the 
+		const ObjectId = mongoose.Types.ObjectId
+		Review.aggregate([
+			{ $match: {"resID": ObjectId(req.params.resId)}},
+			{$group: {
+				_id: null, 
+				rate: {$avg: "$rate"}, 
+				price: {$avg: "$price"}}}]).then((average) =>{
+					const aveRate = average[0].rate
+					const avePrice = average[0].price
+					Restaurant.findOneAndUpdate({id: req.params.resId},
+						{$set: {
+							rate: aveRate,
+							price: avePrice
+						}}).then((update) =>{
+							res.send(result)
+						})
+				}, (error) =>{
+					res.status(400).send(error);
+				})
+		
+	}, (error) =>{
+		res.status(400).send(error)
+	})
+})
+
+
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
 }) 
