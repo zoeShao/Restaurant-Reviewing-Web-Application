@@ -39,6 +39,7 @@ let maxReviews = 4 // max Contents one page can show
 let currentPage = 1 // current page number
 let reviewLst = [];
 let store = null
+let userName = ""
 
 //Server part TODO: get data from the server and load them to the page
 
@@ -86,7 +87,7 @@ function modifyButton(e) {
 
 function addNewReview(e) {
     e.preventDefault();
-  
+
     //Server part TODO: add the review to the server
     if (e.target.lastElementChild.innerText === 'Submit') {
         // const userName = "user";
@@ -326,6 +327,8 @@ function getRestaurant(){
         method:'get'
     }).done((res) =>{
         if(res){
+            userName = document.querySelector('#loginOrUsername').innerText
+            console.log(userName)
             console.log(res.restaurant)
             store = res.restaurant;
             addRestaurantToDom(store)
@@ -352,6 +355,11 @@ function getReviews(){
             console.log(res.reviews)
             console.log(res.reviews[0])
             reviewLst = res.reviews
+            for (let i = 0; i < reviewLst.length; i++) {
+                if (reviewLst[i].userName === userName) {
+                    document.querySelector('#submitBtn').innerText = 'Resubmit'
+                }
+            }
             showPage(currentPage);
             console.log(reviewLst.length)
             // console.log(reviewLst[0].userName)
