@@ -233,7 +233,7 @@ function addReviewToDom(review) {
 function addRestaurantToDom(store) {
     // const restaurantInfoHeader = document.querySelector('#restaurantHeader')
     // const restaurantInfoBody = document.querySelector('#restaurantInfo')
-    // const restaurantBookmark = document.querySelector('#bookmark')
+    const restaurantBookmark = document.querySelector('#bookmark')
     
     // restaurant info header
     const restaurantHeader = document.createElement('div')
@@ -354,8 +354,13 @@ function getRestaurant(){
             // console.log(res.restaurant)
             store = res.restaurant;
             restaurantInfoHeader.innerText = ""
+            // console.log(restaurantInfoHeader.firstElementChild)
             restaurantInfoBody.innerText = ""
-            restaurantBookmark.innerText = ""
+            const bookmarkDiv = document.createElement('div')
+            bookmarkDiv.id = "bookmark"
+            bookmarkDiv.className = "col-md-2"
+            restaurantInfoHeader.appendChild(bookmarkDiv)
+            // restaurantBookmark.innerText = ""
             addRestaurantToDom(store)
             getReviews()
             // showPage(currentPage);
