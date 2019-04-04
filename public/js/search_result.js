@@ -113,14 +113,14 @@ function sendOutSearchRequest(content, searchType){
 Button event listeners functions
 ***/
 function pressButtonState(pressedLink){
-	chineseLink.style.borderBottom = "";
-	fastfoodLink.style.borderBottom = "";
-	japaneseLink.style.borderBottom = "";
-	koreanLink.style.borderBottom = "";
-	americanLink.style.borderBottom = "";
-	markhamLink.style.borderBottom = "";
-	downtownLink.style.borderBottom = "";
-	pressedLink.style.borderBottom = "1px solid"
+	chineseLink.style.textDecoration = "";
+	fastfoodLink.style.textDecoration = "";
+	japaneseLink.style.textDecoration = "";
+	koreanLink.style.textDecoration = "";
+	americanLink.style.textDecoration = "";
+	markhamLink.style.textDecoration = "";
+	downtownLink.style.textDecoration = "";
+	pressedLink.style.textDecoration = "underline"
 }
 
 function showChineseRes(e){

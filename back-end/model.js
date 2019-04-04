@@ -106,6 +106,10 @@ const reviewSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  resName: {
+    type: String,
+    required: true
+  },
   rate: {
     type: Number,
     required: false,

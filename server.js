@@ -162,7 +162,29 @@ app.get('/restaurants', (req, res) => {
 	})
 })
 
-// route for jump to mainreview page of restaurant 
+// GET one restaurant via id
+app.get('/restaurants/:id', (req, res) => {
+	// Add code here
+	const id = req.params.id
+
+	if (!ObjectID.isValid(id)) {
+		res.status(404).send()
+	}
+
+	// Otherwise, findById
+	Restaurant.findById(id).then((restaurant) => {
+		if (!restaurant) {
+			res.status(404).send()
+		} else {
+			/// sometimes wrap returned object in another object   
+			res.send({restaurant})
+		}
+	}).catch((error) => {
+		res.status(400).send()
+	})
+})
+
+// rpute for jump to main account page of restaurant owner
 app.route('/restaurant_review')
 	.get((req, res) => {
 		res.sendFile(__dirname + '/public/review_page.html')
@@ -358,6 +380,13 @@ app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
 	const location = req.body.location;
 
 	Restaurant.find({location: location}).sort({rate: -1}).then((result) =>{
+		res.send(result);
+	}).catch((error) => res.status(400).send(error))
+
+})
+
+app.get('/newRestaurants', userPagesAuthenticate, (req, res) =>{
+	Restaurant.find().sort({_id: -1}).limit(3).then((result) =>{
 		res.send(result);
 	}).catch((error) => res.status(400).send(error))
 
