@@ -63,26 +63,30 @@ function addNewReview(e) {
         const url = '/addReview/' + store._id
         const content = document.querySelector('#FormControlTextarea1').value;
         if (content) {
-            var data = JSON.stringify({
-            "rate": document.querySelector('#FormControlSelect2').value,
-            "price": document.querySelector('#FormControlSelect1').value,
-            "content": document.querySelector('#FormControlTextarea1').value
-            });
-            $.ajax({
-                url: url,
-                method: 'post',
-                processData: false,
-                contentType: "application/json",
-                data: data
-            }).done((res) =>{
-                console.log('add review');
-                getRestaurant()
-                e.target.lastElementChild.innerText = 'Resubmit'
-                // getRestaurant();
-            }).fail((error) =>{
-                alert('fail to add review');
-                console.log(error);
-            })
+            if (!userName) {
+                alert('Fail to submit review, please log in first');
+            } else {
+                var data = JSON.stringify({
+                "rate": document.querySelector('#FormControlSelect2').value,
+                "price": document.querySelector('#FormControlSelect1').value,
+                "content": document.querySelector('#FormControlTextarea1').value
+                });
+                $.ajax({
+                    url: url,
+                    method: 'post',
+                    processData: false,
+                    contentType: "application/json",
+                    data: data
+                }).done((res) =>{
+                    console.log('add review');
+                    getRestaurant()
+                    e.target.lastElementChild.innerText = 'Resubmit'
+                    // getRestaurant();
+                }).fail((error) =>{
+                    alert('fail to add review');
+                    console.log(error);
+                })
+            }
         } else {
             e.target.lastElementChild.className = "float-right btn btn-info disabled"
         }
@@ -293,7 +297,8 @@ function getRestaurant(){
         method:'get'
     }).done((res) =>{
         if(res){
-            userName = document.querySelector('#loginOrUsername').innerText
+            getLogInStatus()
+            // userName = document.querySelector('#loginOrUsername').innerText
             store = res.restaurant;
             if (!restaurantInfoHeader.firstElementChild.innerText) {
                 addRestaurantToDom(store)
@@ -332,7 +337,33 @@ function getReviews(){
             alert("cannot get reviews");
         }
     }).fail((error) =>{
-        alert("cannot get reviewss");
+        alert("cannot get reviews");
         console.log(error);
     })
+}
+
+//get all the reviews of the restaurant
+function getLogInStatus(){
+    const url = '/getLogInInfo';
+    const request = new Request(url, {
+      method: 'get',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+    });
+    fetch(request).then((res) => {
+      if(res.status == 204){
+        // console.log("sign out 000000status")
+        // console.log(userName)
+      } else{
+        return res.json()
+      }
+    }).then((data) =>{
+      if(data){
+        // console.log(data.name)
+        userName = data.name
+      }
+      
+    }).catch(error => {log(error)})
 }
