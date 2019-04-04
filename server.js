@@ -299,15 +299,7 @@ app.post('/users/signUp', (req, res) => {
 		}
 	}
 ).catch((error) => {
-	//duplicate key error
-	if(error.code == 11000 && error.name == "MongoError"){
-		req.session.failToSignUp = "duplicatedKeys";
-	} else if(error.errors.password || error.errors.email){
-		req.session.failToSignUp = "notValidInfo";
-	} else{
-		//should not happen
-		req.session.failToSignUp = "unknownReasons";
-	}
+	req.session.failToSignUp = identifyErrors(error);
 	log(req.session.failToSignUp)
 	res.redirect('/signUp');
 	})
@@ -798,6 +790,19 @@ app.delete('/admin/removeReview/:id/:resId', adminPagesAuthenticate, (req, res) 
 	})
 })
 
+//helper function
+function identifyErrors(error){
+	//duplicate key error
+	if(error.code == 11000 && error.name == "MongoError"){
+		return "duplicatedKeys";
+    //not valid password or email
+	} else if(error.errors.password || error.errors.email){
+		return "notValidInfo";
+	} else{
+		//should not happen
+		return "unknownReasons";
+	}
+}
 
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
