@@ -427,7 +427,7 @@ app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) 
 			res.status(400).send('Restaurant address is required')
 		}
 		else{
-			res.status(400).send(error)
+			res.status(600).send(error)
 		}
 	})
 })
