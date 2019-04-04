@@ -4,6 +4,7 @@ import {getLogInInfo, signOutUser} from './navBar.js';
 let maxReviews = 4 // max Contents one page can show
 let currentPage = 1 // current page number
 let reviewLst = [];
+let favouriteLst = []
 let store = null
 let userName = ""
 let rid = ""
@@ -111,7 +112,7 @@ function addNewReview(e) {
                 e.target.lastElementChild.innerText = 'Resubmit'
                 // getRestaurant();
             }).fail((error) =>{
-                alert('Fail to resubmit review, please log in first');
+                alert('Fail to resubmit review');
                 console.log(error);
             })
         } else {
@@ -154,7 +155,6 @@ function changeBookmark(e) {
 /*-----------------------------------------------------------*/
 /*** DOM functions below - use these to create and edit DOM objects ***/
 function addReviewToDom(review) {
-    console.log("hey!")
     const contentBoxElement = document.createElement('div')
     contentBoxElement.className = "contentBox"
     const userImgElement = document.createElement('div')
@@ -233,14 +233,12 @@ function addRestaurantInfoToDom(store) {
 /*-----------------------------------------------------------*/
 /*** helper functions ***/
 function showPage(currentPage) {
-    console.log(reviewLst.length)
     // var queryString = decodeURIComponent(window.location.search);
     // queryString = queryString.substring(1);
     // var id = qs.get("myVar1");
     // console.log(queryString)
     // addRestaurantToDom(store)
     let restPage = reviewLst.length - currentPage * 4
-    console.log(restPage)
     if (restPage >= 0) {
         reviewPart.innerText = ""
         for (let i = 0; i < maxReviews; i++) {
@@ -297,9 +295,9 @@ function getRestaurant(){
         method:'get'
     }).done((res) =>{
         if(res){
-            getLogInStatus()
             // userName = document.querySelector('#loginOrUsername').innerText
             store = res.restaurant;
+            getLogInStatus(store)
             if (!restaurantInfoHeader.firstElementChild.innerText) {
                 addRestaurantToDom(store)
                 // console.log(restaurantInfoHeader.firstElementChild.innerText)
@@ -343,7 +341,7 @@ function getReviews(){
 }
 
 //get all the reviews of the restaurant
-function getLogInStatus(){
+function getLogInStatus(store){
     const url = '/getLogInInfo';
     const request = new Request(url, {
       method: 'get',
@@ -356,14 +354,42 @@ function getLogInStatus(){
       if(res.status == 204){
         // console.log("sign out 000000status")
         // console.log(userName)
+        bookmark.innerText = ""
       } else{
         return res.json()
       }
     }).then((data) =>{
-      if(data){
-        // console.log(data.name)
-        userName = data.name
-      }
+        if(data){
+            // console.log(data.name)
+            userName = data.name
+            getFavourite(store)
+        }
       
     }).catch(error => {log(error)})
+}
+
+//get all restaurants for this user and then display 
+function getFavourite(store){
+    const url = '/getMyfavourites';
+    $.ajax({
+        url: url,
+        method:'get'
+    }).done((res) =>{
+        if(res.restaurants){
+            favouriteLst = res.restaurants;
+            // console.log(favouriteLst)
+            for (let i = 0; i < favouriteLst.length; i++) {
+                if (favouriteLst[i].name === store.name) {
+                    bookmark.firstElementChild.innerHTML = "<i class=\"bookmarked fas fa-bookmark\"></i>"
+                    // console.log("yes")
+                } 
+            }
+        }
+        else{
+            alert("cannot get restaurants");
+        }
+    }).fail((error) =>{
+        alert("cannot get restaurants");
+        console.log(error);
+    })
 }
