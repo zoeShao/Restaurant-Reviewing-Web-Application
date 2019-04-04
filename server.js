@@ -55,6 +55,14 @@ const sessionChecker = (req, res, next) => {
 	}
 }
 
+const generalPagesAuthenticate = (req, res, next) => {
+    if(req.session.user === 'a' || req.session.user === 'o'){
+        res.status(400).send("Administrator or restaurant owner cannot do this operation!");
+    } else{
+        next();
+    }
+}
+
 const userPagesAuthenticate = (req, res, next) => {
 	if(req.session.user){
 		User.findById(req.session.user).then((user) =>{
@@ -107,7 +115,7 @@ const authenticate = (req, res, next) =>{
 }
 
 //root route
-app.get('/', (req, res) => {
+app.get('/', generalPagesAuthenticate, (req, res) => {
 	if(req.session.accountType){
 		if(req.session.accountType !== 'u'){
 				res.redirect('/users/logout')
@@ -376,16 +384,16 @@ app.get('/users/logout', (req, res) => {
 })
 
 //get most popular restaurant given a location
-app.get('/popularRestaurants/:location', userPagesAuthenticate, (req, res) =>{
+app.get('/popularRestaurants/:location', generalPagesAuthenticate, (req, res) =>{
 	const location = req.params.location;
   
 	Restaurant.find({location: location}).sort({rate: -1}).then((result) =>{
 		res.send(result);
-	}).catch((error) => res.status(400).send(error))
+	}).catch((error) => res.send([]))
 
 })
 
-app.get('/newRestaurants', (req, res) =>{
+app.get('/newRestaurants', generalPagesAuthenticate, (req, res) =>{
 	Restaurant.find().sort({_id: -1}).limit(3).then((result) =>{
 		res.send(result);
 	}).catch((error) => res.status(400).send(error))
@@ -741,37 +749,6 @@ app.post('/addReview/:resId', userPagesAuthenticate, (req, res) =>{
 	}).catch((error) => {
 		res.status(400).send()
 	})
-	// const review = new Review({
-	// 	resID: req.params.resId,
-	// 	userID: req.user._id,
-	// 	userName: req.user.name,
-	// 	resName: rName,
-	// 	rate: req.body.rate,
-	// 	price: req.body.price,
-	// 	content: req.body.content
-	// })
-	// review.save().then((result) =>{
-	// 	const ObjectId = mongoose.Types.ObjectId
-	// 	// req.session.userReviewId = result._id
-	// 	Review.aggregate([
-	// 		{ $match: {"resID": ObjectId(req.params.resId)}},
-	// 		{$group: {
-	// 			_id: null, 
-	// 			rate: {$avg: "$rate"}, 
-	// 			price: {$avg: "$price"}}}]).then((average) =>{
-	// 				const aveRate = average[0].rate
-	// 				const avePrice = average[0].price
-	// 				Restaurant.findOneAndUpdate({_id: req.params.resId},
-	// 					{$set: {
-	// 						rate: aveRate,
-	// 						price: avePrice
-	// 					}}).then((update) =>{
-	// 						res.send(result)
-	// 					})
-	// 			}, (error) =>{
-	// 				res.status(400).send(error);
-	// 			})
-	// })
 })
 
 app.get('/getUserImg/:id', (req, res) => {
@@ -798,13 +775,10 @@ app.get('/getUserImg/:id', (req, res) => {
 
 //Codes for search result
 //search type can only be: "resName", "location", "category"
-app.get('/searchRestaurants/:searchType/:content/:from', userPagesAuthenticate, (req, res) => { 
+app.get('/searchRestaurants/:searchType/:content/:from', generalPagesAuthenticate, (req, res) => { 
 	const content = req.params.content;
 	const searchType = req.params.searchType;
 	const from = req.params.from;
-	log("content: "+ content);
-	log("search type: "+ searchType);
-	log("from: "+ from);
 	if(searchType == "resName"){
 		Restaurant.find({name: {$regex: new RegExp(content.trim(), "i") }}).then((result) =>
 		{
@@ -850,14 +824,12 @@ app.get('/searchRestaurants/:searchType/:content/:from', userPagesAuthenticate, 
 	
 })
 
-app.get('/openSearchResult', (req, res) => {
+app.get('/openSearchResult', generalPagesAuthenticate, (req, res) => {
 	// check if we have active session cookie
-		log("before redirect");
 		res.sendFile(__dirname + '/public/restaurants_search_result.html')
 })
 
-app.get('/getRestaurants', (req, res) => {
-	log("Searching res session: "+ req.session.searchingRes)
+app.get('/getRestaurants', generalPagesAuthenticate, (req, res) => {
 	if(req.session.searchingRes){
 		res.send({res: req.session.searchingRes});
 		req.session.searchingRes = null;
@@ -892,7 +864,7 @@ app.get('/admin/getAllRestaurants', adminPagesAuthenticate, (req, res) => {
 	}).catch(error => res.status(400).send(error));
 })
 
-app.patch('/admin/banOrRecoverUser', (req, res) => {
+app.patch('/admin/banOrRecoverUser', adminPagesAuthenticate, (req, res) => {
 	const user = req.body.userToModify;
 	
 	User.findByIdAndUpdate(user._id, 
