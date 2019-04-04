@@ -565,6 +565,49 @@ app.get('/getResReview', (req, res) =>{
 	})
 })
 
+app.patch('/editReview/:resId/:rid', authenticate, (req, res) =>{
+	const id = req.params.rid
+
+	if(!ObjectID.isValid(id)){
+		return res.status(404).send()
+	}
+
+	Review.findOneAndUpdate({_id: id}, {$set: {
+			resID: req.params.resId,
+			userID: req.user._id,
+			userName: req.user.name,
+			rate: req.body.rate,
+			price: req.body.price,
+			content: req.body.content
+		}}, {new: true}).then((result) => {
+			if(!result){
+				res.status(404).send();
+			}
+			else{
+				const ObjectId = mongoose.Types.ObjectId
+				Review.aggregate([
+					{ $match: {"resID": ObjectId(req.params.resId)}},
+					{$group: {
+						_id: null, 
+						rate: {$avg: "$rate"}, 
+						price: {$avg: "$price"}}}]).then((average) =>{
+							const aveRate = average[0].rate
+							const avePrice = average[0].price
+							Restaurant.findOneAndUpdate({_id: req.params.resId},
+								{$set: {
+									rate: aveRate,
+									price: avePrice
+								}}).then((update) =>{
+									res.send(result)
+								})
+						}, (error) =>{
+							res.status(400).send(error);
+						})
+				res.send({result});
+			}
+		})
+})
+
 // add a new review to a retaurant
 app.post('/addReview/:resId', authenticate, (req, res) =>{
 	const review = new Review({
@@ -577,6 +620,7 @@ app.post('/addReview/:resId', authenticate, (req, res) =>{
 	})
 	review.save().then((result) =>{
 		const ObjectId = mongoose.Types.ObjectId
+		// req.session.userReviewId = result._id
 		Review.aggregate([
 			{ $match: {"resID": ObjectId(req.params.resId)}},
 			{$group: {
