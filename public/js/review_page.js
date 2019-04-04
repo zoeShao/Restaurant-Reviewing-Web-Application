@@ -143,6 +143,18 @@ function changeBookmark(e) {
         e.target.parentElement.innerHTML = "<i class=\"bookmarked fas fa-bookmark\"></i>"
         //Server part TODO: Get user data from server and push the store to his/her favourite list
         // code below requires server call
+        const url = '/addMyfavourites/' + store._id
+            $.ajax({
+                url: url,
+                method: 'post',
+                processData: false,
+                contentType: "application/json",
+            }).done((res) =>{
+                console.log('add to favourite');
+            }).fail((error) =>{
+                alert('fail to add review');
+                console.log(error);
+            })
         // user.favourite.push(store)
     } else if (e.target.classList.contains('bookmarked')) {
         e.target.parentElement.innerHTML = "<i class=\"notbookmarked far fa-bookmark\"></i>"
