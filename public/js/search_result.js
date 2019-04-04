@@ -76,21 +76,11 @@ function getRestaurantDataFromServer(){
 }
 
 function sendOutSearchRequest(content, searchType){
-	const url = '/searchRestaurants';
-    // The data we are going to send in our request
-    let data = {
-        content: content,
-		searchType: searchType,
-		from: "search_page"
-    }
+	const url = '/searchRestaurants/' + searchType + "/" + content + "/search_page";
+  
     // Create our request constructor with all the parameters we need
     const request = new Request(url, {
-        method: 'post', 
-        body: JSON.stringify(data),
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
+        method: 'get'
     });
     fetch(request).then((res) => {
 		if(res.status == 204){

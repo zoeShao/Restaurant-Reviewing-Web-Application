@@ -765,10 +765,10 @@ app.get('/getUserImg/:id', (req, res) => {
 
 //Codes for search result
 //search type can only be: "resName", "location", "category"
-app.post('/searchRestaurants', userPagesAuthenticate, (req, res) => { 
-	const content = req.body.content;
-	const searchType = req.body.searchType;
-	const from = req.body.from;
+app.get('/searchRestaurants/:searchType/:content/:from', userPagesAuthenticate, (req, res) => { 
+	const content = req.params.content;
+	const searchType = req.params.searchType;
+	const from = req.params.from;
 	log("content: "+ content);
 	log("search type: "+ searchType);
 	log("from: "+ from);
@@ -873,7 +873,7 @@ app.get('/admin/getAllRestaurants', adminPagesAuthenticate, (req, res) => {
 	}).catch(error => res.status(400).send(error));
 })
 
-app.post('/admin/banOrRecoverUser', (req, res) => {
+app.patch('/admin/banOrRecoverUser', (req, res) => {
 	const user = req.body.userToModify;
 	
 	User.findByIdAndUpdate(user._id, 
