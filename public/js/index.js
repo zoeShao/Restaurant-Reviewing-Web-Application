@@ -19,6 +19,7 @@ window.signOutUser = signOutUser;
 
 // InitializePopularRestaurants("Downtown-Toronto", maxShowingRestaurant);
 addSlideShow() 
+
 /***************Get data from server***************************/
 //Get list of popular restaurant
 function getListOfNewRestaurants(location){
@@ -36,19 +37,10 @@ function getListOfNewRestaurants(location){
 
 //Get list of popular restaurant
 function getListOfPopularRestaurants(location){
-	const url = '/popularRestaurants';
-    // The data we are going to send in our request
-    let data = {
-        location: location
-    }
+	const url = '/popularRestaurants/' + location;
     // Create our request constructor with all the parameters we need
     const request = new Request(url, {
-        method: 'post', 
-        body: JSON.stringify(data),
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
+        method: 'get', 
     });
     return fetch(request)
 }
@@ -231,3 +223,13 @@ function addSlideShow() {
   }).catch(error => {log(error);});
 }
 
+/*** Search function */
+$('#searchButtonLink').click(function(){
+  const link = "/searchRestaurants/resName/" + $("#searchInput").val() + "/homePage";
+  $("#searchBar").attr({
+    'action': link
+  })
+})
+
+
+/****                 */
