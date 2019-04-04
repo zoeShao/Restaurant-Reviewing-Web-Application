@@ -87,7 +87,7 @@ function editRes(e){
     // search the restaurant index in list of user
     if(e.target.classList.contains('btn') && !(editing)){
         let index = null;
-        const address = e.target.parentElement.firstElementChild.childNodes[1].lastElementChild.lastElementChild.innerText;
+        const address = e.target.parentElement.firstElementChild.childNodes[1].childNodes[2].lastElementChild.innerText;
         for(let i = 0; i < resLst.length; i++){
             if(resLst[i].address === address){
                 index = i;
@@ -147,8 +147,11 @@ function addNewRes(e){
         if(error.status === 500){
             alert('restaurant image is required')
         }
-        else{
+        else if (error.status === 400){
             alert(error.responseText);
+        }
+        else{
+            alert('failed to add restaurant')
         }
         console.log(error);
     })
@@ -177,7 +180,12 @@ function addEditRes(index){
             editing = false;
             getRestaurant();
         }).fail((error) =>{
-            alert('fail to add restaurant');
+            if(error.status === 400){
+                alert(error.responseText);
+            }
+            else{
+                alert('fail to edit restaurant');
+            }
             console.log(error);
         })
     }
@@ -380,9 +388,9 @@ function addNewResToDom(newRes){
     newAddrP.appendChild(newAddrS);
     newAddrP.appendChild(newAddrS2);
     // rate 
-    const rateP = addRateToDom(newRes.rate);
+    const rateP = addRateToDom(Math.round(newRes.rate));
     // price 
-    const priceP = addPriceToDom(newRes.price);
+    const priceP = addPriceToDom(Math.round(newRes.price));
     // add to the info div
     newInfoDiv.appendChild(newNameP);
     newInfoDiv.appendChild(newPhoneP);
