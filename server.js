@@ -284,25 +284,30 @@ app.post('/users/signUp', (req, res) => {
 	email: req.body.email,
 	accountType: req.body.type
 })
-	saveUser.save().then((user) => {
-		req.session.user = user._id;
-		req.session.name = user.name;
-		req.session.accountType = user.accountType;
-		if(req.session.accountType === 'o'){
-			res.redirect('/myRes');
-		} else if (req.session.accountType === 'a'){
-			res.redirect('/adminBanUsers');
-		} else if (req.session.accountType === 'u'){
-			res.redirect('/');
-		}else{
-			res.status(400).send();
+	if(saveUser.accountType != 'a'){
+		saveUser.save().then((user) => {
+			req.session.user = user._id;
+			req.session.name = user.name;
+			req.session.accountType = user.accountType;
+			if(req.session.accountType === 'o'){
+				res.redirect('/myRes');
+			} else if (req.session.accountType === 'u'){
+				res.redirect('/');
+			}else{
+				res.status(400).send();
+			}
 		}
+	).catch((error) => {
+		req.session.failToSignUp = identifyErrors(error);
+		log(req.session.failToSignUp)
+		res.redirect('/signUp');
+		})
+	} else{
+		//prevent signing up for admin
+		req.session.failToSignUp = "unknownReasons";
+		res.redirect('/signUp');
 	}
-).catch((error) => {
-	req.session.failToSignUp = identifyErrors(error);
-	log(req.session.failToSignUp)
-	res.redirect('/signUp');
-	})
+	
 })
 
 
