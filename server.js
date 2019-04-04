@@ -85,22 +85,6 @@ const adminPagesAuthenticate = (req, res, next) => {
 	}
 }
 
-const authenticate = (req, res, next) =>{
-	if(req.session.user){
-		User.findById(req.session.user).then((user) =>{
-			if((!user) || user.banned){
-				return Promise.reject()
-			}else{
-				req.user = user
-				next()
-			}
-		})
-	}
-	else{
-		res.status(400).redirect('/login')
-	}
-}
-
 
 //root route
 app.get('/', userPagesAuthenticate, (req, res) => {
@@ -195,9 +179,12 @@ app.route('/individual_setting')
 app.get('/resReviews/:id', (req, res) =>{
 	const id = req.params.id
 	if (req.session.resReviewId) {
+		log(req.session.resReviewId)
 		req.session.resReviewId = null
+		log(req.session.resReviewId)
 	}
 	req.session.resReviewId = id
+	log(req.session.resReviewId)
 	if(req.session.accountType == 'a'){
 		res.redirect('/adminResReviews');
 	} else if (req.session.accountType == 'o'){
@@ -205,6 +192,9 @@ app.get('/resReviews/:id', (req, res) =>{
 	} else {
 		res.redirect('/restaurant_review')
 	}
+	// else if (req.session.accountType == 'u'){
+	// 	res.redirect('/restaurant_review')
+	// }
 })
 
 
@@ -235,9 +225,11 @@ app.get('/getLogInInfo', (req, res) => {
 		User.findById(req.session.user).then((user) => {
 			res.send({"name": user.name, 'email': user.email, "profileImg": user.profilePicture, "accountType":user.accountType});
 		}).catch((error) => {
+			log(error)
 			res.redirect('/login')
 		})
 	} else{
+		log("signed out status")
 		//respond with no content, implying the user hasn't logged in
 		res.status(204).send();
 	}
@@ -246,18 +238,23 @@ app.get('/getLogInInfo', (req, res) => {
 app.post('/users/login', function(req, res){
 
     const name = req.body.name;
-	const password = req.body.password;
+		const password = req.body.password;
 		
 		if(req.session.user){
+			log("already logged in")
 			res.redirect('/');
 		}else{
 			User.findByNamePassword(name, password).then((user) => {
 				if(!user) {
+					console.log("password not correct")
+					console.log(name);
+					console.log(password);
 					req.session.failToLogin = true;
 					res.redirect('/login')
 				} else {
 					// Add the user to the session cookie that we will
 					// send to the client
+					console.log("password correct")
 					req.session.user = user._id;
 					req.session.name = user.name
 					req.session.accountType = user.accountType;
@@ -273,6 +270,7 @@ app.post('/users/login', function(req, res){
 					
 				}
 			}).catch((error) => {
+				log(error)
 				res.status(400).redirect('/login')
 			})
 		}
@@ -286,29 +284,33 @@ app.post('/users/signUp', (req, res) => {
 	email: req.body.email,
 	accountType: req.body.type
 })
-	if(saveUser.accountType != 'a'){
-		saveUser.save().then((user) => {
-			req.session.user = user._id;
-			req.session.name = user.name;
-			req.session.accountType = user.accountType;
-			if(req.session.accountType === 'o'){
-				res.redirect('/myRes');
-			} else if (req.session.accountType === 'u'){
-				res.redirect('/');
-			}else{
-				res.status(400).send();
-			}
+	saveUser.save().then((user) => {
+		req.session.user = user._id;
+		req.session.name = user.name;
+		req.session.accountType = user.accountType;
+		if(req.session.accountType === 'o'){
+			res.redirect('/myRes');
+		} else if (req.session.accountType === 'a'){
+			res.redirect('/adminBanUsers');
+		} else if (req.session.accountType === 'u'){
+			res.redirect('/');
+		}else{
+			res.status(400).send();
 		}
-	).catch((error) => {
-		req.session.failToSignUp = identifyErrors(error);
-		res.redirect('/signUp');
-		})
-	} else{
-		//prevent signing up for admin
-		req.session.failToSignUp = "unknownReasons";
-		res.redirect('/signUp');
 	}
-	
+).catch((error) => {
+	//duplicate key error
+	if(error.code == 11000 && error.name == "MongoError"){
+		req.session.failToSignUp = "duplicatedKeys";
+	} else if(error.errors.password || error.errors.email){
+		req.session.failToSignUp = "notValidInfo";
+	} else{
+		//should not happen
+		req.session.failToSignUp = "unknownReasons";
+	}
+	log(req.session.failToSignUp)
+	res.redirect('/signUp');
+	})
 })
 
 
@@ -330,6 +332,22 @@ app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
 	}).catch((error) => res.status(400).send(error))
 
 })
+
+const authenticate = (req, res, next) =>{
+	if(req.session.user){
+		User.findById(req.session.user).then((user) =>{
+			if((!user) || user.banned){
+				return Promise.reject()
+			}else{
+				req.user = user
+				next()
+			}
+		})
+	}
+	else{
+		res.status(400).redirect('/login')
+	}
+}
 
 //post for create new restaurant
 app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) =>{
@@ -415,6 +433,7 @@ app.get('/readImg/:filename', (req, res) =>{
 app.delete('/removeRes/:id', authenticate, (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
+		log('object id')
 		return res.status(404).send()
 	}
 	Restaurant.findOneAndDelete({_id: id}).then((restaurant) =>{
@@ -422,6 +441,7 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 				res.status(400).send()
 			}
 			if(!restaurant){
+				log('null restaurant')
 				res.status(404).send()
 			}
 			else{
@@ -473,6 +493,7 @@ app.patch('/editUserInfo', [authenticate, upload.single('userImg')], (req, res) 
 			}
 			res.send()
 		}, (error) =>{
+			log(error);
 			res.status(400).send(error)
 		})
 	}
@@ -480,6 +501,7 @@ app.patch('/editUserInfo', [authenticate, upload.single('userImg')], (req, res) 
 		User.findOneAndUpdate({_id: id}, {$set: change}).then((user) =>{
 			res.send()
 		}, (error) =>{
+			log(error)
 			res.status(400).send(error)
 		})
 	}
@@ -593,7 +615,6 @@ app.patch('/editReview/:resId/:rid', authenticate, (req, res) =>{
 						}, (error) =>{
 							res.status(400).send(error);
 						})
-				// res.send({result});
 			}
 		})
 })
@@ -679,6 +700,9 @@ app.post('/searchRestaurants', userPagesAuthenticate, (req, res) => {
 	const content = req.body.content;
 	const searchType = req.body.searchType;
 	const from = req.body.from;
+	log("content: "+ content);
+	log("search type: "+ searchType);
+	log("from: "+ from);
 	if(searchType == "resName"){
 		Restaurant.find({name: {$regex: new RegExp(content.trim(), "i") }}).then((result) =>
 		{
@@ -708,6 +732,7 @@ app.post('/searchRestaurants', userPagesAuthenticate, (req, res) => {
 	}else if(searchType == "category"){
 		Restaurant.find({category: {$regex: new RegExp(content.trim(), "i")}}).then((result) =>
 		{
+			log("result" + result);
 			req.session.searchingRes = result;
 			if(from == "search_page"){
 				res.send({res: req.session.searchingRes});
@@ -725,10 +750,12 @@ app.post('/searchRestaurants', userPagesAuthenticate, (req, res) => {
 
 app.get('/openSearchResult', userPagesAuthenticate, (req, res) => {
 	// check if we have active session cookie
+		log("before redirect");
 		res.sendFile(__dirname + '/public/restaurants_search_result.html')
 })
 
 app.get('/getRestaurants', userPagesAuthenticate, (req, res) => {
+	log("Searching res session: "+ req.session.searchingRes)
 	if(req.session.searchingRes){
 		res.send({res: req.session.searchingRes});
 		req.session.searchingRes = null;
@@ -777,7 +804,7 @@ app.get('/admin/getAllRestaurants', adminPagesAuthenticate, (req, res) => {
 	}).catch(error => res.status(400).send(error));
 })
 
-app.post('/admin/banOrRecoverUser', adminPagesAuthenticate, (req, res) => {
+app.post('/admin/banOrRecoverUser', (req, res) => {
 	const user = req.body.userToModify;
 	
 	User.findByIdAndUpdate(user._id, 
@@ -786,13 +813,14 @@ app.post('/admin/banOrRecoverUser', adminPagesAuthenticate, (req, res) => {
 	}}, {new: true}
 		).then((result) => {
 		res.send()
-	}).catch(error => {res.status(400).send(error)});
+	}).catch(error => {log(error)});
 })
 
 //delete a restaurant review given its id
 app.delete('/admin/removeReview/:id/:resId', adminPagesAuthenticate, (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
+		log('object id')
 		return res.status(404).send()
 	}
 	Review.findOneAndDelete({_id: id}).then((review) =>{
@@ -822,19 +850,6 @@ app.delete('/admin/removeReview/:id/:resId', adminPagesAuthenticate, (req, res) 
 	})
 })
 
-//helper function
-function identifyErrors(error){
-	//duplicate key error
-	if(error.code == 11000 && error.name == "MongoError"){
-		return "duplicatedKeys";
-    //not valid password or email
-	} else if(error.errors.password || error.errors.email){
-		return "notValidInfo";
-	} else{
-		//should not happen
-		return "unknownReasons";
-	}
-}
 
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)

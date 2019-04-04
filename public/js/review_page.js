@@ -76,7 +76,7 @@ function addNewReview(e) {
                 data: data
             }).done((res) =>{
                 console.log('add review');
-                getReviews()
+                getRestaurant()
                 e.target.lastElementChild.innerText = 'Resubmit'
                 // getRestaurant();
             }).fail((error) =>{
@@ -103,11 +103,11 @@ function addNewReview(e) {
                 data: data
             }).done((res) =>{
                 console.log('done resubmit review');
-                getReviews()
+                getRestaurant()
                 e.target.lastElementChild.innerText = 'Resubmit'
                 // getRestaurant();
             }).fail((error) =>{
-                alert('fail to resubmit review');
+                alert('Fail to resubmit review, please log in first');
                 console.log(error);
             })
         } else {
@@ -138,12 +138,12 @@ function changeBookmark(e) {
         e.target.parentElement.innerHTML = "<i class=\"bookmarked fas fa-bookmark\"></i>"
         //Server part TODO: Get user data from server and push the store to his/her favourite list
         // code below requires server call
-        user.favourite.push(store)
+        // user.favourite.push(store)
     } else if (e.target.classList.contains('bookmarked')) {
         e.target.parentElement.innerHTML = "<i class=\"notbookmarked far fa-bookmark\"></i>"
         //Server part TODO: Get user data from server and remove the store to his/her favourite list
         // code below requires server call
-        user.favourite.splice(user.favourite.indexOf(store), 1)
+        // user.favourite.splice(user.favourite.indexOf(store), 1)
     }
 }
 
@@ -295,7 +295,10 @@ function getRestaurant(){
         if(res){
             userName = document.querySelector('#loginOrUsername').innerText
             store = res.restaurant;
-            addRestaurantToDom(store)
+            if (!restaurantInfoHeader.firstElementChild.innerText) {
+                addRestaurantToDom(store)
+                // console.log(restaurantInfoHeader.firstElementChild.innerText)
+            }
             getReviews()
         }
         else{
