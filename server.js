@@ -58,22 +58,27 @@ const sessionChecker = (req, res, next) => {
 const userPagesAuthenticate = (req, res, next) => {
 	if(req.session.user){
 		User.findById(req.session.user).then((user) =>{
-			if(user.accountType !== "u"){
-				res.status(400).send("Administrator/Restaurant owner cannot do this operation!")
+			if((!user) || user.accountType !== "u" || user.banned){
+				if(user.banned){
+					res.status(400).send("You have been banned!")
+				}
+				else{
+					res.status(400).send("Only valid user account can do this operation!")
+				}
 			}else{
 				req.user = user
 				next()
 			}
 		})
 	} else{
-		next()
+		res.redirect('/login')
 	}
 }
 
 const adminPagesAuthenticate = (req, res, next) => {
 	if(req.session.user){
 		User.findById(req.session.user).then((user) =>{
-			if(user.accountType !== "a"){
+			if((!user) || user.accountType !== "a"){
 				res.status(400).send("You have to be an administrator to do this operation!")
 			}else{
 				req.user = user
@@ -81,14 +86,37 @@ const adminPagesAuthenticate = (req, res, next) => {
 			}
 		})
 	} else{
-		res.status(400).send("You have to be an administrator to do this operation!")
+		res.redirect('/login')
 	}
 }
 
+const authenticate = (req, res, next) =>{
+	if(req.session.user){
+		User.findById(req.session.user).then((user) =>{
+			if((!user) || user.banned){
+				res.status(400).send("Invalid User")
+			}else{
+				req.user = user
+				next()
+			}
+		})
+	}
+	else{
+		res.redirect('/login')
+	}
+}
 
 //root route
-app.get('/', userPagesAuthenticate, (req, res) => {
-	res.sendFile(__dirname + '/public/index.html')
+app.get('/', (req, res) => {
+	if(req.session.accountType){
+		if(req.session.accountType !== 'u'){
+				res.redirect('/users/logout')
+			}else{
+				res.sendFile(__dirname + '/public/index.html')
+			}
+	} else{
+		res.sendFile(__dirname + '/public/index.html')
+	}
 })
 
 //routes for log in and sign up
@@ -111,7 +139,6 @@ app.route('/signUp')
 		}
 		
 	})
-
 
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
@@ -163,50 +190,55 @@ app.route('/restaurant_review')
 		res.sendFile(__dirname + '/public/review_page.html')
 	})
 
-// rpute for jump to main account page of restaurant owner
+// route for jump to main account page of restaurant owner
 app.route('/myRes')
-	.get((req, res) => {
+	.get(authenticate, (req, res) => {
+		if(req.user.accountType !== 'o'){
+			res.status(400).send("Only restaurant owner can enter!")
+		}
 		res.sendFile(__dirname + '/public/restaurant_myRes.html')
 	})
 
-// rpute for jump to main account page of restaurant owner
+// route for jump to account setting page of restaurant owner
 app.route('/resAccountSet')
-	.get((req, res) => {
+	.get(authenticate, (req, res) => {
+		if(req.user.accountType !== 'o'){
+			res.status(400).send("Only restaurant owner can enter!")
+		}
 		res.sendFile(__dirname + '/public/restaurant_setting.html')
 })
 
+// route for jump to restaurant reviews page of restaurant owner
 app.route('/resReviews')
-	.get((req, res) => {
+	.get(authenticate, (req, res) => {
+		if(req.user.accountType !== 'o'){
+			res.status(400).send("Only restaurant owner can enter!")
+		}
 		res.sendFile(__dirname + '/public/restaurant_reviews.html')
 	})
 
-// rpute for jump to main page of individual account 
+// route for jump to main page of individual account 
 app.route('/individual_account')
-	.get((req, res) => {
+	.get(userPagesAuthenticate, (req, res) => {
 		res.sendFile(__dirname + '/public/individual_account.html')
 	})
 
 // rpute for jump to main account page of individual favourite
 app.route('/individual_favourite')
-	.get((req, res) => {
+	.get(userPagesAuthenticate, (req, res) => {
 		res.sendFile(__dirname + '/public/individual_favourite.html')
 	})
 
 // rpute for jump to main account page of individual setting
 app.route('/individual_setting')
-	.get((req, res) => {
+	.get(userPagesAuthenticate, (req, res) => {
 		res.sendFile(__dirname + '/public/individual_setting.html')
 	})
 
+// get the restaurant id and then redirect to the review page for different user
 app.get('/resReviews/:id', (req, res) =>{
 	const id = req.params.id
-	if (req.session.resReviewId) {
-		log(req.session.resReviewId)
-		req.session.resReviewId = null
-		log(req.session.resReviewId)
-	}
 	req.session.resReviewId = id
-	log(req.session.resReviewId)
 	if(req.session.accountType == 'a'){
 		res.redirect('/adminResReviews');
 	} else if (req.session.accountType == 'o'){
@@ -214,19 +246,14 @@ app.get('/resReviews/:id', (req, res) =>{
 	} else {
 		res.redirect('/restaurant_review')
 	}
-	// else if (req.session.accountType == 'u'){
-	// 	res.redirect('/restaurant_review')
-	// }
 })
 
-
+//get the restaurant info 
 app.get('/restaurantInfo', (req, res) =>{
 	const id = req.session.resReviewId
-
 	if (!ObjectID.isValid(id)) {
 		res.status(404).send()
 	}
-
 	// Otherwise, findById
 	Restaurant.findById(id).then((restaurant) => {
 		if (!restaurant) {
@@ -257,8 +284,8 @@ app.get('/getLogInInfo', (req, res) => {
 	}
 })
 
+// login a user
 app.post('/users/login', function(req, res){
-
     const name = req.body.name;
 		const password = req.body.password;
 		
@@ -289,7 +316,6 @@ app.post('/users/login', function(req, res){
 					}else{
 						res.status(400).send();
 					}
-					
 				}
 			}).catch((error) => {
 				log(error)
@@ -298,8 +324,11 @@ app.post('/users/login', function(req, res){
 		}
 })
 
+//sign Up a user
 app.post('/users/signUp', (req, res) => {
-
+	if(req.body.type === 'a'){
+		res.status(400).send('Cannot regist an admin');
+	}
 	const saveUser = new User({
 	name: req.body.name,
 	password: req.body.password,
@@ -312,8 +341,6 @@ app.post('/users/signUp', (req, res) => {
 		req.session.accountType = user.accountType;
 		if(req.session.accountType === 'o'){
 			res.redirect('/myRes');
-		} else if (req.session.accountType === 'a'){
-			res.redirect('/adminBanUsers');
 		} else if (req.session.accountType === 'u'){
 			res.redirect('/');
 		}else{
@@ -335,7 +362,7 @@ app.post('/users/signUp', (req, res) => {
 	})
 })
 
-
+// logout user
 app.get('/users/logout', (req, res) => {
 	req.session.destroy((error) => {
 		if (error) {
@@ -346,7 +373,10 @@ app.get('/users/logout', (req, res) => {
 	})
 })
 
-app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
+// get the most popular restaurant by location
+// lawb change to get method later !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+app.post('/popularRestaurants', (req, res) =>{
 	const location = req.body.location;
 
 	Restaurant.find({location: location}).sort({rate: -1}).then((result) =>{
@@ -355,31 +385,18 @@ app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
 
 })
 
-app.get('/newRestaurants', userPagesAuthenticate, (req, res) =>{
+app.get('/newRestaurants', (req, res) =>{
 	Restaurant.find().sort({_id: -1}).limit(3).then((result) =>{
 		res.send(result);
 	}).catch((error) => res.status(400).send(error))
 
 })
 
-const authenticate = (req, res, next) =>{
-	if(req.session.user){
-		User.findById(req.session.user).then((user) =>{
-			if((!user) || user.banned){
-				return Promise.reject()
-			}else{
-				req.user = user
-				next()
-			}
-		})
-	}
-	else{
-		res.status(400).redirect('/login')
-	}
-}
-
 //post for create new restaurant
 app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) =>{
+	if(req.user.accountType !== 'o'){
+		res.status(400).send("Only restaurant owner can do this!")
+	}
 	const restaurant = new Restaurant({
 		owner: req.user._id,
 		picture: req.file.filename,
@@ -392,18 +409,17 @@ app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) 
 	restaurant.save().then((result) =>{
 		res.send(result)
 	},(error) =>{
+		//add error message later !!!!!!!!!!!!!!!!!!!
 		res.status(400).send(error)
 	})
 })
 
 //add the restaurant to the user's favourites
-app.post('/addMyfavourites/:id', authenticate, (req, res) =>{
+app.post('/addMyfavourites/:id', userPagesAuthenticate, (req, res) =>{
 	const id = req.params.id
-
 	if (!ObjectID.isValid(id)) {
 		res.status(404).send()
 	}
-	
 	// $new: true gives back the new document
 	User.findByIdAndUpdate(req.user._id, {$push: {favourites: id}}, {new: true}).then((user) => {
 		if (!user) {
@@ -416,7 +432,8 @@ app.post('/addMyfavourites/:id', authenticate, (req, res) =>{
 	})
 })
 
-app.delete('/delMyfavourites/:id', authenticate, (req, res) =>{
+//remove the restaurant from favouyrite
+app.delete('/delMyfavourites/:id', userPagesAuthenticate, (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
 		log('object id')
@@ -435,26 +452,21 @@ app.delete('/delMyfavourites/:id', authenticate, (req, res) =>{
 })
 
 //get all favourite restaurants for this user's id
-app.get('/getMyfavourites', authenticate, (req, res) =>{
-	User.findById(req.user._id).then((user) => {
-		if (!user) {
-			res.status(404).send()
-		} else {
-			/// sometimes wrap returned object in another object
-			Restaurant.find({_id: req.user.favourites}).sort({_id: -1}).then((restaurants) => {
-				res.send({restaurants})
-			},(error) =>{
-				res.status(450).send(error)
-			})   
-		}
-	}).catch((error) => {
-		res.status(400).send()
-	})
+app.get('/getMyfavourites', userPagesAuthenticate, (req, res) =>{
+		/// sometimes wrap returned object in another object
+		Restaurant.find({_id: req.user.favourites}).sort({_id: -1}).then((restaurants) => {
+			res.send({restaurants})
+		},(error) =>{
+			res.status(450).send(error)
+	})   		
 })
 
 
 //get all restaurants for this user's id
 app.get('/getMyRestaurants', authenticate, (req, res) =>{
+	if(req.user.accountType !== 'o'){
+		res.status(400).send("Only restaurant owner can do this!")
+	}
 	Restaurant.find({owner: req.user._id}).sort({_id: -1}).then((restaurants) => {
 		res.send({restaurants})
 	},(error) =>{
@@ -483,10 +495,10 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 		log('object id')
 		return res.status(404).send()
 	}
+	if(req.user.accountType === 'u'){
+		res.status(400).send('user cannot remove restaurant')
+	}
 	Restaurant.findOneAndDelete({_id: id}).then((restaurant) =>{
-			if(req.session.accountType === 'u'){
-				res.status(400).send()
-			}
 			if(!restaurant){
 				log('null restaurant')
 				res.status(404).send()
@@ -512,6 +524,9 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 //edit user information for current user
 app.patch('/editUserInfo', [authenticate, upload.single('userImg')], (req, res) =>{
 	const id = req.user._id;
+	if(req.user.accountType === 'a'){
+		res.status(400).send()
+	}
 	let change;
 	if(req.body.password && req.body.password !== ""){
 		change = {
@@ -554,8 +569,13 @@ app.patch('/editUserInfo', [authenticate, upload.single('userImg')], (req, res) 
 	}
 })
 
+//edit the restaurant information
+//add error checking later !!!!!!!!!!!!!!!
 app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
 	const id = req.params.id
+	if(req.user.accountType !== 'o'){
+		res.status(400).send()
+	}
 	if(!ObjectID.isValid(id)){
 		return res.status(404).send()
 	}
@@ -600,11 +620,9 @@ app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>
 	}
 })
 
-app.get('/getIndReviews', authenticate, (req, res) =>{
+//get all reviews for one user
+app.get('/getIndReviews', userPagesAuthenticate, (req, res) =>{
 	const id = req.user._id
-	if(!ObjectID.isValid(id)){
-		return res.status(404).send()
-	}
 	Review.find({userID: id}).then((reviews) =>{
 		res.send({reviews})
 	}, (error) =>{
@@ -612,6 +630,7 @@ app.get('/getIndReviews', authenticate, (req, res) =>{
 	})
 })
 
+//get all reviews for one restaurant
 app.get('/getResReview', (req, res) =>{
 	const id = req.session.resReviewId
 	if(!ObjectID.isValid(id)){
@@ -624,7 +643,8 @@ app.get('/getResReview', (req, res) =>{
 	})
 })
 
-app.patch('/editReview/:resId/:rid', authenticate, (req, res) =>{
+//edit the review
+app.patch('/editReview/:resId/:rid', userPagesAuthenticate, (req, res) =>{
 	const id = req.params.rid
 
 	if(!ObjectID.isValid(id)){
@@ -667,7 +687,7 @@ app.patch('/editReview/:resId/:rid', authenticate, (req, res) =>{
 })
 
 // add a new review to a retaurant
-app.post('/addReview/:resId', authenticate, (req, res) =>{
+app.post('/addReview/:resId', userPagesAuthenticate, (req, res) =>{
 	Restaurant.findById(req.params.resId).then((restaurant) => {
 		if (!restaurant) {
 			res.status(404).send()
@@ -765,7 +785,7 @@ app.get('/getUserImg/:id', (req, res) => {
 
 //Codes for search result
 //search type can only be: "resName", "location", "category"
-app.post('/searchRestaurants', userPagesAuthenticate, (req, res) => { 
+app.post('/searchRestaurants', (req, res) => { 
 	const content = req.body.content;
 	const searchType = req.body.searchType;
 	const from = req.body.from;
@@ -817,13 +837,13 @@ app.post('/searchRestaurants', userPagesAuthenticate, (req, res) => {
 	
 })
 
-app.get('/openSearchResult', userPagesAuthenticate, (req, res) => {
+app.get('/openSearchResult', (req, res) => {
 	// check if we have active session cookie
 		log("before redirect");
 		res.sendFile(__dirname + '/public/restaurants_search_result.html')
 })
 
-app.get('/getRestaurants', userPagesAuthenticate, (req, res) => {
+app.get('/getRestaurants', (req, res) => {
 	log("Searching res session: "+ req.session.searchingRes)
 	if(req.session.searchingRes){
 		res.send({res: req.session.searchingRes});
@@ -834,31 +854,17 @@ app.get('/getRestaurants', userPagesAuthenticate, (req, res) => {
 /*       codes for admin page   */
 app.route('/adminResReviews')
 .get(adminPagesAuthenticate, (req, res) => {
-	if(req.session.accountType == 'a'){
-		res.sendFile(__dirname + '/public/individual_account_adminView_comments.html')
-		} else{
-			res.status(400).send("Normal users are not authorized to go to admin page")
-		}
+	res.sendFile(__dirname + '/public/individual_account_adminView_comments.html')
 })
 
 app.route('/adminBanUsers')
 	.get(adminPagesAuthenticate, (req, res) => {
-		if(req.session.accountType == 'a'){
-			res.sendFile(__dirname + '/public/individual_account_adminView_banUser.html')
-		} else{
-			res.status(400).send("Normal users are not authorized to go to admin page")
-		}
-		
+		res.sendFile(__dirname + '/public/individual_account_adminView_banUser.html')
 	})
 
 app.route('/adminRestaurants')
 	.get(adminPagesAuthenticate, (req, res) => {
-		if(req.session.accountType == 'a'){
-			res.sendFile(__dirname + '/public/individual_account_adminView_restaurants.html')
-		} else{
-			res.status(400).send("Normal users are not authorized to go to admin page")
-		}
-		
+		res.sendFile(__dirname + '/public/individual_account_adminView_restaurants.html')
 	})
 
 app.get('/admin/getAllUsers', adminPagesAuthenticate, (req, res) => {
