@@ -284,33 +284,30 @@ app.post('/users/signUp', (req, res) => {
 	email: req.body.email,
 	accountType: req.body.type
 })
-	saveUser.save().then((user) => {
-		req.session.user = user._id;
-		req.session.name = user.name;
-		req.session.accountType = user.accountType;
-		if(req.session.accountType === 'o'){
-			res.redirect('/myRes');
-		} else if (req.session.accountType === 'a'){
-			res.redirect('/adminBanUsers');
-		} else if (req.session.accountType === 'u'){
-			res.redirect('/');
-		}else{
-			res.status(400).send();
+	if(saveUser.accountType != 'a'){
+		saveUser.save().then((user) => {
+			req.session.user = user._id;
+			req.session.name = user.name;
+			req.session.accountType = user.accountType;
+			if(req.session.accountType === 'o'){
+				res.redirect('/myRes');
+			} else if (req.session.accountType === 'u'){
+				res.redirect('/');
+			}else{
+				res.status(400).send();
+			}
 		}
-	}
-).catch((error) => {
-	//duplicate key error
-	if(error.code == 11000 && error.name == "MongoError"){
-		req.session.failToSignUp = "duplicatedKeys";
-	} else if(error.errors.password || error.errors.email){
-		req.session.failToSignUp = "notValidInfo";
+	).catch((error) => {
+		req.session.failToSignUp = identifyErrors(error);
+		log(req.session.failToSignUp)
+		res.redirect('/signUp');
+		})
 	} else{
-		//should not happen
+		//prevent signing up for admin
 		req.session.failToSignUp = "unknownReasons";
+		res.redirect('/signUp');
 	}
-	log(req.session.failToSignUp)
-	res.redirect('/signUp');
-	})
+	
 })
 
 
@@ -851,6 +848,19 @@ app.delete('/admin/removeReview/:id/:resId', adminPagesAuthenticate, (req, res) 
 	})
 })
 
+//helper function
+function identifyErrors(error){
+	//duplicate key error
+	if(error.code == 11000 && error.name == "MongoError"){
+		return "duplicatedKeys";
+    //not valid password or email
+	} else if(error.errors.password || error.errors.email){
+		return "notValidInfo";
+	} else{
+		//should not happen
+		return "unknownReasons";
+	}
+}
 
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`)
