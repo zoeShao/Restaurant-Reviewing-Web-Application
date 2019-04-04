@@ -301,7 +301,6 @@ app.post('/users/login', function(req, res){
 		const password = req.body.password;
 		
 		if(req.session.user){
-			log("already logged in")
 			res.redirect('/');
 		}else{
 			User.findByNamePassword(name, password).then((user) => {
@@ -328,7 +327,6 @@ app.post('/users/login', function(req, res){
 					}
 				}
 			}).catch((error) => {
-				log(error)
 				res.status(400).redirect('/login')
 			})
 		}
@@ -367,7 +365,6 @@ app.post('/users/signUp', (req, res) => {
 		//should not happen
 		req.session.failToSignUp = "unknownReasons";
 	}
-	log(req.session.failToSignUp)
 	res.redirect('/signUp');
 	})
 })
@@ -457,10 +454,8 @@ app.post('/addMyfavourites/:id', userPagesAuthenticate, (req, res) =>{
 app.delete('/delMyfavourites/:id', userPagesAuthenticate, (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
-		log('object id')
 		return res.status(404).send()
 	}
-	log(req.user._id)
 	User.findByIdAndUpdate(req.user._id, {$pull: {favourites: id}}, {new: true}).then((user) => {
 		if (!user) {
 			res.status(404).send()
@@ -513,7 +508,6 @@ app.get('/readImg/:filename', (req, res) =>{
 app.delete('/removeRes/:id', authenticate, (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
-		log('object id')
 		return res.status(404).send()
 	}
 	if(req.user.accountType === 'u'){
@@ -521,7 +515,6 @@ app.delete('/removeRes/:id', authenticate, (req, res) =>{
 	}
 	Restaurant.findOneAndDelete({_id: id}).then((restaurant) =>{
 			if(!restaurant){
-				log('null restaurant')
 				res.status(404).send()
 			}
 			else{
@@ -576,7 +569,6 @@ app.patch('/editUserInfo', [authenticate, upload.single('userImg')], (req, res) 
 			}
 			res.send()
 		}, (error) =>{
-			log(error);
 			res.status(400).send(error)
 		})
 	}
@@ -584,7 +576,6 @@ app.patch('/editUserInfo', [authenticate, upload.single('userImg')], (req, res) 
 		User.findOneAndUpdate({_id: id}, {$set: change}).then((user) =>{
 			res.send()
 		}, (error) =>{
-			log(error)
 			res.status(400).send(error)
 		})
 	}
@@ -808,7 +799,6 @@ app.get('/searchRestaurants/:searchType/:content/:from', generalPagesAuthenticat
 	}else if(searchType == "category"){
 		Restaurant.find({category: {$regex: new RegExp(content.trim(), "i")}}).then((result) =>
 		{
-			log("result" + result);
 			req.session.searchingRes = result;
 			if(from == "search_page"){
 				res.send({res: req.session.searchingRes});
@@ -873,14 +863,13 @@ app.patch('/admin/banOrRecoverUser', adminPagesAuthenticate, (req, res) => {
 	}}, {new: true}
 		).then((result) => {
 		res.send()
-	}).catch(error => {log(error)});
+	}).catch(error => {res.status(400).send(error)});
 })
 
 //delete a restaurant review given its id
 app.delete('/admin/removeReview/:id/:resId', adminPagesAuthenticate, (req, res) =>{
 	const id = req.params.id
 	if(!ObjectID.isValid(id)){
-		log('object id')
 		return res.status(404).send()
 	}
 	Review.findOneAndDelete({_id: id}).then((review) =>{
