@@ -142,10 +142,13 @@ app.route('/signUp')
 
 app.route('/login')
 	.get(sessionChecker, (req, res) => {
-		if(req.session.failToLogin){
+		if(req.session.failToLogin === "wrongCredential"){
 			req.session.failToLogin = null;
-			res.render('login.hbs', {error: 'Username/Password incorrect'})
-		}else{
+			res.render('login.hbs', {error: 'Username/Password incorrect.'})
+		} else if (req.session.failToLogin === "banned"){
+            req.session.failToLogin = null;
+			res.render('login.hbs', {error: 'Sorry, your account is banned by the administrator.'})
+        } else{
 			req.session.failToLogin = null;
 			res.sendFile(__dirname + '/public/login.html')
 		}
@@ -295,15 +298,14 @@ app.post('/users/login', function(req, res){
 		}else{
 			User.findByNamePassword(name, password).then((user) => {
 				if(!user) {
-					console.log("password not correct")
-					console.log(name);
-					console.log(password);
-					req.session.failToLogin = true;
+					req.session.failToLogin = "wrongCredential";
 					res.redirect('/login')
-				} else {
+				} else if(user.banned === true){
+                    req.session.failToLogin = "banned";
+					res.redirect('/login')
+                } else {
 					// Add the user to the session cookie that we will
 					// send to the client
-					console.log("password correct")
 					req.session.user = user._id;
 					req.session.name = user.name
 					req.session.accountType = user.accountType;
