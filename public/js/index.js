@@ -168,10 +168,13 @@ function addSlideShow() {
      "https://ffc.com/wp-content/uploads/2018/03/Welcome-New-Staff-FFC-Chicago-1030x687.jpg"]
     for (let i = 0; i < maxPromotingRestaurant; i++){
       if(i < resList.length){
+          const aElement = document.createElement('a')
+          aElement.href = "/resReviews/" + resList[i]._id
           const img = document.createElement('img');
           img.src = "/readImg/" + resList[i].picture;
           img.alt="Promote Picture"
-          newRestaurantsElement[i].appendChild(img)
+          aElement.appendChild(img)
+          newRestaurantsElement[i].appendChild(aElement)
           log(resList[i])
       } else {
           const img = document.createElement('img');
