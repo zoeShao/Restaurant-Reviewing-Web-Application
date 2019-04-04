@@ -5,7 +5,7 @@ document.getElementById("dropdownMarkham").addEventListener("click", showMarkham
 document.getElementById("dropdownToronto").addEventListener("click", showDowntownRestaurants);
 
 
-let maxShowingRestaurant = 2;
+let maxShowingRestaurant = 4;
 let maxPromotingRestaurant = 3;
 const popularRestaurantsElement = document.getElementById("popularRestaurants");
 const newRestaurantsElement = document.querySelectorAll('.promoteImg')
@@ -97,6 +97,10 @@ function changeRestaurant(restaurant, resObj){
   //change name
   const cardBody = form.children[1];
   const h4 = cardBody.children[0]
+  let rate = addRateToDom(resObj.rate)
+  let price = addPriceToDom(resObj.price)
+  cardBody.children[1].appendChild(rate)
+  cardBody.children[2].appendChild(price)
   const btnLink = h4.children[0];
   btnLink.innerText = resObj.name;
 }
@@ -116,7 +120,8 @@ function addPopularRestaurant(){
 
   const img = document.createElement('img');
   img.className = "card-img-top img-fluid";
-  img.style.height = "300px";
+  // img.style.height = "300px";
+  img.style.height = "200px";
   img.style.width = "350px";
   link.appendChild(img);
   form.appendChild(link);
@@ -126,6 +131,8 @@ function addPopularRestaurant(){
 
   const h4Title = document.createElement('h4');
   h4Title.className = "card-title";
+  const rate = document.createElement('div');
+  const price = document.createElement("div");
 
   const titleLink = document.createElement('button')
   titleLink.className = "resTitleLink";
@@ -133,6 +140,9 @@ function addPopularRestaurant(){
 
   h4Title.appendChild(titleLink);
   cardBody.appendChild(h4Title);
+  cardBody.appendChild(rate);
+  cardBody.appendChild(price);
+
   
   form.appendChild(cardBody);
   card.appendChild(form)
@@ -144,6 +154,40 @@ function clearAllPopularRestaurants(){
   while (popularRestaurantsElement.firstChild) {
     popularRestaurantsElement.removeChild(popularRestaurantsElement.firstChild);
   }
+}
+
+function addRateToDom(rate) {
+  const paraElement = document.createElement('p')
+  paraElement.className = "homeList"
+  const strongElement = document.createElement('strong')
+  strongElement.innerText = "Rate: "
+  paraElement.appendChild(strongElement)
+  const linkElement = document.createElement('link')
+  linkElement.rel = "stylesheet"
+  linkElement.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  paraElement.appendChild(linkElement)
+  for (let i = 0; i < rate; i++) {
+    const spanElement = document.createElement('span')
+    spanElement.className = "fa fa-star checked"
+    paraElement.appendChild(spanElement)
+  }
+  for (let i = rate; i < 5; i++) {
+    const spanElement = document.createElement('span')
+    spanElement.className = "fa fa-star"
+    paraElement.appendChild(spanElement)
+  }
+  return paraElement
+}
+
+function addPriceToDom(rate) {
+  const paraElement = document.createElement('p')
+  paraElement.className = "homeList"
+  let priceRate = ''
+  for (let i = 0; i < rate; i++) {
+    priceRate = priceRate + '$'
+  }
+  paraElement.innerHTML = '<strong>Price: </strong>' + priceRate
+  return paraElement
 }
 
 function addSlideShow() {
