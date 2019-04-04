@@ -15,7 +15,7 @@ getLogInInfo();
 window.signOutUser = signOutUser;
 /*                               */
 
-InitializePopularRestaurants("Downtown", maxShowingRestaurant);
+InitializePopularRestaurants("Downtown-Toronto", maxShowingRestaurant);
 
 /***************Get data from server***************************/
 
@@ -58,7 +58,7 @@ function showDowntownRestaurants(e) {
     const dropDownButton = document.getElementById("dropDownButton");
     dropDownButton.innerText = "Downtown-Toronto";
     
-    InitializePopularRestaurants("Downtown", maxShowingRestaurant)
+    InitializePopularRestaurants("Downtown-Toronto", maxShowingRestaurant)
   }
 }
 
@@ -66,6 +66,7 @@ function InitializePopularRestaurants(location, maxShowingRestaurant){
   getListOfPopularRestaurants(location).then((res) => {
     return res.json();
   }).then((resList) => {
+    log(resList);
     for (let i = 0; i < maxShowingRestaurant && i < resList.length; i++){
       if(popularRestaurantsElement.children.length < maxShowingRestaurant){
           addPopularRestaurant();
@@ -80,13 +81,11 @@ function InitializePopularRestaurants(location, maxShowingRestaurant){
 function changeRestaurant(restaurant, resObj){
   //change link
   const form = restaurant.children[0].children[0]
-  //TODO: fill up get link to restaurant
-  form.action = "";
+  form.action = "/resReviews/" + resObj._id;
 
 
   //change image source
   const img = form.children[0].children[0];
-  //TODO: change image source
   img.src = "/readImg/" + resObj.picture;
 
   //change name
@@ -110,7 +109,9 @@ function addPopularRestaurant(){
   link.type = "submit";
 
   const img = document.createElement('img');
-  img.className = "card-img-top";
+  img.className = "card-img-top img-fluid";
+  img.style.height = "300px";
+  img.style.width = "350px";
   link.appendChild(img);
   form.appendChild(link);
 
