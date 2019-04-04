@@ -387,6 +387,24 @@ app.post('/addMyfavourites/:id', authenticate, (req, res) =>{
 	})
 })
 
+app.delete('/delMyfavourites/:id', authenticate, (req, res) =>{
+	const id = req.params.id
+	if(!ObjectID.isValid(id)){
+		log('object id')
+		return res.status(404).send()
+	}
+	log(req.user._id)
+	User.findByIdAndUpdate(req.user._id, {$pull: {favourites: id}}, {new: true}).then((user) => {
+		if (!user) {
+			res.status(404).send()
+		} else {
+			res.send({restaurant: id, user: user})
+		}
+	}).catch((error) => {
+		res.status(400).send(error)
+	})
+})
+
 //get all favourite restaurants for this user's id
 app.get('/getMyfavourites', authenticate, (req, res) =>{
 	User.findById(req.user._id).then((user) => {

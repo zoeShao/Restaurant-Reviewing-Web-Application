@@ -152,7 +152,7 @@ function changeBookmark(e) {
             }).done((res) =>{
                 console.log('add to favourite');
             }).fail((error) =>{
-                alert('fail to add review');
+                alert('fail to add to favourite');
                 console.log(error);
             })
         // user.favourite.push(store)
@@ -161,6 +161,18 @@ function changeBookmark(e) {
         //Server part TODO: Get user data from server and remove the store to his/her favourite list
         // code below requires server call
         // user.favourite.splice(user.favourite.indexOf(store), 1)
+        const url = '/delMyfavourites/' + store._id
+            $.ajax({
+                url: url,
+                method: 'delete',
+                processData: false,
+                contentType: "application/json",
+            }).done((res) =>{
+                console.log('delete in favourite');
+            }).fail((error) =>{
+                alert('fail to delete a restaurant in favourite');
+                console.log(error);
+            })
     }
 }
 
