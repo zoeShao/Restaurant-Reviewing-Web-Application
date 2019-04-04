@@ -85,6 +85,22 @@ const adminPagesAuthenticate = (req, res, next) => {
 	}
 }
 
+const authenticate = (req, res, next) =>{
+	if(req.session.user){
+		User.findById(req.session.user).then((user) =>{
+			if((!user) || user.banned){
+				return Promise.reject()
+			}else{
+				req.user = user
+				next()
+			}
+		})
+	}
+	else{
+		res.status(400).redirect('/login')
+	}
+}
+
 
 //root route
 app.get('/', userPagesAuthenticate, (req, res) => {
@@ -238,10 +254,9 @@ app.get('/getLogInInfo', (req, res) => {
 app.post('/users/login', function(req, res){
 
     const name = req.body.name;
-		const password = req.body.password;
+	const password = req.body.password;
 		
 		if(req.session.user){
-			log("already logged in")
 			res.redirect('/');
 		}else{
 			User.findByNamePassword(name, password).then((user) => {
@@ -329,22 +344,6 @@ app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
 	}).catch((error) => res.status(400).send(error))
 
 })
-
-const authenticate = (req, res, next) =>{
-	if(req.session.user){
-		User.findById(req.session.user).then((user) =>{
-			if((!user) || user.banned){
-				return Promise.reject()
-			}else{
-				req.user = user
-				next()
-			}
-		})
-	}
-	else{
-		res.status(400).redirect('/login')
-	}
-}
 
 //post for create new restaurant
 app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) =>{
@@ -700,7 +699,6 @@ app.get('/openSearchResult', userPagesAuthenticate, (req, res) => {
 })
 
 app.get('/getRestaurants', userPagesAuthenticate, (req, res) => {
-	log("Searching res session: "+ req.session.searchingRes)
 	if(req.session.searchingRes){
 		res.send({res: req.session.searchingRes});
 		req.session.searchingRes = null;
@@ -749,7 +747,7 @@ app.get('/admin/getAllRestaurants', adminPagesAuthenticate, (req, res) => {
 	}).catch(error => res.status(400).send(error));
 })
 
-app.post('/admin/banOrRecoverUser', (req, res) => {
+app.post('/admin/banOrRecoverUser', adminPagesAuthenticate, (req, res) => {
 	const user = req.body.userToModify;
 	
 	User.findByIdAndUpdate(user._id, 
