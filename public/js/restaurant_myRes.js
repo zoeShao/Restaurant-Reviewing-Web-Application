@@ -17,6 +17,8 @@ let editing = false; // flag for check whether we are in editing page or not
 const dropDown = document.querySelector('#dropDown')
 const contentBody = document.querySelector('#mainBody');
 const pager = document.querySelector('#pager')
+const accountBody = document.querySelector('#accountBody');
+accountBody.style.overflow = "auto";
 /* Event listeners for button submit and button click */
 dropDown.addEventListener('click', changeMain);
 pager.addEventListener('click', changePage);

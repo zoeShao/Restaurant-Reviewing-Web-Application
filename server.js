@@ -324,7 +324,7 @@ app.get('/users/logout', (req, res) => {
 app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
 	const location = req.body.location;
 
-	Restaurant.find({location: location}).sort({rate: 1}).then((result) =>{
+	Restaurant.find({location: location}).sort({rate: -1}).then((result) =>{
 		res.send(result);
 	}).catch((error) => res.status(400).send(error))
 

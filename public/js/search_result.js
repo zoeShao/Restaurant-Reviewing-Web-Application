@@ -147,7 +147,7 @@ function showMarkhamRes(e){
 
 function showDowntownRes(e){
     if(e.target.classList.contains("foodCatLink")){
-		sendOutSearchRequest("Downtown", "location");
+		sendOutSearchRequest("Downtown-Toronto", "location");
     }
 }
 //search bar
@@ -203,8 +203,7 @@ function addFavouriteToDom(restaurant) {
 	contentBoxElement.className = "contentBox"
 	const aElement = document.createElement('a')
 	aElement.className = "reviewLink"
-	//TODO: change restaurant.link
-	aElement.href = restaurant.page;
+	aElement.href = '/resReviews/' + restaurant._id;
 	const storeImgElement = document.createElement('div')
 	storeImgElement.classNmae = "storeImgContainer"
 	const storeImg = document.createElement('img')
