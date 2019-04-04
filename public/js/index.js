@@ -166,6 +166,7 @@ function addSlideShow() {
           const aElement = document.createElement('a')
           aElement.href = "/resReviews/" + resList[i]._id
           const img = document.createElement('img');
+          img.className = "slideImage"
           img.src = "/readImg/" + resList[i].picture;
           img.alt="Promote Picture"
           aElement.appendChild(img)
@@ -173,6 +174,7 @@ function addSlideShow() {
           log(resList[i])
       } else {
           const img = document.createElement('img');
+          img.className = "slideImage"
           img.src = promoteLst[i]
           img.alt="Promote Picture"
           newRestaurantsElement[i].appendChild(img)

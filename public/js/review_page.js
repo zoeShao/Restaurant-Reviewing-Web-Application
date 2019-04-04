@@ -255,6 +255,7 @@ function addRestaurantToDom(store) {
     const divElement = document.createElement('div')
     divElement.className = "RestaurantImgContainer"
     const storeImg = document.createElement('img')
+    storeImg.className = "resImg"
     const url = '/readImg/';
     storeImg.src = url + store.picture;
     // storeImg.src = store.image
@@ -431,7 +432,7 @@ function getFavourite(store){
             favouriteLst = res.restaurants;
             // console.log(favouriteLst)
             for (let i = 0; i < favouriteLst.length; i++) {
-                if (favouriteLst[i].name === store.name) {
+                if (favouriteLst[i]._id === store._id) {
                     bookmark.firstElementChild.innerHTML = "<i class=\"bookmarked fas fa-bookmark\"></i>"
                     // console.log("yes")
                 } 
