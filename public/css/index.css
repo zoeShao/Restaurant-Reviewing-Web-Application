@@ -56,8 +56,16 @@
   width: 100%;
 }
 
-#dropDownButton{
+/*#dropDownButton{
   background-color: red;
+}*/
+
+.card-title {
+  margin-bottom: 0px;
+}
+
+p.homeList {
+  margin-bottom: 0px;
 }
 
 .submitLink{
