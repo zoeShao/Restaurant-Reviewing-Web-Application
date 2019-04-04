@@ -467,6 +467,15 @@ function getRestaurant(){
         if(res.restaurants){
             resLst = res.restaurants;
             showPage(currentPage);
+            if (resLst.length === 0) {
+                const contentBoxElement = document.createElement('div')
+                contentBoxElement.className = "bodyInitial"
+                const contentElement = document.createElement('p')
+                contentElement.className = "emptyReview"
+                contentElement.innerHTML = "<strong>(You have not add any restaurant yet. You can add your restaurants by clicking \"add new\".)</strong>"
+                contentBoxElement.appendChild(contentElement)
+                contentBody.appendChild(contentBoxElement)
+            }
         }
         else{
             alert("cannot get restaurants");
