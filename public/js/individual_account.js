@@ -112,28 +112,37 @@ function addReviewToDom(review) {
 	contentBoxElement.className = "contentBox"
 	const aElement = document.createElement('a')
 	aElement.className = "reviewLink"
-	// if (review.rName == "McDonald's") {
-	// 	aElement.href = "review_page.html"
-	// } else {
-	// 	aElement.href = "#"
-	// }
 	aElement.href = "/resReviews/" + review.resID
 	const reviewElement = document.createElement('div')
 	reviewElement.className = "storeContainer"
 	const nameElement = document.createElement('p')
 	// nameElement.innerHTML = "<strong>Restaurant name: </strong>" 
-	nameElement.innerHTML = "<strong>Restaurant name: </strong>" + `${review.resName}`
-	const rateElement = addRateToDom(review.rate)
-	const priceElement = addPriceToDom(review.price)
-	const contentElement = document.createElement('p')
-	contentElement.innerHTML = "<strong>Review: </strong>" + `${review.content}`
-	reviewElement.appendChild(nameElement)
-	reviewElement.appendChild(rateElement)
-	reviewElement.appendChild(priceElement)
-	reviewElement.appendChild(contentElement)
-	aElement.appendChild(reviewElement)
-	contentBoxElement.appendChild(aElement)
-	contentBody.appendChild(contentBoxElement)
+	const url = '/restaurants/' + review.resID;
+    $.ajax({
+        url: url,
+        method:'get'
+    }).done((res) =>{
+        if(res.restaurant){
+        	nameElement.innerHTML = "<strong>Restaurant name: </strong>" + `${review.resName}` + " <strong>(Address: </strong>" + `${res.restaurant.address}` + "<strong>)</strong>"
+			const rateElement = addRateToDom(review.rate)
+			const priceElement = addPriceToDom(review.price)
+			const contentElement = document.createElement('p')
+			contentElement.innerHTML = "<strong>Review: </strong>" + `${review.content}`
+			reviewElement.appendChild(nameElement)
+			reviewElement.appendChild(rateElement)
+			reviewElement.appendChild(priceElement)
+			reviewElement.appendChild(contentElement)
+			aElement.appendChild(reviewElement)
+			contentBoxElement.appendChild(aElement)
+			contentBody.appendChild(contentBoxElement)
+        }
+        else{
+            alert("cannot get restaurant");
+        }
+    }).fail((error) =>{
+        alert("cannot get restaurant");
+        console.log(error);
+    })
 }
 
 /*-----------------------------------------------------------*/
@@ -233,7 +242,7 @@ function getReviews(){
             	contentElement.innerHTML = "<strong>(You have not written any review yet.)</strong>"
             	contentBoxElement.appendChild(contentElement)
             	contentBody.appendChild(contentBoxElement)
-            	console.log(contentBody)
+            	// console.log(contentBody)
             }
         }
         else{
