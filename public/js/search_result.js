@@ -20,6 +20,8 @@ const pager = document.querySelector('#pager')
 const chineseLink = document.querySelector("#chineseLink");
 const fastfoodLink = document.querySelector("#fastFoodLink");
 const japaneseLink = document.querySelector("#japaneseLink");
+const koreanLink = document.querySelector("#koreanLink");
+const americanLink = document.querySelector("#americanLink");
 const markhamLink = document.querySelector("#markhamLink");
 const downtownLink = document.querySelector("#downtownLink");
 
@@ -110,44 +112,61 @@ function sendOutSearchRequest(content, searchType){
 /*** 
 Button event listeners functions
 ***/
+function pressButtonState(pressedLink){
+	chineseLink.style.borderBottom = "";
+	fastfoodLink.style.borderBottom = "";
+	japaneseLink.style.borderBottom = "";
+	koreanLink.style.borderBottom = "";
+	americanLink.style.borderBottom = "";
+	markhamLink.style.borderBottom = "";
+	downtownLink.style.borderBottom = "";
+	pressedLink.style.borderBottom = "1px solid"
+}
+
 function showChineseRes(e){
     if(e.target.classList.contains("foodCatLink")){
-        //server part TODO: make server call to get all the Chinese restaurants in the array
+				pressButtonState(chineseLink);
         sendOutSearchRequest("Chinese", "category");
     }
 }
 
 function showFastFoodRes(e){
     if(e.target.classList.contains("foodCatLink")){
+				pressButtonState(fastfoodLink);
         sendOutSearchRequest("Fast Food", "category");
     }
 }
 
 function showJapaneseRes(e){
     if(e.target.classList.contains("foodCatLink")){
-		sendOutSearchRequest("Japanese", "category");
+			pressButtonState(japaneseLink);
+			sendOutSearchRequest("Japanese", "category");
     }
 }
 function showKoreanRes(e){
     if(e.target.classList.contains("foodCatLink")){
-		sendOutSearchRequest("Korean", "category");
+			pressButtonState(koreanLink);
+			sendOutSearchRequest("Korean", "category");
     }
 }
 function showAmericanRes(e){
     if(e.target.classList.contains("foodCatLink")){
-		sendOutSearchRequest("American", "category");
+			pressButtonState(americanLink);
+			sendOutSearchRequest("American", "category");
     }
 }
 
 function showMarkhamRes(e){
     if(e.target.classList.contains("foodCatLink")){
-		sendOutSearchRequest("Markham", "location");
+			pressButtonState(markhamLink);
+			sendOutSearchRequest("Markham", "location");
     }
 }
 
 function showDowntownRes(e){
     if(e.target.classList.contains("foodCatLink")){
-		sendOutSearchRequest("Downtown-Toronto", "location");
+			pressButtonState(downtownLink);
+			sendOutSearchRequest("Downtown-Toronto", "location");
     }
 }
 //search bar
