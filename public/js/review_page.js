@@ -255,6 +255,7 @@ function addRestaurantToDom(store) {
     const divElement = document.createElement('div')
     divElement.className = "RestaurantImgContainer"
     const storeImg = document.createElement('img')
+    storeImg.className = "resImg"
     const url = '/readImg/';
     storeImg.src = url + store.picture;
     // storeImg.src = store.image
