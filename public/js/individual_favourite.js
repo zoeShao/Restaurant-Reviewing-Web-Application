@@ -235,6 +235,16 @@ function getFavourite(){
         	console.log(res.restaurants)
             favouriteLst = res.restaurants;
             showPage(currentPage);
+            if (favouriteLst.length === 0) {
+            	const contentBoxElement = document.createElement('div')
+            	contentBoxElement.className = "bodyInitial"
+            	const contentElement = document.createElement('p')
+            	contentElement.className = "emptyReview"
+            	contentElement.innerHTML = "<strong>(You have not bookmarked any restaurant yet.)</strong>"
+            	contentBoxElement.appendChild(contentElement)
+            	contentBody.appendChild(contentBoxElement)
+            	console.log(contentBody)
+            }
         }
         else{
             alert("cannot get restaurants");
