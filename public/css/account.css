@@ -245,8 +245,14 @@ a.reviewLink:hover {
 	margin-left: 10px;
 	margin-right: 40px;
 	margin-top: 10px;
-	height: 100px;
+	height: 150px;
+	width: 250px;
 	float: left;
+}
+
+.resImg {
+	height: 150px;
+	width: 220px;
 }
 
 

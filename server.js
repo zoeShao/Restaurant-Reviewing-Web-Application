@@ -135,6 +135,28 @@ app.get('/restaurants', (req, res) => {
 	})
 })
 
+// GET one restaurant via id
+app.get('/restaurants/:id', (req, res) => {
+	// Add code here
+	const id = req.params.id
+
+	if (!ObjectID.isValid(id)) {
+		res.status(404).send()
+	}
+
+	// Otherwise, findById
+	Restaurant.findById(id).then((restaurant) => {
+		if (!restaurant) {
+			res.status(404).send()
+		} else {
+			/// sometimes wrap returned object in another object   
+			res.send({restaurant})
+		}
+	}).catch((error) => {
+		res.status(400).send()
+	})
+})
+
 // rpute for jump to main account page of restaurant owner
 app.route('/restaurant_review')
 	.get((req, res) => {
