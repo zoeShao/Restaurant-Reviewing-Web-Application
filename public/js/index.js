@@ -22,15 +22,10 @@ addSlideShow()
 /***************Get data from server***************************/
 //Get list of popular restaurant
 function getListOfNewRestaurants(location){
-  const url = '/popularRestaurants';
-    // The data we are going to send in our request
-    let data = {
-        location: location
-    }
+  const url = '/newRestaurants';
     // Create our request constructor with all the parameters we need
     const request = new Request(url, {
-        method: 'post', 
-        body: JSON.stringify(data),
+        method: 'get', 
         headers: {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'

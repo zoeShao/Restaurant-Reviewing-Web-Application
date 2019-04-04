@@ -333,6 +333,13 @@ app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
 
 })
 
+app.get('/newRestaurants', userPagesAuthenticate, (req, res) =>{
+	Restaurant.find().sort({_id: -1}).limit(3).then((result) =>{
+		res.send(result);
+	}).catch((error) => res.status(400).send(error))
+
+})
+
 const authenticate = (req, res, next) =>{
 	if(req.session.user){
 		User.findById(req.session.user).then((user) =>{
