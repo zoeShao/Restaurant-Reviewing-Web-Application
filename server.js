@@ -376,7 +376,7 @@ app.get('/users/logout', (req, res) => {
 // get the most popular restaurant by location
 // lawb change to get method later !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
+app.post('/popularRestaurants', (req, res) =>{
 	const location = req.body.location;
 
 	Restaurant.find({location: location}).sort({rate: -1}).then((result) =>{
@@ -385,7 +385,7 @@ app.post('/popularRestaurants', userPagesAuthenticate, (req, res) =>{
 
 })
 
-app.get('/newRestaurants', userPagesAuthenticate, (req, res) =>{
+app.get('/newRestaurants', (req, res) =>{
 	Restaurant.find().sort({_id: -1}).limit(3).then((result) =>{
 		res.send(result);
 	}).catch((error) => res.status(400).send(error))
