@@ -1,16 +1,16 @@
 import {getLogInInfo, signOutUser} from './navBar.js';
 /* Class */
-class User {
-	constructor(image, name, email, password, type){
-        this.image = image;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.type = type;
-        this.reviews = [];
-        this.favourite = [];
-    }
-}
+// class User {
+// 	constructor(image, name, email, password, type){
+//         this.image = image;
+//         this.name = name;
+//         this.email = email;
+//         this.password = password;
+//         this.type = type;
+//         this.reviews = [];
+//         this.favourite = [];
+//     }
+// }
 
 // class Restaurant{
 //     constructor(image, name, phone, address, rate, price){
@@ -40,6 +40,7 @@ let currentPage = 1 // current page number
 let reviewLst = [];
 let store = null
 let userName = ""
+let rid = ""
 
 //Server part TODO: get data from the server and load them to the page
 
@@ -61,6 +62,10 @@ const reviewForm = document.querySelector('#reviewForm')
 const reviewPart = document.querySelector('#reviewPart')
 const pager = document.querySelector('#pager')
 const bookmark = document.querySelector('#bookmark')
+
+const restaurantInfoHeader = document.querySelector('#restaurantHeader')
+const restaurantInfoBody = document.querySelector('#restaurantInfo')
+const restaurantBookmark = document.querySelector('#bookmark')
 
 /* Load the initial page. */ 
 // showPage(currentPage)
@@ -95,14 +100,13 @@ function addNewReview(e) {
         // const price = document.querySelector('#FormControlSelect1').value;
         // const rate = document.querySelector('#FormControlSelect2').value;
         const url = '/addReview/' + store._id
-        var data = JSON.stringify({
+        const content = document.querySelector('#FormControlTextarea1').value;
+        if (content) {
+            var data = JSON.stringify({
             "rate": document.querySelector('#FormControlSelect2').value,
             "price": document.querySelector('#FormControlSelect1').value,
             "content": document.querySelector('#FormControlTextarea1').value
-        });
-        const content = document.querySelector('#FormControlTextarea1').value;
-        if (content) {
-            console.log(content)
+            });
             $.ajax({
                 url: url,
                 method: 'post',
@@ -111,7 +115,7 @@ function addNewReview(e) {
                 data: data
             }).done((res) =>{
                 console.log('add review');
-                getReviews()
+                getRestaurant()
                 e.target.lastElementChild.innerText = 'Resubmit'
                 // getRestaurant();
             }).fail((error) =>{
@@ -131,16 +135,37 @@ function addNewReview(e) {
         // const storeName = "McDonald's";
         // const price = document.querySelector('#FormControlSelect1').value;
         // const rate = document.querySelector('#FormControlSelect2').value;
+        const url = '/editReview/' + store._id + '/' + rid
         const content = document.querySelector('#FormControlTextarea1').value;
         if (content) {
-            for (let i = 0; i < reviewLst.length; i++) {
-                if (reviewLst[i].uName === userName) {
-                    reviewLst[i].rate = rate
-                    reviewLst[i].price = price 
-                    reviewLst[i].content = content
-                }
-            }
-            showPage(currentPage)
+            var data = JSON.stringify({
+            "rate": document.querySelector('#FormControlSelect2').value,
+            "price": document.querySelector('#FormControlSelect1').value,
+            "content": document.querySelector('#FormControlTextarea1').value
+            });
+            $.ajax({
+                url: url,
+                method: 'patch',
+                processData: false,
+                contentType: "application/json",
+                data: data
+            }).done((res) =>{
+                console.log('done resubmit review');
+                getRestaurant()
+                e.target.lastElementChild.innerText = 'Resubmit'
+                // getRestaurant();
+            }).fail((error) =>{
+                alert('fail to resubmit review');
+                console.log(error);
+            })
+            // for (let i = 0; i < reviewLst.length; i++) {
+            //     if (reviewLst[i].uName === userName) {
+            //         reviewLst[i].rate = rate
+            //         reviewLst[i].price = price 
+            //         reviewLst[i].content = content
+            //     }
+            // }
+            // showPage(currentPage)
         } else {
             e.target.lastElementChild.className = "float-right btn btn-info disabled"
         }
@@ -206,9 +231,10 @@ function addReviewToDom(review) {
 }
 
 function addRestaurantToDom(store) {
-    const restaurantInfoHeader = document.querySelector('#restaurantHeader')
-    const restaurantInfoBody = document.querySelector('#restaurantInfo')
-    const restaurantBookmark = document.querySelector('#bookmark')
+    // const restaurantInfoHeader = document.querySelector('#restaurantHeader')
+    // const restaurantInfoBody = document.querySelector('#restaurantInfo')
+    // const restaurantBookmark = document.querySelector('#bookmark')
+    
     // restaurant info header
     const restaurantHeader = document.createElement('div')
     restaurantHeader.className = "col-md-10"
@@ -268,20 +294,16 @@ function showPage(currentPage) {
     let restPage = reviewLst.length - currentPage * 4
     console.log(restPage)
     if (restPage >= 0) {
-        console.log("???")
         reviewPart.innerText = ""
         for (let i = 0; i < maxReviews; i++) {
             let j = ((currentPage-1)*4) + i
-            console.log(j)
             addReviewToDom(reviewLst[j])
         }
     } else {
-        console.log("!!!!!")
         restPage = maxReviews + restPage
         reviewPart.innerText = ""
         for (let i = 0; i < restPage; i++) {
             let j = ((currentPage-1)*4) + i
-            console.log(j)
             addReviewToDom(reviewLst[j])
         }
     }
@@ -328,9 +350,12 @@ function getRestaurant(){
     }).done((res) =>{
         if(res){
             userName = document.querySelector('#loginOrUsername').innerText
-            console.log(userName)
-            console.log(res.restaurant)
+            // console.log(userName)
+            // console.log(res.restaurant)
             store = res.restaurant;
+            restaurantInfoHeader.innerText = ""
+            restaurantInfoBody.innerText = ""
+            restaurantBookmark.innerText = ""
             addRestaurantToDom(store)
             getReviews()
             // showPage(currentPage);
@@ -352,17 +377,16 @@ function getReviews(){
         method:'get'
     }).done((res) =>{
         if(res.reviews){
-            console.log(res.reviews)
-            console.log(res.reviews[0])
+            // console.log(res.reviews)
+            // console.log(res.reviews[0])
             reviewLst = res.reviews
             for (let i = 0; i < reviewLst.length; i++) {
                 if (reviewLst[i].userName === userName) {
                     document.querySelector('#submitBtn').innerText = 'Resubmit'
+                    rid = reviewLst[i]._id
                 }
             }
             showPage(currentPage);
-            console.log(reviewLst.length)
-            // console.log(reviewLst[0].userName)
         }
         else{
             alert("cannot get reviews");
