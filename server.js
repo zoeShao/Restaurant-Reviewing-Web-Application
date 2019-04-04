@@ -712,6 +712,28 @@ app.post('/addReview/:resId', authenticate, (req, res) =>{
 	// })
 })
 
+app.get('/getUserImg/:id', (req, res) => {
+	// Add code here
+	const id = req.params.id
+
+	if (!ObjectID.isValid(id)) {
+		res.status(404).send()
+	}
+
+	// Otherwise, findById
+	User.findById(id).then((user) => {
+		if (!user) {
+			res.status(404).send()
+		} else {
+			/// sometimes wrap returned object in another object
+			const userImg = user.profilePicture
+			res.send({userImg})
+		}
+	}).catch((error) => {
+		res.status(400).send()
+	})
+})
+
 //Codes for search result
 //search type can only be: "resName", "location", "category"
 app.post('/searchRestaurants', userPagesAuthenticate, (req, res) => { 

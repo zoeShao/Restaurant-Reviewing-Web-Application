@@ -185,21 +185,49 @@ function addReviewToDom(review) {
     userImgElement.classNmae = "userImgContainer"
     const userImg = document.createElement('img')
     userImg.className = "userImg img-thumbnail rounded-circle"
-    userImg.src = "https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg"
-    userImg.alt = "avatar Picture"
-    userImgElement.appendChild(userImg)
-    contentBoxElement.appendChild(userImgElement)
-    const contentElement = document.createElement('div')
-    contentElement.className = "storeContainer"
-    const rateElement = addRateToDom(review.rate)
-    const priceElement = addPriceToDom(review.price)
-    const content = document.createElement('p')
-    content.innerHTML = "<strong>"+`${review.userName}`+":\" </strong>" + `${review.content}` +  "<strong>\"</strong>"
-    contentElement.appendChild(rateElement)
-    contentElement.appendChild(priceElement)
-    contentElement.appendChild(content)
-    contentBoxElement.appendChild(contentElement)
-    reviewPart.appendChild(contentBoxElement)
+    // img.src = "/readImg/" + getUserImage(review.userID)
+    const url = '/getUserImg/' + review.userID;
+    $.ajax({
+        url: url,
+        method:'get'
+    }).done((res) =>{
+        if(res.userImg){
+            userImg.src = "/readImg/" + res.userImg
+            userImg.alt = "avatar Picture"
+            userImgElement.appendChild(userImg)
+            contentBoxElement.appendChild(userImgElement)
+            const contentElement = document.createElement('div')
+            contentElement.className = "storeContainer"
+            const rateElement = addRateToDom(review.rate)
+            const priceElement = addPriceToDom(review.price)
+            const content = document.createElement('p')
+            content.innerHTML = "<strong>"+`${review.userName}`+":\" </strong>" + `${review.content}` +  "<strong>\"</strong>"
+            contentElement.appendChild(rateElement)
+            contentElement.appendChild(priceElement)
+            contentElement.appendChild(content)
+            contentBoxElement.appendChild(contentElement)
+            reviewPart.appendChild(contentBoxElement)
+        } else{
+            userImg.src = "https://finanzmesse.ch/userdata/uploads/referenten/avatar.jpg"
+            userImg.alt = "avatar Picture"
+            userImgElement.appendChild(userImg)
+            contentBoxElement.appendChild(userImgElement)
+            const contentElement = document.createElement('div')
+            contentElement.className = "storeContainer"
+            const rateElement = addRateToDom(review.rate)
+            const priceElement = addPriceToDom(review.price)
+            const content = document.createElement('p')
+            content.innerHTML = "<strong>"+`${review.userName}`+":\" </strong>" + `${review.content}` +  "<strong>\"</strong>"
+            contentElement.appendChild(rateElement)
+            contentElement.appendChild(priceElement)
+            contentElement.appendChild(content)
+            contentBoxElement.appendChild(contentElement)
+            reviewPart.appendChild(contentBoxElement)
+        }
+    }).fail((error) =>{
+        alert("cannot get user image");
+        console.log(error);
+    })
 }
 
 function addRestaurantToDom(store) {
