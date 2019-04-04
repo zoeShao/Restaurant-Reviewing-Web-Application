@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema({
   },
   accountType: { // can only be 'u' - user, 'o' - Restaurant owner, 'a' - 'admin'
     type: String,
+    enum: ['u', 'o', 'a'],
     required: true
   },
   banned: {
