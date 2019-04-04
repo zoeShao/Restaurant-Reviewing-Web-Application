@@ -549,6 +549,18 @@ app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>
 	}
 })
 
+app.get('/getIndReviews', authenticate, (req, res) =>{
+	const id = req.user._id
+	if(!ObjectID.isValid(id)){
+		return res.status(404).send()
+	}
+	Review.find({userID: id}).then((reviews) =>{
+		res.send({reviews})
+	}, (error) =>{
+		res.status(450).send(error)
+	})
+})
+
 app.get('/getResReview', (req, res) =>{
 	const id = req.session.resReviewId
 	if(!ObjectID.isValid(id)){
@@ -599,43 +611,84 @@ app.patch('/editReview/:resId/:rid', authenticate, (req, res) =>{
 						}, (error) =>{
 							res.status(400).send(error);
 						})
-				res.send({result});
+				// res.send({result});
 			}
 		})
 })
 
 // add a new review to a retaurant
 app.post('/addReview/:resId', authenticate, (req, res) =>{
-	const review = new Review({
-		resID: req.params.resId,
-		userID: req.user._id,
-		userName: req.user.name,
-		rate: req.body.rate,
-		price: req.body.price,
-		content: req.body.content
-	})
-	review.save().then((result) =>{
-		const ObjectId = mongoose.Types.ObjectId
-		// req.session.userReviewId = result._id
-		Review.aggregate([
-			{ $match: {"resID": ObjectId(req.params.resId)}},
-			{$group: {
-				_id: null, 
-				rate: {$avg: "$rate"}, 
-				price: {$avg: "$price"}}}]).then((average) =>{
-					const aveRate = average[0].rate
-					const avePrice = average[0].price
-					Restaurant.findOneAndUpdate({_id: req.params.resId},
-						{$set: {
-							rate: aveRate,
-							price: avePrice
-						}}).then((update) =>{
-							res.send(result)
+	Restaurant.findById(req.params.resId).then((restaurant) => {
+		if (!restaurant) {
+			res.status(404).send()
+		} else {
+			/// sometimes wrap returned object in another object   
+			const review = new Review({
+				resID: req.params.resId,
+				userID: req.user._id,
+				userName: req.user.name,
+				resName: restaurant.name,
+				rate: req.body.rate,
+				price: req.body.price,
+				content: req.body.content
+			})
+			review.save().then((result) =>{
+				const ObjectId = mongoose.Types.ObjectId
+				// req.session.userReviewId = result._id
+				Review.aggregate([
+					{ $match: {"resID": ObjectId(req.params.resId)}},
+					{$group: {
+						_id: null, 
+						rate: {$avg: "$rate"}, 
+						price: {$avg: "$price"}}}]).then((average) =>{
+							const aveRate = average[0].rate
+							const avePrice = average[0].price
+							Restaurant.findOneAndUpdate({_id: req.params.resId},
+								{$set: {
+									rate: aveRate,
+									price: avePrice
+								}}).then((update) =>{
+									res.send(result)
+								})
+						}, (error) =>{
+							res.status(400).send(error);
 						})
-				}, (error) =>{
-					res.status(400).send(error);
-				})
+			})
+		}
+	}).catch((error) => {
+		res.status(400).send()
 	})
+	// const review = new Review({
+	// 	resID: req.params.resId,
+	// 	userID: req.user._id,
+	// 	userName: req.user.name,
+	// 	resName: rName,
+	// 	rate: req.body.rate,
+	// 	price: req.body.price,
+	// 	content: req.body.content
+	// })
+	// review.save().then((result) =>{
+	// 	const ObjectId = mongoose.Types.ObjectId
+	// 	// req.session.userReviewId = result._id
+	// 	Review.aggregate([
+	// 		{ $match: {"resID": ObjectId(req.params.resId)}},
+	// 		{$group: {
+	// 			_id: null, 
+	// 			rate: {$avg: "$rate"}, 
+	// 			price: {$avg: "$price"}}}]).then((average) =>{
+	// 				const aveRate = average[0].rate
+	// 				const avePrice = average[0].price
+	// 				Restaurant.findOneAndUpdate({_id: req.params.resId},
+	// 					{$set: {
+	// 						rate: aveRate,
+	// 						price: avePrice
+	// 					}}).then((update) =>{
+	// 						res.send(result)
+	// 					})
+	// 			}, (error) =>{
+	// 				res.status(400).send(error);
+	// 			})
+	// })
 })
 
 //Codes for search result
