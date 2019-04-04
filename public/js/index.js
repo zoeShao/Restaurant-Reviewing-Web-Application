@@ -6,7 +6,9 @@ document.getElementById("dropdownToronto").addEventListener("click", showDowntow
 
 
 let maxShowingRestaurant = 2;
+let maxPromotingRestaurant = 3;
 const popularRestaurantsElement = document.getElementById("popularRestaurants");
+const newRestaurantsElement = document.querySelectorAll('.promoteImg')
 
 //initialize calls
 
@@ -15,10 +17,27 @@ getLogInInfo();
 window.signOutUser = signOutUser;
 /*                               */
 
-InitializePopularRestaurants("Downtown-Toronto", maxShowingRestaurant);
-
+// InitializePopularRestaurants("Downtown-Toronto", maxShowingRestaurant);
+addSlideShow() 
 /***************Get data from server***************************/
-
+//Get list of popular restaurant
+function getListOfNewRestaurants(location){
+  const url = '/popularRestaurants';
+    // The data we are going to send in our request
+    let data = {
+        location: location
+    }
+    // Create our request constructor with all the parameters we need
+    const request = new Request(url, {
+        method: 'post', 
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+    return fetch(request)
+}
 
 //Get list of popular restaurant
 function getListOfPopularRestaurants(location){
@@ -138,5 +157,33 @@ function clearAllPopularRestaurants(){
   while (popularRestaurantsElement.firstChild) {
     popularRestaurantsElement.removeChild(popularRestaurantsElement.firstChild);
   }
+}
+
+function addSlideShow() {
+  getListOfNewRestaurants("Downtown-Toronto").then((res) => {
+    return res.json();
+  }).then((resList) => {
+    const promoteLst = ["https://ffc.com/wp-content/uploads/2018/03/Welcome-New-Staff-FFC-Chicago-1030x687.jpg",
+    "https://www.phillymag.com/wp-content/uploads/sites/3/2015/02/BestNewRestaurantLogo.jpg",
+     "https://ffc.com/wp-content/uploads/2018/03/Welcome-New-Staff-FFC-Chicago-1030x687.jpg"]
+    for (let i = 0; i < maxPromotingRestaurant; i++){
+      if(i < resList.length){
+          const img = document.createElement('img');
+          img.src = "/readImg/" + resList[i].picture;
+          img.alt="Promote Picture"
+          newRestaurantsElement[i].appendChild(img)
+          log(resList[i])
+      } else {
+          const img = document.createElement('img');
+          img.src = promoteLst[i]
+          img.alt="Promote Picture"
+          newRestaurantsElement[i].appendChild(img)
+          log(i)
+      }
+      
+    }
+  }).then((resList) => {
+    InitializePopularRestaurants("Downtown-Toronto", maxShowingRestaurant);
+  }).catch(error => {log(error);});
 }
 
