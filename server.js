@@ -189,9 +189,12 @@ app.get('/resReviews/:id', (req, res) =>{
 		res.redirect('/adminResReviews');
 	} else if (req.session.accountType == 'o'){
 		res.redirect('/resReviews')
-	} else if (req.session.accountType == 'u'){
+	} else {
 		res.redirect('/restaurant_review')
 	}
+	// else if (req.session.accountType == 'u'){
+	// 	res.redirect('/restaurant_review')
+	// }
 })
 
 
