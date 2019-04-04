@@ -409,8 +409,21 @@ app.post('/addRestaurants', [authenticate, upload.single('resImg')], (req, res) 
 	restaurant.save().then((result) =>{
 		res.send(result)
 	},(error) =>{
-		//add error message later !!!!!!!!!!!!!!!!!!!
-		res.status(400).send(error)
+		if(error.message.includes('Path `name` is required.')){
+			res.status(400).send('Restaurant name is required')
+		}
+		else if(error.message.includes('Path `phone` is required.')){
+			res.status(400).send('Restaurant phone is required')
+		}
+		else if(error.message.includes('is shorter than the minimum allowed length')){
+			res.status(400).send('Restaurant phone has to have length 10')
+		}
+		else if(error.message.includes(' Path `address` is required.')){
+			res.status(400).send('Restaurant address is required')
+		}
+		else{
+			res.status(400).send(error)
+		}
 	})
 })
 
