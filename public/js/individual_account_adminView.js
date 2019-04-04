@@ -142,7 +142,7 @@ function banOrRecoverUser(userObj){
 	}
 	log(userObj);
 	$.ajax({
-		"type": 'POST',
+		"type": 'PATCH',
 		"url": '/admin/banOrRecoverUser',
 		"headers": {
 			"Content-Type": "application/json",
