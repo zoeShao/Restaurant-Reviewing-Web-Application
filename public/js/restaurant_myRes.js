@@ -108,6 +108,13 @@ function editRes(e){
             addNewResBox(index);
             const newResForm = document.querySelector('#newResForm');
             newResForm.addEventListener('submit', addEditRes(index));
+            var mainBody = document.getElementById('newResBox')
+            var input = document.getElementById('newRestaurantAddr');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            function init() {
+                var autocomplete = new google.maps.places.Autocomplete(input);
+            }
+            google.maps.event.addDomListener(mainBody, 'load', init);
             editingSetting()
         }
         // delete restaurant event
