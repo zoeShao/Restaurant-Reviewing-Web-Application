@@ -56,7 +56,7 @@ const sessionChecker = (req, res, next) => {
 }
 
 const generalPagesAuthenticate = (req, res, next) => {
-    if(req.session.user === 'a' || req.session.user === 'o'){
+    if(req.session.accountType === 'a' || req.session.accountType === 'o'){
         res.status(400).send("Administrator or restaurant owner cannot do this operation!");
     } else{
         next();
