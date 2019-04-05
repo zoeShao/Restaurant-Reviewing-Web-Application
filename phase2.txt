@@ -1,0 +1,45 @@
+
+
+Instructions:
+
+*For not logged in user:
+     
+     Start with the home page, a not logged in user would be able to search for restaurants, browse the 4 top rated restaurants in the location you choose.
+     If you search for a restaurant name, or click on the food catogoies side bar, it would bring you to the search result page. You can always search on restaurants
+     based on their locations or food categories there. You can also rank the search results by name, rate and price. 
+     When you click on the carousel, one of the popular restaurants at home page, or one of the restaurants from search result page, it would bring you to the corresponding restaurant review page,
+     As a not logged in user, you can only read other users' reviews and restaurant information here, and you can always search for a restaurant again at this page. 
+
+
+
+*For user:
+    -username: user
+    -password: user 
+
+    For user, you can do anything a not logged user can do. In addition to that, at restaurant review page, you can review a restaurant and add a restaurant to your favourite.
+    However, you can only review once, but you can resubmit your review anytime. 
+
+    If you click on your profile picture or username on navigator bar at any page, it would bring you to user page. On this page, you can read your reviews, your favourite restaurants, and 
+    edit your profile here. 
+
+
+* For admin:
+      username: admin
+      password: admin
+      
+      For admin, after you log in, you would be directed to admin account page and this is the view of admin. The admin can't go to pages other than the admin account page because he can access all the information and do all his jobs here. 
+      1. He can ban/recover users. When a user is banned, he is restricted to log in his account.  
+        - if a normal user get banned, he can't go to his user page, edit his profile, read his favourite list, add/delete a favourite restaurant, read his reviews, review a restaurant and edit the existing reviews. 
+        - if a restaurant owner get banned, he can't access to his restaurant page which means he can't edit/add/delete restaurants, and edit user profile.
+        - notice that if a user is banned that he can't log in, he is not supposed perform the operations above, but for safety reasons, we still check the status of the user before doing these operations. 
+      2. He can delete reviews. After deleting reviews, the rating, price of the corresponding restaurant would be recalculate.
+      3. He can remove restaurants as well. After deleting, the system automatically removes all reviews under the restaurant and remove the restaurant from users' favourite lists. 
+      
+* For restaurant user:
+      username: user2
+      password: user2
+
+      1.For user2, you will login to the restaurant account page that you can view all reviews from your restaurants at All reviews page, you can also sort the reviews by click the sort by name or rate in up-right corner. You can change page by click the buttons at the down-right corner. 
+      2.At My restaurants page, you can view all your restaurants and you can edit them or remove them by click the buttons in each restaurant content. If you want to add a new restaurant, you can do so by click the button at top-left corner. By clicking 'add new' or 'edit' button, you will entry restaurant editing page that you can edit all information of your restaurant and click save to submit or cancel to exist back to review page.
+      3.The setting page of user2 is pretty same as setting page of user.
+      4.For all these three pages, you can click log out at top right corner to go back to index page. Since user2 is a restaurant owner account, it cannot go to restaurant page to write review.
