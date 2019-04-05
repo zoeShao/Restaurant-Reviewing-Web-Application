@@ -70,8 +70,7 @@ function InitializeAdminRestaurants(){
 		changeRestaurant(popularRestaurants.children[i], resList[i]);
 	  }
 	  restaurantsList = resList;
-	  log(restaurantsList)
-	}).catch(error => {log(error);});
+	}).catch(error => {alert("Fail to get restaurants data from server!");});
 }
 
 function removeRestaurantFromServer(resObj){
@@ -94,16 +93,13 @@ function removeRestaurants(e){
 	if (e.target.classList.contains("remove")){
 		const restaurantToRemove = e.target.parentElement.parentElement.parentElement;
 		const resAddress = e.target.parentElement.children[1].innerText;
-		log(resAddress)
 		let i = 0;
 		let originalLength = restaurantsList.length;
 		for(i = 0; i < restaurantsList.length; i++){
 			if (restaurantsList[i].address == resAddress){
-				log(restaurantsList[i])
 				removeRestaurantFromServer(restaurantsList[i]);
 				popularRestaurants.removeChild(restaurantToRemove);
 				restaurantsList.splice(i, 1);
-				log(restaurantsList)
 				break;
 			}
 		}
@@ -133,14 +129,13 @@ function InitializeAdminBanUsers(){
 		loadUsers(returnUserList[i]);
 	  }
 	  usersList = returnUserList;
-	}).catch(error => {log(error);});
+	}).catch(error => {alert("Fail to load user from server!");});
 }
 
 function banOrRecoverUser(userObj){
 	const data = {
 		'userToModify': userObj
 	}
-	log(userObj);
 	$.ajax({
 		"type": 'PATCH',
 		"url": '/admin/banOrRecoverUser',
@@ -165,7 +160,6 @@ function banUser(e){
 		children[0].children[1].innerText;
 		for(let i = 0; i < usersList.length; i++){
 			if (usersList[i].name == userName){
-				log(usersList[i])
 				banOrRecoverUser(usersList[i]);
 				break;
 			}
@@ -199,8 +193,7 @@ function InitializeAdminReviews(){
 	}).then((revList) => {
 		reviewsList = revList.reviews;
 		showPage(currentPage);
-	  log(reviewsList)
-	}).catch(error => {log(error);});
+	}).catch(error => {alert("Fail to load reviews from server!");});
 }
 
 function removeReviewFromServer(revObj){
@@ -224,11 +217,9 @@ function removeComments(e){
 				let originalLength = reviewsList.length;
 				for(i = 0; i < reviewsList.length; i++){
 					if (reviewsList[i]._id == commentId){
-						log(reviewsList[i])
 						removeReviewFromServer(reviewsList[i]);
 						commentsMainbody.removeChild(commentToRemove);
 						reviewsList.splice(i, 1);
-						log(reviewsList)
 						break;
 					}
 				}
@@ -248,14 +239,12 @@ function changePage(e) {
 			currentPage = currentPage - 1
 			showPage(currentPage)
 		}
-		// console.log(currentPage)
 
 	} else if (e.target.classList.contains('next')) {
 		if ((currentPage * 3) < reviewsList.length) {
 			currentPage = currentPage + 1
 		}
 		showPage(currentPage)		
-		// console.log(currentPage)
 	}
 }
 
@@ -265,7 +254,6 @@ function showPage(currentPage) {
 		commentsMainbody.innerText = ""
 		for (let i = 0; i < maxReviews; i++) {
 			let j = ((currentPage-1)*3) + i
-			// console.log(j)
 			addReviewToDom(reviewsList[j])
 		}
 	} else {
@@ -273,7 +261,6 @@ function showPage(currentPage) {
 		commentsMainbody.innerText = ""
 		for (let i = 0; i < restPage; i++) {
 			let j = ((currentPage-1)*3) + i
-			// console.log(j)
 			addReviewToDom(reviewsList[j])
 		}
 	}
@@ -308,7 +295,6 @@ function addReviewToDom(review) {
 	input.type = "hidden";
 	input.value = review._id;
 	contentBoxElement.appendChild(input);
-	log(contentBoxElement);
 	commentsMainbody.appendChild(contentBoxElement)
 }
 
@@ -367,7 +353,7 @@ function loadUsers(userObj){
 	else{
 		profilePic.src = "/readImg/" + imgSrc;
 	}
-	profilePic.className = "rounded-circle";
+	profilePic.className = "img-thumbnail rounded-circle peopleIcon";
 	profilePicDiv.className = "float-left mr-3 portraitContainer";
 
 	profilePicDiv.appendChild(profilePic); 
@@ -388,7 +374,6 @@ function loadUsers(userObj){
 	}
     contentBoxElement.appendChild(button);
     contentBoxElement.style.minHeight = "150px";
-    log(contentBoxElement);
 	banMainbody.appendChild(contentBoxElement)
 }
 
@@ -401,7 +386,6 @@ function changeRestaurant(restaurant, resObj){
   
 	//change restaurant name
 	const cardBody = restaurant.children[0].children[1];
-	log(cardBody)
 	const h4 = cardBody.children[0]
 	const name = document.createElement("p")
 	name.className = "text-primary"

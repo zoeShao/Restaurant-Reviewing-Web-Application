@@ -58,21 +58,17 @@ function getRestaurantDataFromServer(){
   });
   fetch(request).then((res) => {
     if(res.status == 204){
-    //   log("sign out status")
-    //   changeToSignOutStatus();
     } else{
       return res.json()
     }
     
   }).then((restaurants) =>{
-	log(restaurants.res);
     if(restaurants){
 	  allRestaurantsData = restaurants.res;
-	  log(restaurants.res);
 	  showRestaurants(allRestaurantsData);
     }
     
-  }).catch(error => {log(error)})
+  }).catch(error => {alert("Fail to show restaurants on page")})
 }
 
 function sendOutSearchRequest(content, searchType){
@@ -89,14 +85,12 @@ function sendOutSearchRequest(content, searchType){
 		}
 		
 	  }).then((restaurants) =>{
-		log(restaurants.res);
 		if(restaurants){
 		  allRestaurantsData = restaurants.res;
-		  log(restaurants.res);
 		  showRestaurants(allRestaurantsData);
 		}
 		
-	}).catch(error => {log(error)})
+	}).catch(error => {alert("Fail to send search request!")})
 }
 /*-----------------------------------------------------------*/
 /*** 
@@ -194,14 +188,12 @@ function changePage(e) {
 			currentPage = currentPage - 1
 			showPage(currentPage)
 		}
-		console.log(currentPage)
 
 	} else if (e.target.classList.contains('next')) {
 		if ((currentPage * 3) < allRestaurantsData.length) {
 			currentPage = currentPage + 1
 		}
 		showPage(currentPage)		
-		console.log(currentPage)
 	}
 }
 
@@ -276,7 +268,6 @@ function showPage(currentPage) {
 		contentBody.innerText = ""
 		for (let i = 0; i < maxReviews; i++) {
 			let j = ((currentPage-1)*3) + i
-			// console.log(j)
 			addFavouriteToDom(allRestaurantsData[j])
 		}
 	} else {
@@ -284,7 +275,6 @@ function showPage(currentPage) {
 		contentBody.innerText = ""
 		for (let i = 0; i < restPage; i++) {
 			let j = ((currentPage-1)*3) + i
-			// console.log(j)
 			addFavouriteToDom(allRestaurantsData[j])
 		}
 	}
