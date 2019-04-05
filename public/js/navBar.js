@@ -11,7 +11,6 @@ export function getLogInInfo(){
     });
     fetch(request).then((res) => {
       if(res.status == 204){
-        log("sign out status")
         changeToSignOutStatus();
       } else{
         return res.json()
@@ -22,7 +21,7 @@ export function getLogInInfo(){
         changeToLoggedInStatus(data)
       }
       
-    }).catch(error => {log(error)})
+    }).catch(error => {alert("Fail to get log in information!")})
   }
   
   //sign out user
@@ -39,11 +38,10 @@ export function signOutUser(){
           // Handle response we get from the API
           // Usually check the error codes to see what happened
           if (res.status === 200) {
-              console.log('sign out')
               changeToSignOutStatus();
           } 
       }).catch((error) => {
-          console.log(error)
+          alert("Fail to sign out user!");
       })
       
   }

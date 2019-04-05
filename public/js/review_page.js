@@ -79,13 +79,11 @@ function addNewReview(e) {
                     contentType: "application/json",
                     data: data
                 }).done((res) =>{
-                    console.log('add review');
                     getRestaurant()
                     e.target.lastElementChild.innerText = 'Resubmit'
                     // getRestaurant();
                 }).fail((error) =>{
                     alert('fail to add review');
-                    console.log(error);
                 })
             }
         } else {
@@ -107,13 +105,11 @@ function addNewReview(e) {
                 contentType: "application/json",
                 data: data
             }).done((res) =>{
-                console.log('done resubmit review');
                 getRestaurant()
                 e.target.lastElementChild.innerText = 'Resubmit'
                 // getRestaurant();
             }).fail((error) =>{
                 alert('Fail to resubmit review');
-                console.log(error);
             })
         } else {
             e.target.lastElementChild.className = "float-right btn btn-info disabled"
@@ -150,10 +146,8 @@ function changeBookmark(e) {
                 processData: false,
                 contentType: "application/json",
             }).done((res) =>{
-                console.log('add to favourite');
             }).fail((error) =>{
                 alert('fail to add to favourite');
-                console.log(error);
             })
         // user.favourite.push(store)
     } else if (e.target.classList.contains('bookmarked')) {
@@ -168,10 +162,8 @@ function changeBookmark(e) {
                 processData: false,
                 contentType: "application/json",
             }).done((res) =>{
-                console.log('delete in favourite');
             }).fail((error) =>{
                 alert('fail to delete a restaurant in favourite');
-                console.log(error);
             })
     }
 }
@@ -226,7 +218,6 @@ function addReviewToDom(review) {
         }
     }).fail((error) =>{
         alert("cannot get user image");
-        console.log(error);
     })
 }
 
@@ -286,11 +277,6 @@ function addRestaurantInfoToDom(store) {
 /*-----------------------------------------------------------*/
 /*** helper functions ***/
 function showPage(currentPage) {
-    // var queryString = decodeURIComponent(window.location.search);
-    // queryString = queryString.substring(1);
-    // var id = qs.get("myVar1");
-    // console.log(queryString)
-    // addRestaurantToDom(store)
     let restPage = reviewLst.length - currentPage * 4
     if (restPage >= 0) {
         reviewPart.innerText = ""
@@ -348,12 +334,10 @@ function getRestaurant(){
         method:'get'
     }).done((res) =>{
         if(res){
-            // userName = document.querySelector('#loginOrUsername').innerText
             store = res.restaurant;
             getLogInStatus(store)
             if (!restaurantInfoHeader.firstElementChild.innerText) {
                 addRestaurantToDom(store)
-                // console.log(restaurantInfoHeader.firstElementChild.innerText)
             }
             getReviews()
         }
@@ -362,7 +346,6 @@ function getRestaurant(){
         }
     }).fail((error) =>{
         alert("cannot get restaurant");
-        console.log(error);
     })
 }
 
@@ -389,7 +372,6 @@ function getReviews(){
         }
     }).fail((error) =>{
         alert("cannot get reviews");
-        console.log(error);
     })
 }
 
@@ -405,20 +387,17 @@ function getLogInStatus(store){
     });
     fetch(request).then((res) => {
       if(res.status == 204){
-        // console.log("sign out 000000status")
-        // console.log(userName)
         bookmark.innerText = ""
       } else{
         return res.json()
       }
     }).then((data) =>{
         if(data){
-            // console.log(data.name)
             userName = data.name
             getFavourite(store)
         }
       
-    }).catch(error => {log(error)})
+    }).catch(error => {alert("Can't get log in status")})
 }
 
 //get all restaurants for this user and then display 
@@ -430,11 +409,9 @@ function getFavourite(store){
     }).done((res) =>{
         if(res.restaurants){
             favouriteLst = res.restaurants;
-            // console.log(favouriteLst)
             for (let i = 0; i < favouriteLst.length; i++) {
                 if (favouriteLst[i]._id === store._id) {
                     bookmark.firstElementChild.innerHTML = "<i class=\"bookmarked fas fa-bookmark\"></i>"
-                    // console.log("yes")
                 } 
             }
         }
@@ -443,7 +420,6 @@ function getFavourite(store){
         }
     }).fail((error) =>{
         alert("cannot get restaurants");
-        console.log(error);
     })
 }
 

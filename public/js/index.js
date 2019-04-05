@@ -81,7 +81,7 @@ function InitializePopularRestaurants(location, maxShowingRestaurant){
         changeRestaurant(popularRestaurantsElement.children[i], resList[i]);
       }
     }
-  }).catch(error => {log(error);}
+  }).catch(error => {alert("Fail to get popular data from the server!");}
   )}
 
 //helper function
@@ -208,20 +208,18 @@ function addSlideShow() {
           img.alt="Promote Picture"
           aElement.appendChild(img)
           newRestaurantsElement[i].appendChild(aElement)
-          log(resList[i])
       } else {
           const img = document.createElement('img');
           img.className = "slideImage"
           img.src = promoteLst[i]
           img.alt="Promote Picture"
           newRestaurantsElement[i].appendChild(img)
-          log(i)
       }
       
     }
   }).then((resList) => {
     InitializePopularRestaurants("Downtown-Toronto", maxShowingRestaurant);
-  }).catch(error => {log(error);});
+  }).catch(error => {alert("Fail to add restaurant to carousel!");});
 }
 
 /*** Search function */
