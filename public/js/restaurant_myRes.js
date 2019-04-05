@@ -45,6 +45,13 @@ function changeMain(e){
         // add listener for editing page
         const newResForm = document.querySelector('#newResForm');
         newResForm.addEventListener('submit', addNewRes);
+        var mainBody = document.getElementById('newResBox')
+        var input = document.getElementById('newRestaurantAddr');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        function init() {
+            var autocomplete = new google.maps.places.Autocomplete(input);
+        }
+        google.maps.event.addDomListener(mainBody, 'load', init);
         editingSetting();
     }
     // part for sort event
@@ -101,6 +108,13 @@ function editRes(e){
             addNewResBox(index);
             const newResForm = document.querySelector('#newResForm');
             newResForm.addEventListener('submit', addEditRes(index));
+            var mainBody = document.getElementById('newResBox')
+            var input = document.getElementById('newRestaurantAddr');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            function init() {
+                var autocomplete = new google.maps.places.Autocomplete(input);
+            }
+            google.maps.event.addDomListener(mainBody, 'load', init);
             editingSetting()
         }
         // delete restaurant event
@@ -336,6 +350,16 @@ function addNewResBox(index){
     newForm.appendChild(newBtnDiv2);
     newCloDiv.appendChild(newForm);
     newBoxDiv.appendChild(newCloDiv);
+    // const newAdd = document.createElement('div');
+    // newAdd.className = "form-group"
+    // const newInput = document.createElement('input');
+    // newInput.type = 'text';
+    // newInput.className = 'form-control';
+    // newInput.id = "locationName";
+    // newInput.value = "Restaurant address";
+    // newAdd.appendChild(newInput);
+    // newBoxDiv.appendChild(newAdd);
+
     // add to the DOM
     contentBody.appendChild(newBoxDiv);
 }

@@ -163,7 +163,7 @@ userSchema.pre('findOneAndUpdate', function (next) {
   }
 })
 
-// Our own student finding function 
+// Our user finding function by name and password
 userSchema.statics.findByNamePassword = function (name, password) {
   const User = this
 
