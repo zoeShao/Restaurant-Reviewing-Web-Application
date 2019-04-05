@@ -60,6 +60,16 @@ function changeMain(e){
         sortByName()
 		showPage(currentPage)
     }
+    else if(e.target.classList.contains('dropdown-rate')){
+        contentBody.innerText = ""
+        sortByRate()
+		showPage(currentPage)
+    }
+    else if(e.target.classList.contains('dropdown-price')){
+        contentBody.innerText = ""
+        sortByPrice()
+		showPage(currentPage)
+    }
 }
 
 // eventholder function for change page event
@@ -84,7 +94,7 @@ function editRes(e){
     // search the restaurant index in list of user
     if(e.target.classList.contains('btn') && !(editing)){
         let index = null;
-        const address = e.target.parentElement.firstElementChild.childNodes[1].lastElementChild.lastElementChild.innerText;
+        const address = e.target.parentElement.firstElementChild.childNodes[1].childNodes[2].lastElementChild.innerText;
         for(let i = 0; i < resLst.length; i++){
             if(resLst[i].address === address){
                 index = i;
@@ -141,7 +151,15 @@ function addNewRes(e){
         editing = false;
         getRestaurant();
     }).fail((error) =>{
-        alert('fail to add restaurant');
+        if(error.status === 500){
+            alert('restaurant image is required')
+        }
+        else if (error.status === 400){
+            alert(error.responseText);
+        }
+        else{
+            alert('failed to add restaurant')
+        }
         console.log(error);
     })
    
@@ -169,7 +187,12 @@ function addEditRes(index){
             editing = false;
             getRestaurant();
         }).fail((error) =>{
-            alert('fail to add restaurant');
+            if(error.status === 400){
+                alert(error.responseText);
+            }
+            else{
+                alert('fail to edit restaurant');
+            }
             console.log(error);
         })
     }
@@ -210,9 +233,9 @@ function addNewResBox(index){
     let url, name, phone, address, location, category;
     if(index == -1){
         url = '#';
-        name = 'Restaurant name';
-        phone = 'Restaurant phone number';
-        address = 'Restaurant address';
+        name = '';
+        phone = '';
+        address = '';
         location = 'Downtown-Toronto';
         category = 'Fast Food';
     }else{
@@ -381,10 +404,16 @@ function addNewResToDom(newRes){
     newAddrS2.appendChild(document.createTextNode(newRes.address));
     newAddrP.appendChild(newAddrS);
     newAddrP.appendChild(newAddrS2);
+    // rate 
+    const rateP = addRateToDom(Math.round(newRes.rate));
+    // price 
+    const priceP = addPriceToDom(Math.round(newRes.price));
     // add to the info div
     newInfoDiv.appendChild(newNameP);
     newInfoDiv.appendChild(newPhoneP);
     newInfoDiv.appendChild(newAddrP);
+    newInfoDiv.appendChild(rateP);
+    newInfoDiv.appendChild(priceP);
     newA.appendChild(newImgDiv);
     newA.appendChild(newInfoDiv);
     // part for edit button
@@ -454,6 +483,54 @@ function sortByName() {
     if(a.name > b.name) { return 1; }
     return 0;
 	})
+}
+
+function sortByRate() {
+	resLst.sort(function(a, b){
+    if(a.rate < b.rate) { return 1; }
+    if(a.rate > b.rate) { return -1; }
+    return 0;
+	})
+}
+
+function sortByPrice() {
+	resLst.sort(function(a, b){
+    if(a.price < b.price) { return -1; }
+    if(a.price > b.price) { return 1; }
+    return 0;
+	})
+}
+
+function addRateToDom(rate) {
+	const paraElement = document.createElement('p')
+	const strongElement = document.createElement('strong')
+	strongElement.innerText = "Rate: "
+	paraElement.appendChild(strongElement)
+	const linkElement = document.createElement('link')
+	linkElement.rel = "stylesheet"
+	linkElement.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+	paraElement.appendChild(linkElement)
+	for (let i = 0; i < rate; i++) {
+		const spanElement = document.createElement('span')
+		spanElement.className = "fa fa-star checked"
+		paraElement.appendChild(spanElement)
+	}
+	for (let i = rate; i < 5; i++) {
+		const spanElement = document.createElement('span')
+		spanElement.className = "fa fa-star"
+		paraElement.appendChild(spanElement)
+	}
+	return paraElement
+}
+
+function addPriceToDom(rate) {
+	const paraElement = document.createElement('p')
+	let priceRate = ''
+	for (let i = 0; i < rate; i++) {
+		priceRate = priceRate + '$'
+	}
+	paraElement.innerHTML = '<strong>Price: </strong>' + priceRate
+	return paraElement
 }
 
 // create a new input div by given information

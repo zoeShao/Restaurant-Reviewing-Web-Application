@@ -446,3 +446,12 @@ function getFavourite(store){
         console.log(error);
     })
 }
+
+/*** Search function */
+$('#searchBtn').click(function(){
+    const link = "/searchRestaurants/resName/" + $("#searchInput").val() + "/reviewPage";
+    $("#searchBar").attr({
+      'action': link
+    })
+  })
+  /****                 */
