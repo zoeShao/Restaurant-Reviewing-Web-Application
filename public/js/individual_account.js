@@ -1,26 +1,4 @@
 import {getLogInInfo, signOutUser} from './navBar.js';
-/* Class */
-// class User {
-// 	constructor(image, name, email, password, type){
-//         this.image = image;
-//         this.name = name;
-//         this.email = email;
-//         this.password = password;
-//         this.type = type;
-//         this.reviews = [];
-//         this.favourite = [];
-//     }
-// }
-
-// class Review {
-// 	constructor(rName, uName, rate, price, content){
-//         this.rName = rName;
-//         this.uName = uName;
-//         this.rate = rate;
-//         this.price = price;
-//         this.content = content;
-//     }
-// }
 
 /* Global variables */
 let maxReviews = 3 // max Contents one page can show
@@ -28,28 +6,6 @@ let currentPage = 1 // current page number
 let reviewLst = []
 let store = null
 
-//Server part TODO: get data from the server and load them to the page
-
-/* Examples(hardcode part) */
-// create a user
-// const userImg = "avatar.jpg"
-// const user = new User(userImg, "user", "user@mail.com", "user", "i")
-// // create reviews the user add
-// const review1 = new Review("McDonald's", "user", 3, 1, "here is the review.here is the review.here is the review.here is the review.")
-// const review2 = new Review("Osaka Sushi", "user", 4, 2, "here is the review.here is the review.")
-// // These examples are just for test purpose (sort)
-// const review3 = new Review("Atest", "user", 5, 3, "here is the review.")
-// const review4 = new Review("Btest", "user", 1, 1, "here is the review.")
-// const review5 = new Review("Ctest", "user", 4, 3, "here is the review.")
-// const review6 = new Review("Dtest", "user", 5, 2, "here is the review.")
-// // Add these reviews to the user's review array (does not change the DOM)
-// user.reviews.push(review2)
-// user.reviews.push(review1)
-// // These examples are just for test purpose (sort)
-// user.reviews.push(review3)
-// user.reviews.push(review4)
-// user.reviews.push(review5)
-// user.reviews.push(review6)
 
 /* Select all DOM form elements you'll need. */ 
 const dropDown = document.querySelector('#dropDown')

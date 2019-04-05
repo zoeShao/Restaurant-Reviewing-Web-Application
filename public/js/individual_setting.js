@@ -31,7 +31,6 @@ Functions can call DOM functions
 function modifyUserInfo(e) {
 	e.preventDefault();
 	if (e.target.classList.contains('editInfo')) {
-		//Server part TODO: update the user info in the server
 		if (e.target.innerText === 'edit') {
 			e.target.parentElement.style.position = "static"
 			addProfileSelector(e.target.parentElement.parentElement.parentElement)

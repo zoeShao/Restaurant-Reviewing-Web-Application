@@ -9,21 +9,6 @@ let store = null
 let userName = ""
 let rid = ""
 
-//Server part TODO: get data from the server and load them to the page
-
-/* Examples(hardcode part) */
-// const storeImg = "https://upload.wikimedia.org/wikipedia/commons/4/4b/McDonald%27s_logo.svg"
-// const store = new Restaurant(storeImg, "McDonald's", "1234567890", "552 Yonge St, Toronto", 3, 1)
-// create a review
-// const review1 = new Review("McDonald's", "user1", 3, 1, "here is the review.here is the review.here is the review.here is the review.")
-// const review2 = new Review("McDonald's", "user2", 2, 1, "here is the review.here is the review.")
-// // create a user
-// const userImg = "avatar.jpg"
-// const user = new User(userImg, "user", "user@mail.com", "user", "i")
-// // Add these reviews to the user's review array (does not change the DOM)
-// store.reviews.push(review1)
-// store.reviews.push(review2)
-
 /* Select all DOM form elements you'll need. */ 
 const reviewForm = document.querySelector('#reviewForm')
 const reviewPart = document.querySelector('#reviewPart')
@@ -59,7 +44,6 @@ function modifyButton(e) {
 function addNewReview(e) {
     e.preventDefault();
 
-    //Server part TODO: add the review to the server
     if (e.target.lastElementChild.innerText === 'Submit') {
         const url = '/addReview/' + store._id
         const content = document.querySelector('#FormControlTextarea1').value;
@@ -137,7 +121,6 @@ function changeBookmark(e) {
     e.preventDefault();
     if (e.target.classList.contains('notbookmarked')) {
         e.target.parentElement.innerHTML = "<i class=\"bookmarked fas fa-bookmark\"></i>"
-        //Server part TODO: Get user data from server and push the store to his/her favourite list
         // code below requires server call
         const url = '/addMyfavourites/' + store._id
             $.ajax({
@@ -149,10 +132,8 @@ function changeBookmark(e) {
             }).fail((error) =>{
                 alert('fail to add to favourite');
             })
-        // user.favourite.push(store)
     } else if (e.target.classList.contains('bookmarked')) {
         e.target.parentElement.innerHTML = "<i class=\"notbookmarked far fa-bookmark\"></i>"
-        //Server part TODO: Get user data from server and remove the store to his/her favourite list
         // code below requires server call
         // user.favourite.splice(user.favourite.indexOf(store), 1)
         const url = '/delMyfavourites/' + store._id
