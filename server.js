@@ -910,8 +910,12 @@ app.delete('/admin/removeReview/:id/:resId', adminPagesAuthenticate, (req, res) 
 				_id: null, 
 				rate: {$avg: "$rate"}, 
 				price: {$avg: "$price"}}}]).then((average) =>{
-					const aveRate = average[0].rate
-					const avePrice = average[0].price
+                    const aveRate = 0;
+                    const avePrice = 0;
+                    if (averge){
+                        aveRate = average[0].rate
+					    avePrice = average[0].price
+                    }
 					Restaurant.findOneAndUpdate({_id: req.params.resId},
 						{$set: {
 							rate: aveRate,
