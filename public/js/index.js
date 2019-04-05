@@ -72,16 +72,17 @@ function InitializePopularRestaurants(location, maxShowingRestaurant){
   getListOfPopularRestaurants(location).then((res) => {
     return res.json();
   }).then((resList) => {
-    clearAllPopularRestaurants();
-    for (let i = 0; i < maxShowingRestaurant && i < resList.length; i++){
-      if(popularRestaurantsElement.children.length < maxShowingRestaurant){
-          addPopularRestaurant();
+    if (resList.length > 0){
+      clearAllPopularRestaurants();
+      for (let i = 0; i < maxShowingRestaurant && i < resList.length; i++){
+        if(popularRestaurantsElement.children.length < maxShowingRestaurant){
+            addPopularRestaurant();
+        }
+        changeRestaurant(popularRestaurantsElement.children[i], resList[i]);
       }
-      changeRestaurant(popularRestaurantsElement.children[i], resList[i]);
     }
-  }).catch(error => {log(error);});
-   
-}
+  }).catch(error => {log(error);}
+  )}
 
 //helper function
 function changeRestaurant(restaurant, resObj){
