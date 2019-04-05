@@ -353,7 +353,7 @@ function loadUsers(userObj){
 	else{
 		profilePic.src = "/readImg/" + imgSrc;
 	}
-	profilePic.className = "rounded-circle";
+	profilePic.className = "img-thumbnail rounded-circle peopleIcon";
 	profilePicDiv.className = "float-left mr-3 portraitContainer";
 
 	profilePicDiv.appendChild(profilePic); 
