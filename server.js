@@ -912,7 +912,7 @@ app.delete('/admin/removeReview/:id/:resId', adminPagesAuthenticate, (req, res) 
 				price: {$avg: "$price"}}}]).then((average) =>{
                     const aveRate = 0;
                     const avePrice = 0;
-                    if (averge){
+                    if (averge !== [] || average){
                         aveRate = average[0].rate
 					    avePrice = average[0].price
                     }
