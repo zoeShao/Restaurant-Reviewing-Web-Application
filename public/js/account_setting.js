@@ -60,7 +60,12 @@ function modifyUserInfo(e) {
 				navImg.innerText = "";
 				getUserInfo();
 			}).fail((error) =>{
-				alert('fail to change user info');
+				if(error.status === 400){
+					alert(error.responseText);
+				}
+				else{
+					alert('fail to change user info');
+				}
 				console.log(error);
 			})
 		}

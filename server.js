@@ -569,20 +569,35 @@ app.patch('/editUserInfo', [authenticate, upload.single('userImg')], (req, res) 
 			}
 			res.send()
 		}, (error) =>{
-			res.status(400).send(error)
+			if(error.message.includes('users index: email_1')){
+				res.status(400).send('this email has been used')
+			}
+			else if(error.message.includes('users index: name_1')){
+				res.status(400).send('this username has been used')
+			}
+			else{
+				res.status(600).send(error)
+			}
 		})
 	}
 	else{
 		User.findOneAndUpdate({_id: id}, {$set: change}).then((user) =>{
 			res.send()
 		}, (error) =>{
-			res.status(400).send(error)
+			if(error.message.includes('users index: email_1')){
+				res.status(400).send('this email has been used')
+			}
+			else if(error.message.includes('users index: name_1')){
+				res.status(400).send('this username has been used')
+			}
+			else{
+				res.status(600).send(error)
+			}
 		})
 	}
 })
 
 //edit the restaurant information
-//add error checking later !!!!!!!!!!!!!!!
 app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>{
 	const id = req.params.id
 	if(req.user.accountType !== 'o'){
@@ -612,6 +627,13 @@ app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>
 					}
 				})
 			}
+		}, (error) =>{
+			if(error.message.includes('duplicate key error')){
+				res.status(400).send('this address is already existed')
+			}
+			else{
+				res.status(600).send(error)
+			}
 		})
 	}
 	else{
@@ -627,6 +649,13 @@ app.patch('/editRes/:id', [authenticate, upload.single('resImg')], (req, res) =>
 			}
 			else{
 				res.send();
+			}
+		}, (error) =>{
+			if(error.message.includes('duplicate key error')){
+				res.status(400).send('this address is already existed')
+			}
+			else{
+				res.status(600).send(error)
 			}
 		})
 	}
