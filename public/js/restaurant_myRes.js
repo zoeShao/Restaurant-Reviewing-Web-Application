@@ -136,7 +136,14 @@ function editRes(e){
             newResForm.addEventListener('submit', addEditRes(index));
             var mainBody = document.getElementById('newResBox')
             var input = document.getElementById('newRestaurantAddr');
-            var autocomplete = new google.maps.places.Autocomplete(input);
+            // var autocomplete = new google.maps.places.Autocomplete(input);
+            var defaultBounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(43.5920, -79.5257),
+            new google.maps.LatLng(43.9410, -79.2460));
+            var options = {
+              bounds: defaultBounds,
+            }
+            var autocomplete = new google.maps.places.Autocomplete(input, options);
             function init() {
                 var autocomplete = new google.maps.places.Autocomplete(input);
             }
